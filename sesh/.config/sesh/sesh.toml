@@ -1,0 +1,25 @@
+[[session]]
+name = "Downloads 📥"
+path = "~/Downloads/"
+startup_command = "ls"
+
+[[session]]
+name = "wezterm config"
+path = "~/.config/wezterm"
+startup_command = "nvim wezterm.lua"
+
+[[session]]
+name = "sesh config"
+path = "~/.config/sesh"
+startup_command = "nvim sesh.toml"
+
+[[session]]
+name = "Dev 💻"
+path = "~/dev"
+startup_command = "l"
+
+[[session]]
+name = "Home 🏡"
+path = "~/"
+startup_command = "clear"
+
