@@ -122,6 +122,8 @@ bindkey -s ,f 'tmux-sessionizer\n'
 
 # n node version control 
 export PATH="/usr/local/bin:$PATH"
+# for scripts
+export PATH="/users/yosefsaaid/local/bin:$PATH"
 # java 
 export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.12
 export PATH="$JAVA_HOME/bin/:$PATH"
