@@ -14,6 +14,8 @@ return {
 		"saadparwaiz1/cmp_luasnip", -- for autocompletion
 		"rafamadriz/friendly-snippets", -- useful snippets
 		"onsails/lspkind.nvim", -- vs-code like pictograms
+		"neovim/nvim-lspconfig", -- LSP configuration
+		"b0o/schemastore.nvim", -- JSON schema store for YAML
 	},
 	config = function()
 		local cmp = require("cmp")
@@ -57,6 +59,25 @@ return {
 					maxwidth = 50,
 					ellipsis_char = "...",
 				}),
+			},
+		})
+
+		-- Set up LSP for YAML
+		local nvim_lsp = require("lspconfig")
+		local schemastore = require("schemastore")
+
+		nvim_lsp.yamlls.setup({
+			settings = {
+				yaml = {
+					schemas = schemastore.yaml.schemas(),
+				},
+			},
+			on_attach = function(client, bufnr)
+				-- Enable completion triggered by <c-x><c-o>
+				vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+			end,
+			flags = {
+				debounce_text_changes = 150,
 			},
 		})
 	end,
