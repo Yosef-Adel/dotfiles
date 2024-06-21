@@ -61,6 +61,9 @@ local config = {
 		k.cmd_to_tmux_prefix("7", "7"),
 		k.cmd_to_tmux_prefix("8", "8"),
 		k.cmd_to_tmux_prefix("9", "9"),
+
+		k.cmd_to_alt_key("f"),
+		k.cmd_to_alt_key("b"),
 	},
 }
 return config
