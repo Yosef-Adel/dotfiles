@@ -3,6 +3,7 @@ return {
 	dependencies = {
 		"williamboman/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
+		"mfussenegger/nvim-lint",
 	},
 	config = function()
 		local mason = require("mason")
@@ -35,6 +36,7 @@ return {
 				"prismals",
 				"pyright",
 				"gopls",
+				-- "yamlls",
 			},
 		})
 
@@ -47,6 +49,7 @@ return {
 				"pylint",
 				"golangci_lint_ls",
 				"eslint_d",
+				-- "cfn-lint",
 			},
 		})
 
@@ -56,21 +59,6 @@ return {
 					capabilities = capabilities,
 				})
 			end,
-			-- ["svelte"] = function()
-			-- 	-- configure svelte server
-			-- 	lspconfig["svelte"].setup({
-			-- 		capabilities = capabilities,
-			-- 		on_attach = function(client, bufnr)
-			-- 			vim.api.nvim_create_autocmd("BufWritePost", {
-			-- 				pattern = { "*.js", "*.ts" },
-			-- 				callback = function(ctx)
-			-- 					-- Here use ctx.match instead of ctx.file
-			-- 					client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
-			-- 				end,
-			-- 			})
-			-- 		end,
-			-- 	})
-			-- end,
 			["graphql"] = function()
 				-- configure graphql language server
 				lspconfig["graphql"].setup({
@@ -110,6 +98,12 @@ return {
 						},
 					},
 				})
+			end,
+		})
+
+		vim.api.nvim_create_autocmd({ "BufWritePost", "BufEnter" }, {
+			callback = function()
+				require("lint").try_lint()
 			end,
 		})
 	end,
