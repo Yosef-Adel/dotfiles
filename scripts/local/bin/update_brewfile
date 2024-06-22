@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Path to your Brewfile
+BREWFILE=~/dotfiles/Brewfile
+
+# Update the Brewfile
+brew bundle dump --file=$BREWFILE --force
