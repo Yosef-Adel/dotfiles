@@ -5,11 +5,11 @@ local h = require("utils/helpers")
 local k = require("utils/keys")
 local w = require("utils/wallpaper")
 
-local wallpapers_glob = os.getenv("HOME") .. "/Pictures/wallpapers/*"
+local wallpapers_glob = os.getenv("HOME") .. "/Pictures/anime/*"
 
 local config = {
 	background = {
-		--w.get_wallpaper(wallpapers_glob),
+		w.get_wallpaper(wallpapers_glob),
 		b.get_background(0.8, 0.8),
 	},
 	macos_window_background_blur = 500,
