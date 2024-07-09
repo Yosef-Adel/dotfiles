@@ -111,7 +111,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # ==================== Path ====================
-export PATH="$HOME/.tmuxifier/bin:$PATH"
+export PATH="$HOME/.tmuxifierr/bin:$PATH"
 # Python3
 export PATH="/Users/yosefsaaid/Library/Python/3.9/bin:$PATH"
 
@@ -139,6 +139,8 @@ HISTFILE=~/.zsh_history
 # }}}
 
 # ==================== Aliases ====================
+# Tldr
+alias tldrf='tldr --list | fzf --preview "tldr {1} | bat --color=always --paging=never" --preview-window=right,70% | xargs tldr'
 # General Aliases
 alias ll='ls -l'
 alias ..='cd ..'
