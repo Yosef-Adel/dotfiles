@@ -23,3 +23,8 @@ name = "Home 🏡"
 path = "~/"
 startup_command = "clear"
 
+
+[[session]]
+name = "Second Brain 🧠"
+path = "~/OneDrive/Second Brain/"
+startup_command = "nvim"
