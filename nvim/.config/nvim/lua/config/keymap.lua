@@ -4,8 +4,8 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
 
 vim.keymap.set("n", "J", "mzJ`z")
-vim.keymap.set("n", "<c-d>", "<C-d>zz")
-vim.keymap.set("n", "<c-u>", "<C-u>zz")
+vim.keymap.set("n", "<c-d>", "10jzz")
+vim.keymap.set("n", "<c-u>", "10kzz")
 vim.keymap.set("n", "G", "Gzz", { desc = "Go to end of file" })
 
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
