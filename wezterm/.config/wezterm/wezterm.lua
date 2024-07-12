@@ -1,3 +1,4 @@
+local wezterm = require("wezterm")
 local b = require("utils/background")
 local cs = require("utils/color_scheme")
 local f = require("utils/font")
@@ -5,12 +6,13 @@ local h = require("utils/helpers")
 local k = require("utils/keys")
 local w = require("utils/wallpaper")
 
-local wallpapers_glob = os.getenv("HOME") .. "/Pictures/anime/*"
+local wallpapers_glob = os.getenv("HOME") .. "/Pictures/Tremenal Wallpaper/*"
+local wallpapers = w.load_wallpapers(wallpapers_glob)
 
 local config = {
 	background = {
-		w.get_wallpaper(wallpapers_glob),
-		b.get_background(0.8, 0.8),
+		w.get_wallpaper(wallpapers),
+		b.get_background(0.3, 0.3),
 	},
 	macos_window_background_blur = 500,
 	font_size = 16.0,
@@ -30,14 +32,12 @@ local config = {
 		TERM = "xterm-256color",
 		LC_ALL = "en_US.UTF-8",
 	},
-	-- general options
 	adjust_window_size_when_changing_font_size = false,
-	debug_key_events = false,
+	debug_key_events = true,
 	enable_tab_bar = false,
 	native_macos_fullscreen_mode = false,
 	window_close_confirmation = "NeverPrompt",
 	window_decorations = "RESIZE",
-	-- keys
 	keys = {
 		k.cmd_to_tmux_prefix("t", "c"),
 		k.cmd_to_tmux_prefix(",", ","),
@@ -51,7 +51,6 @@ local config = {
 		k.cmd_to_tmux_prefix("o", "u"),
 		k.cmd_to_tmux_prefix("z", "z"),
 		k.cmd_to_tmux_prefix("[", "["),
-
 		k.cmd_to_tmux_prefix("1", "1"),
 		k.cmd_to_tmux_prefix("2", "2"),
 		k.cmd_to_tmux_prefix("3", "3"),
@@ -61,9 +60,27 @@ local config = {
 		k.cmd_to_tmux_prefix("7", "7"),
 		k.cmd_to_tmux_prefix("8", "8"),
 		k.cmd_to_tmux_prefix("9", "9"),
-
 		k.cmd_to_alt_key("f"),
 		k.cmd_to_alt_key("b"),
+		{
+			mods = "CMD",
+			key = "RightArrow",
+			action = wezterm.action_callback(function()
+				wezterm.log_info("CMD+RightArrow pressed")
+				w.next_wallpaper(wallpapers)
+				wezterm.reload_configuration()
+			end),
+		},
+		{
+			mods = "CMD",
+			key = "LeftArrow",
+			action = wezterm.action_callback(function()
+				wezterm.log_info("CMD+LeftArrow pressed")
+				w.previous_wallpaper(wallpapers)
+				wezterm.reload_configuration()
+			end),
+		},
 	},
 }
+
 return config
