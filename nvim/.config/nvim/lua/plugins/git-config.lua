@@ -1,5 +1,11 @@
 return {
 	{
+		"rhysd/git-messenger.vim",
+		config = function()
+			vim.keymap.set("n", "<leader>Gm", "<cmd>GitMessenger<CR>")
+		end,
+	},
+	{
 		"kdheepak/lazygit.nvim",
 		cmd = {
 			"LazyGit",

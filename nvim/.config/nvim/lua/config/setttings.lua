@@ -93,3 +93,10 @@ vim.opt.mouse = ""
 
 -- Add asterisks in block comments
 vim.opt.formatoptions:append({ "r" })
+
+-- Line break conf
+vim.o.wrap = true
+vim.o.breakindent = true
+vim.o.showbreak = "⤷ "
+vim.o.linebreak = true
+vim.o.conceallevel = 2

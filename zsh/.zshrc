@@ -131,6 +131,8 @@ export PATH="$JAVA_HOME/bin/:$PATH"
 export SPARK_HOME=/usr/local/Cellar/apache-spark/3.2.1/libexec
 export PATH="$SPARK_HOME/bin/:$PATH"
 
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)
+export PATH=$JAVA_HOME/bin:$PATH
 
 # History {{{
 HISTSIZE=10000
@@ -187,6 +189,7 @@ alias tat='tmux new-session -As $(basename "$PWD" | tr . -)' # will attach if se
 alias tmuxkillall="tmux ls | cut -d : -f 1 | xargs -I {} tmux kill-session -t {}" # tmux kill all sessions
 alias tk="tmux kill-session " # tmux kill session
 alias tf="tmuxifier load-window frontend"
+alias ta='tmux a'
 
 
 

@@ -1,5 +1,5 @@
 import = [
-   "~/.config/alacritty/catppuccin-mocha.toml"
+   "~/.config/alacritty/tokyonight.toml"
 ]
 
 live_config_reload = true
@@ -14,7 +14,7 @@ TERM = "screen-256color"
 [window]
 decorations = "buttonless"
 dynamic_padding = false
-opacity = 0.9
+# opacity = 0.9
 blur = true
 
 [window.padding]

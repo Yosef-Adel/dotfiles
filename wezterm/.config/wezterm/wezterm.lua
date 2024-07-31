@@ -1,18 +1,18 @@
-local wezterm = require("wezterm")
+-- local wezterm = require("wezterm")
 local b = require("utils/background")
 local cs = require("utils/color_scheme")
 local f = require("utils/font")
 local h = require("utils/helpers")
 local k = require("utils/keys")
-local w = require("utils/wallpaper")
+-- local w = require("utils/wallpaper")
 
-local wallpapers_glob = os.getenv("HOME") .. "/Pictures/Tremenal Wallpaper/*"
-local wallpapers = w.load_wallpapers(wallpapers_glob)
+-- local wallpapers_glob = os.getenv("HOME") .. "/Pictures/Tremenal Wallpaper/*"
+-- local wallpapers = w.load_wallpapers(wallpapers_glob)
 
 local config = {
 	background = {
-		w.get_wallpaper(wallpapers),
-		b.get_background(0.3, 0.3),
+		-- w.get_wallpaper(wallpapers),
+		b.get_background(0.85, 0.85),
 	},
 	macos_window_background_blur = 500,
 	font_size = 16.0,
@@ -62,24 +62,24 @@ local config = {
 		k.cmd_to_tmux_prefix("9", "9"),
 		k.cmd_to_alt_key("f"),
 		k.cmd_to_alt_key("b"),
-		{
-			mods = "CMD",
-			key = "RightArrow",
-			action = wezterm.action_callback(function()
-				wezterm.log_info("CMD+RightArrow pressed")
-				w.next_wallpaper(wallpapers)
-				wezterm.reload_configuration()
-			end),
-		},
-		{
-			mods = "CMD",
-			key = "LeftArrow",
-			action = wezterm.action_callback(function()
-				wezterm.log_info("CMD+LeftArrow pressed")
-				w.previous_wallpaper(wallpapers)
-				wezterm.reload_configuration()
-			end),
-		},
+		-- {
+		-- 	mods = "CMD",
+		-- 	key = "RightArrow",
+		-- 	action = wezterm.action_callback(function()
+		-- 		wezterm.log_info("CMD+RightArrow pressed")
+		-- 		w.next_wallpaper(wallpapers)
+		-- 		wezterm.reload_configuration()
+		-- 	end),
+		-- },
+		-- {
+		-- 	mods = "CMD",
+		-- 	key = "LeftArrow",
+		-- 	action = wezterm.action_callback(function()
+		-- 		wezterm.log_info("CMD+LeftArrow pressed")
+		-- 		w.previous_wallpaper(wallpapers)
+		-- 		wezterm.reload_configuration()
+		-- 	end),
+		-- },
 	},
 }
 
