@@ -91,14 +91,10 @@ return {
 					"html",
 					"cssls",
 					"tailwindcss",
-					"svelte",
 					"lua_ls",
-					"graphql",
 					"emmet_ls",
-					"prismals",
 					"pyright",
 					"gopls",
-					-- "yamlls",
 				},
 			})
 
@@ -121,13 +117,6 @@ return {
 						capabilities = capabilities,
 					})
 				end,
-				["graphql"] = function()
-					-- configure graphql language server
-					lspconfig["graphql"].setup({
-						capabilities = capabilities,
-						filetypes = { "graphql", "gql", "svelte", "typescriptreact", "javascriptreact" },
-					})
-				end,
 				["emmet_ls"] = function()
 					-- configure emmet language server
 					lspconfig["emmet_ls"].setup({
@@ -145,7 +134,6 @@ return {
 					})
 				end,
 				["lua_ls"] = function()
-					-- configure lua server (with special settings)
 					lspconfig["lua_ls"].setup({
 						capabilities = capabilities,
 						settings = {
