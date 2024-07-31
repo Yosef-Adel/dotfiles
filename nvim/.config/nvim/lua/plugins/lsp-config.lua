@@ -107,7 +107,6 @@ return {
 					"pylint",
 					"golangci_lint_ls",
 					"eslint-lsp",
-					-- "cfn-lint",
 				},
 			})
 
