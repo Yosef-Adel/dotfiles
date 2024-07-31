@@ -4,6 +4,8 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		"mfussenegger/nvim-lint",
+		"stevearc/conform.nvim",
+		"zapling/mason-conform.nvim",
 	},
 	config = function()
 		local mason = require("mason")
