@@ -42,5 +42,14 @@ return {
 		vim.keymap.set("n", "<leader>6", function()
 			ui.nav_file(6)
 		end, { desc = "Navigate to 6th file" })
+		vim.keymap.set("n", "<leader>7", function()
+			ui.nav_file(7)
+		end, { desc = "Navigate to 7th file" })
+		vim.keymap.set("n", "<leader>8", function()
+			ui.nav_file(8)
+		end, { desc = "Navigate to 8th file" })
+		vim.keymap.set("n", "<leader>9", function()
+			ui.nav_file(9)
+		end, { desc = "Navigate to 9th file" })
 	end,
 }

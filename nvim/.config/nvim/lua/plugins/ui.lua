@@ -1,15 +1,5 @@
 return {
 	{
-		"nvimdev/dashboard-nvim",
-		enabled = false,
-	},
-	{
-		"nvim-lualine/lualine.nvim",
-		enabled = false,
-	},
-	-- messages, cmdline and the popupmenu
-
-	{
 		"rcarriga/nvim-notify",
 		opts = {
 			timeout = 5000,
@@ -17,9 +7,8 @@ return {
 			render = "wrapped-compact",
 		},
 	},
-
-	-- buffer line
 	{
+
 		"akinsho/bufferline.nvim",
 		event = "VeryLazy",
 		keys = {
@@ -34,8 +23,6 @@ return {
 			},
 		},
 	},
-
-	-- filename with relative path
 	{
 		"b0o/incline.nvim",
 		dependencies = {},
@@ -64,37 +51,5 @@ return {
 				end,
 			})
 		end,
-	},
-	-- LazyGit integration with Telescope
-	{
-		"kdheepak/lazygit.nvim",
-		-- optional for floating window border decoration
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
-	},
-	{
-		"kristijanhusak/vim-dadbod-ui",
-		dependencies = {
-			{ "tpope/vim-dadbod", lazy = true },
-			{ "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true },
-		},
-		cmd = {
-			"DBUI",
-			"DBUIToggle",
-			"DBUIAddConnection",
-			"DBUIFindBuffer",
-		},
-		init = function()
-			-- Your DBUI configuration
-			vim.g.db_ui_use_nerd_fonts = 1
-		end,
-		keys = {
-			{
-
-				"<leader>d",
-				"<cmd>tabnew<cr><bar><bar><cmd>DBUI<cr>",
-			},
-		},
 	},
 }
