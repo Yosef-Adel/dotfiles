@@ -33,13 +33,13 @@ return {
 				end,
 			},
 			mapping = cmp.mapping.preset.insert({
-				["<C-k>"] = cmp.mapping.select_prev_item(), -- Previous suggestion
-				["<C-j>"] = cmp.mapping.select_next_item(), -- Next suggestion
+				["<C-p>"] = cmp.mapping.select_prev_item(), -- Previous suggestion
+				["<C-n>"] = cmp.mapping.select_next_item(), -- Next suggestion
 				["<C-b>"] = cmp.mapping.scroll_docs(-4),
 				["<C-f>"] = cmp.mapping.scroll_docs(4),
 				["<C-Space>"] = cmp.mapping.complete(), -- Show completion suggestions
 				["<C-e>"] = cmp.mapping.abort(), -- Close completion window
-				["<CR>"] = cmp.mapping.confirm({ select = false }), -- Confirm selection
+				["<C-y>"] = cmp.mapping.confirm({ select = false }), -- Confirm selection
 				["<Tab>"] = cmp.mapping(function(fallback)
 					if cmp.visible() then
 						cmp.select_next_item()
