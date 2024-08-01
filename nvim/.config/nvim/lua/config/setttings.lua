@@ -28,9 +28,6 @@ vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 vim.opt.inccommand = "split"
 vim.opt.cursorline = true
 vim.opt.showmode = false
-vim.scriptencoding = "utf-8"
-vim.opt.encoding = "utf-8"
-vim.opt.fileencoding = "utf-8"
 vim.opt.number = true
 vim.opt.title = true
 vim.opt.autoindent = true
@@ -52,3 +49,8 @@ vim.o.showbreak = "⤷ "
 vim.o.linebreak = true
 vim.o.conceallevel = 2
 vim.opt.formatoptions:append({ "r" })
+vim.scriptencoding = "utf-8"
+vim.opt.encoding = "utf-8"
+vim.opt.fileencoding = "utf-8"
+vim.opt.spell = true
+vim.opt.spelllang = "en_us"
