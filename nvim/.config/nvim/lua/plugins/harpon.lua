@@ -16,12 +16,6 @@ return {
 		vim.keymap.set("n", "<leader>j", function()
 			ui.nav_file(2)
 		end, { desc = "Navigate to 2nd file" })
-		vim.keymap.set("n", "<leader>g", function()
-			ui.nav_file(3)
-		end, { desc = "Navigate to 3rd file" })
-		vim.keymap.set("n", "<leader>h", function()
-			ui.nav_file(4)
-		end, { desc = "Navigate to 4th file" })
 
 		-- numbers
 		vim.keymap.set("n", "<leader>1", function()
