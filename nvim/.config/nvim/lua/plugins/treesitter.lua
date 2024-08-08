@@ -13,9 +13,6 @@ return {
 				enable = true,
 			},
 			indent = { enable = true },
-			autotag = {
-				enable = true,
-			},
 			ensure_installed = {
 				"json",
 				"javascript",
@@ -49,5 +46,7 @@ return {
 				},
 			},
 		})
+
+		require("nvim-ts-autotag").setup()
 	end,
 }
