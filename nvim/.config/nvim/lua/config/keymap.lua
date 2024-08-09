@@ -21,9 +21,6 @@ vim.keymap.set("n", ",w", "<cmd> w<CR>")
 
 vim.keymap.set("n", ",f", "<cmd> !tmux neww tmux-sessionizer<CR>")
 
--- for diagnostic
-vim.keymap.set("n", "<leader>rr", vim.diagnostic.open_float, { desc = "Show diagnostic [E]rror messages" })
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 -- tabs
 vim.keymap.set("n", "<leader>nt", "<cmd>tabNext<CR>")
 vim.keymap.set("n", "<leader>pt", "<cmd>tabprevious<CR>")
