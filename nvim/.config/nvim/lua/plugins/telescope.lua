@@ -48,7 +48,7 @@ return {
 
 			map("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
 			map("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-			map("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
+			map("n", "<leader>sa", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
 			map("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
 			map("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
 			map("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
