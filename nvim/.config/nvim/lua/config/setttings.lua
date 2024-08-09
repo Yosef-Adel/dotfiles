@@ -43,7 +43,6 @@ vim.opt.wildignore:append({ "*/node_modules/*" })
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.splitkeep = "cursor"
-vim.opt.mouse = ""
 vim.o.wrap = true
 vim.o.showbreak = "⤷ "
 vim.o.linebreak = true
