@@ -2,7 +2,7 @@ return {
 	{
 		"rhysd/git-messenger.vim",
 		config = function()
-			vim.keymap.set("n", "<leader>Gm", "<cmd>GitMessenger<CR>")
+			vim.keymap.set("n", "<leader>gm", "<cmd>GitMessenger<CR>")
 		end,
 	},
 	{
@@ -34,8 +34,8 @@ return {
 					end
 				end,
 			})
-			vim.keymap.set("n", "<leader>Gu", "<cmd>diffget //2<CR>")
-			vim.keymap.set("n", "<leader>Gh", "<cmd>diffget //3<CR>")
+			vim.keymap.set("n", "<leader>gu", "<cmd>diffget //2<CR>")
+			vim.keymap.set("n", "<leader>gh", "<cmd>diffget //3<CR>")
 		end,
 	},
 	-- optional for floating window border decoration
