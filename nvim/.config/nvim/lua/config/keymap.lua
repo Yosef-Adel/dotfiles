@@ -18,6 +18,7 @@ vim.keymap.set("n", "gl", "$")
 vim.keymap.set("n", "gh", "^")
 -- for saving files
 vim.keymap.set("n", ",w", "<cmd> w<CR>")
+vim.keymap.set("n", "<leader>w", "<cmd> w<CR>")
 
 vim.keymap.set("n", ",f", "<cmd> !tmux neww tmux-sessionizer<CR>")
 

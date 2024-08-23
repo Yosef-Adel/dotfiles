@@ -1,0 +1,11 @@
+# POST Request
+https://example.com
+
+POST /resource
+Content-Type: application/json; charset=UTF-8
+Authorization: Bearer your-token-here
+
+{
+  "key": "value"
+}
+
