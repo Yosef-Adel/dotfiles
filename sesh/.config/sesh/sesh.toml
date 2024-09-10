@@ -25,6 +25,11 @@ startup_command = "clear"
 
 
 [[session]]
-name = "Second Brain 🧠"
+name = "Old Notes"
 path = "~/OneDrive/Second Brain/"
+startup_command = "nvim"
+
+[[session]]
+name = "Second Brain 🧠"
+path = "~/Documents/Second Brain/"
 startup_command = "nvim"

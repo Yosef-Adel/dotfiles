@@ -6,11 +6,5 @@ return {
 		vim.g.vrc_auto_format_response_patterns = {
 			json = "jq",
 		}
-
-		-- Disable the default mappings
-		vim.g.vrc_set_default_mapping = 0
-
-		-- Set custom mapping for executing the REST request
-		vim.api.nvim_set_keymap("n", "<leader>xr", ":call VrcQuery()<CR>", { noremap = true, silent = true })
 	end,
 }

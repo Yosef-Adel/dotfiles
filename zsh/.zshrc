@@ -118,7 +118,7 @@ export PATH="/Users/yosefsaaid/Library/Python/3.9/bin:$PATH"
 # add path for mpj /Users/yosefsaaid/-_-/mpj
 export PATH="/Users/yosefsaaid/-_-/mpj:$PATH"
 
-bindkey -s ,f 'tmux-sessionizer\n'
+bindkey -s '^f' 'tmux-sessionizer\n'
 
 # n node version control 
 export PATH="/usr/local/bin:$PATH"
@@ -190,7 +190,7 @@ alias tmuxkillall="tmux ls | cut -d : -f 1 | xargs -I {} tmux kill-session -t {}
 alias tk="tmux kill-session " # tmux kill session
 alias tf="tmuxifier load-window frontend"
 alias ta='tmux a'
-
+alias td='tmux detach'
 
 
 

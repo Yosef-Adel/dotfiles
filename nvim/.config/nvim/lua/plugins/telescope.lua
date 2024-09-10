@@ -56,13 +56,14 @@ return {
 			map("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 			map("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 			map("n", "<leader>sm", builtin.marks, { desc = " Find marks buffers" })
+			map("n", "<leader>sj", builtin.jumplist, { desc = " Find jumplist" })
 
 			map("n", "<C-p>", builtin.find_files, { desc = "[P]roject [F]iles" })
 			map("n", "<leader>ps", function()
 				builtin.grep_string({ search = vim.fn.input("Grep > ") })
 			end, { desc = "[P]roject [S]earch" })
 
-			map("n", "<C-f>", function()
+			map("n", "<leader>ff", function()
 				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
 					previewer = false,
 				}))
@@ -75,8 +76,11 @@ return {
 				})
 			end, { desc = "[S]earch [/] in Open Files" })
 
-			map("n", "<leader>sn", function()
+			map("n", "<leader>sc", function()
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
+			end, { desc = "[S]earch [N]eovim files" })
+			map("n", "<leader>sn", function()
+				builtin.find_files({ cwd = "~/Documents/Second Brain/" })
 			end, { desc = "[S]earch [N]eovim files" })
 		end,
 	},
