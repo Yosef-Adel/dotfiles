@@ -11,7 +11,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 -- Set global options, keymaps
-require("config.setttings")
+require("config.settings")
 require("config.keymap")
 require("config.autocmds")
 

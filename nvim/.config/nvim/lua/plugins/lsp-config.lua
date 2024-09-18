@@ -60,7 +60,6 @@ return {
 				end,
 			})
 
-			-- Configure diagnostic signs
 			local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 			for type, icon in pairs(signs) do
 				local hl = "DiagnosticSign" .. type
@@ -134,7 +133,7 @@ return {
 			local mason_tool_installer = require("mason-tool-installer")
 			mason_tool_installer.setup({
 				ensure_installed = {
-					"tsserver",
+					"typescript-language-server",
 					"html",
 					"cssls",
 					"tailwindcss",
@@ -149,7 +148,12 @@ return {
 					"pylint",
 					"golangci_lint_ls",
 					"eslint-lsp",
+					"codespell",
+					"misspell",
+					"cspell",
 				},
+				auto_update = true, -- Automatically update the installed tools
+				run_on_start = true, -- Install tools when Neovim starts
 			})
 		end,
 	},
