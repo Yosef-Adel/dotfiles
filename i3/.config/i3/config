@@ -3,11 +3,11 @@
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
 # Mod Key
-set $mod Mod1
+set $mod Mod4
 
 # Execute Always
 
-# exec_always --no-startup-id sudo /home/yosefsaaid/.cargo/bin/kanata -c /home/yosefsaaid/.config/kanata/config.kbd
+exec_always --no-startup-id sudo /home/yosefsaaid/.cargo/bin/kanata -c /home/yosefsaaid/.config/kanata/config.kbd
 exec_always --no-startup-id picom --experimental-backends 
 exec_always --no-startup-id /home/yosefsaaid/local/bin/autotiling
 exec_always --no-startup-id killall polybar 
