@@ -7,9 +7,9 @@ live_config_reload = true
 TERM = "screen-256color"
 
 [font]
-  normal.family = "MesloLGS NF"
+  size = 14
+  normal.family = "JetBrainsMonoNerdFontMono"
   normal.style = "Regular"
-  size = 16
 
 [window]
 decorations = "buttonless"

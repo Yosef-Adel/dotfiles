@@ -115,24 +115,24 @@ export PATH="$HOME/.tmuxifierr/bin:$PATH"
 # Python3
 export PATH="/Users/yosefsaaid/Library/Python/3.9/bin:$PATH"
 
-# add path for mpj /Users/yosefsaaid/-_-/mpj
-export PATH="/Users/yosefsaaid/-_-/mpj:$PATH"
 
 bindkey -s '^f' 'tmux-sessionizer\n'
 
 # n node version control 
 export PATH="/usr/local/bin:$PATH"
-# for scripts
-export PATH="/users/yosefsaaid/local/bin:$PATH"
-# java 
-export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.12
-export PATH="$JAVA_HOME/bin/:$PATH"
-# spark
-export SPARK_HOME=/usr/local/Cellar/apache-spark/3.2.1/libexec
-export PATH="$SPARK_HOME/bin/:$PATH"
 
-export JAVA_HOME=$(/usr/libexec/java_home -v 21)
-export PATH=$JAVA_HOME/bin:$PATH
+# for scripts
+export PATH="/home/yosefsaaid/local/bin:$PATH"
+
+# Rust
+export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/.cargo/env:$PATH"
+
+# go
+export PATH=$PATH:/usr/local/go/bin
+export PATH=$PATH:~/go/bin
+
+export XDG_DATA_DIRS="/var/lib/flatpak/exports/share:/home/$USER/.local/share/flatpak/exports/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 
 # History {{{
 HISTSIZE=10000
@@ -226,6 +226,15 @@ function tmuxkill() {
 }
 # }}}
 
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
 
 # ==================== git Functions ====================
 # Modify the colors and symbols in these variables as desired.
@@ -291,3 +300,4 @@ function git_prompt_string() {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
