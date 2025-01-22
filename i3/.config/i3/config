@@ -12,15 +12,16 @@ exec_always --no-startup-id picom --experimental-backends
 exec_always --no-startup-id /home/yosefsaaid/local/bin/autotiling
 exec_always --no-startup-id killall polybar 
 exec_always --no-startup-id ~/.config/polybar/launch_polybar.sh
-exec_always feh --bg-scale ~/Pictures/Wallpapers/_2.jpg
+exec_always feh --bg-scale ~/Pictures/Wallpaper/_1.jpg
 exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock-fancy --nofork
 exec --no-startup-id nm-applet
 exec wezterm
+exec --no-startup-id copyq
 
 
 # Font
-font pango:monospace MesloLGSDZNerdFont 14
+font pango:monospace   SF Pro Rounded: 14
 
 # Color Scheme (Tokyo Night)
 # Base colors
@@ -61,34 +62,22 @@ client.background        $base
 
 # Border and Gaps
 for_window [class=".*"] border pixel 1
-gaps inner 5
-# border_radius 15
-# smart_borders on
-# smart_borders no_gaps
+gaps inner 4
+gaps outer 10
 
 # Volume Control Bindings
 set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
-
-# Media Player Bindings
-bindsym XF86AudioPlay exec playerctl play
-bindsym XF86AudioPause exec playerctl pause
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
 
 # Workspace Configuration
 set $ws1 "1 "
 set $ws2 "2 "
 set $ws3 "3 "
 set $ws4 "4 "
-set $ws5 "5"
+set $ws5 "5 󰽉"
 set $ws6 "6"
 set $ws7 "7"
-set $ws8 "8 Teams"
-set $ws9 "9 Discord"
+set $ws8 "8 󰊻"
+set $ws9 "9 "
 set $ws10 "10 "
 
 # Workspace Bindings
@@ -104,17 +93,16 @@ bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
 
 # Move Focused Container to Workspace
-bindsym $mod+Shift+1 move container to workspace number $ws1
-bindsym $mod+Shift+2 move container to workspace number $ws2
-bindsym $mod+Shift+3 move container to workspace number $ws3
-bindsym $mod+Shift+4 move container to workspace number $ws4
-bindsym $mod+Shift+5 move container to workspace number $ws5
-bindsym $mod+Shift+6 move container to workspace number $ws6
-bindsym $mod+Shift+7 move container to workspace number $ws7
-bindsym $mod+Shift+8 move container to workspace number $ws8
-bindsym $mod+Shift+9 move container to workspace number $ws9
-bindsym $mod+Shift+0 move container to workspace number $ws10
-
+bindsym $mod+Shift+1 move container to workspace number $ws1; workspace number $ws1
+bindsym $mod+Shift+2 move container to workspace number $ws2; workspace number $ws2
+bindsym $mod+Shift+3 move container to workspace number $ws3; workspace number $ws3
+bindsym $mod+Shift+4 move container to workspace number $ws4; workspace number $ws4
+bindsym $mod+Shift+5 move container to workspace number $ws5; workspace number $ws5
+bindsym $mod+Shift+6 move container to workspace number $ws6; workspace number $ws6
+bindsym $mod+Shift+7 move container to workspace number $ws7; workspace number $ws7
+bindsym $mod+Shift+8 move container to workspace number $ws8; workspace number $ws8
+bindsym $mod+Shift+9 move container to workspace number $ws9; workspace number $ws9
+bindsym $mod+Shift+0 move container to workspace number $ws10; workspace number $ws10
 # Window Management
 floating_modifier $mod
 
@@ -144,28 +132,30 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Screenshots
-# Full-screen screenshot
-bindsym $mod+c exec --no-startup-id bash -c 'maim --format=png "/home/$USER/Pictures/Screenshots/screenshot-$(date +"%Y%m%d-%H%M%S")-all.png" && dunstify -i camera-photo "Screenshot Captured" "Full-screen screenshot saved" && paplay /usr/share/sounds/freedesktop/stereo/camera-shutter.oga'
-
-# Select area screenshot
-bindsym $mod+s exec --no-startup-id bash -c 'maim --format=png --select --noopengl "/home/$USER/Pictures/Screenshots/screenshot-$(date +"%Y%m%d-%H%M%S")-selected.png" && dunstify -i camera-photo "Screenshot Captured" "Selected area screenshot saved" && paplay /usr/share/sounds/freedesktop/stereo/camera-shutter.oga'
+bindsym $mod+c exec flameshot gui
+bindsym $mod+s exec flameshot full
 
 # Other Bindings
 bindsym $mod+x exec i3lock-fancy  
-bindsym $mod+b exec flatpak run io.github.zen_browser.zen
-bindsym $mod+u exec amixer -D pulse sset Master 5%+
-bindsym $mod+m exec amixer -D pulse sset Master 5%-
-bindsym $mod+t exec amixer -D pulse sset Master toggle
+# bindsym $mod+b exec flatpak run io.github.zen_browser.zen
+# Volume control
+bindsym $mod+u exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym $mod+m exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym $mod+t exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Media control (playerctl should still work with PipeWire)
 bindsym $mod+n exec playerctl next
 bindsym $mod+p exec playerctl previous
 bindsym $mod+Shift+p exec playerctl play
 bindsym $mod+Shift+b exec playerctl pause
+
 bindsym $mod+Return exec wezterm
+bindsym $mod+Shift+f exec thunar 
 bindsym $mod+q kill
 bindsym $mod+d exec --no-startup-id dmenu_run
 bindsym $mod+space exec rofi -show combi
 # Layout and Tiling
-bindsym $mod+v split v
+# bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 # bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
@@ -176,4 +166,15 @@ bindsym $mod+a focus parent
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-bindsym $mod+Shift+v exec diodon
+
+
+bindsym $mod+v exec --no-startup-id copyq show
+bindsym $mod+shift+v exec --no-startup-id copyq hide
+
+for_window [instance="copyq"] floating enable
+for_window [instance="copyq"] resize set 1000 600
+for_window [instance="copyq"] move position center
+for_window [instance="copyq"] border pixel 5
+
+bindsym $mod+Tab workspace back_and_forth
+
