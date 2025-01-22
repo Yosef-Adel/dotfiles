@@ -13,7 +13,7 @@ return {
 				typescriptreact = { "eslint-lsp" },
 				svelte = { "prettier" },
 				css = { "prettier" },
-				html = { "prettier" },
+				html = { "htmx-lsp" },
 				json = { "prettier" },
 				yaml = { "prettier" },
 				markdown = { "prettier" },
