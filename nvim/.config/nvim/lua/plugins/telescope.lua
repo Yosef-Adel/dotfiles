@@ -63,7 +63,7 @@ return {
 				builtin.grep_string({ search = vim.fn.input("Grep > ") })
 			end, { desc = "[P]roject [S]earch" })
 
-			map("n", "<leader>ff", function()
+			map("n", "<leader>f", function()
 				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
 					previewer = false,
 				}))
