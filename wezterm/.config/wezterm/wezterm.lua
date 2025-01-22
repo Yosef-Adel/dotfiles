@@ -5,20 +5,20 @@ local f = require("utils/font")
 local h = require("utils/helpers")
 local k = require("utils/keys")
 local w = require("utils/wallpaper")
--- local wallpapers_glob = os.getenv("HOME") .. "/Pictures/Terminal Wallpaper/*"
--- local wallpapers = w.load_wallpapers(wallpapers_glob)
+
+local wallpapers_glob = os.getenv("HOME") .. "/Pictures/Terminal/*"
+local wallpapers = w.load_wallpapers(wallpapers_glob)
 --
 local config = {
 	background = {
-		--		w.get_wallpaper(wallpapers),
-		--		b.get_background(1, 1),
-		b.get_background(0.9, 0.9),
+		-- w.get_wallpaper(wallpapers),
+		-- b.get_background(0.95, 0.95),
 	},
 	macos_window_background_blur = 50,
 	font_size = 16.0,
-	line_height = 1.1,
+	line_height = 1.2,
 	font = f.get_font({
-		"JetBrainsMonoNerdFontMono",
+		" MesloLGS NF",
 	}),
 	color_scheme = cs.get_color_scheme(),
 	window_padding = {
