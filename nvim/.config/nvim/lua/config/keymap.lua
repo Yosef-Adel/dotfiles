@@ -26,5 +26,4 @@ vim.keymap.set("n", "<leader>nt", "<cmd>tabNext<CR>")
 vim.keymap.set("n", "<leader>pt", "<cmd>tabprevious<CR>")
 
 -- Map Leader + vs to the scratch buffer function
-vim.keymap.set("n", "<Leader>vs", ":lua Open_scratch_buffer()<CR>", { noremap = true, silent = true })
-vim.keymap.set("n", "<Leader>fs", "1z=")
+vim.keymap.set("n", "<leader>vs", ":lua Open_scratch_buffer()<CR>", { noremap = true, silent = true })
