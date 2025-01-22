@@ -9,9 +9,14 @@ path = "~/.config/wezterm"
 startup_command = "nvim wezterm.lua"
 
 [[session]]
+name = "nvim config"
+path = "~/.config/nvim"
+startup_command = "nvim"
+
+[[session]]
 name = "sesh config"
 path = "~/.config/sesh"
-startup_command = "nvim sesh.toml"
+startup_command = "nvim"
 
 [[session]]
 name = "Dev 💻"
@@ -24,12 +29,12 @@ path = "~/"
 startup_command = "clear"
 
 
-[[session]]
-name = "Old Notes"
-path = "~/OneDrive/Second Brain/"
-startup_command = "nvim"
-
-[[session]]
-name = "Second Brain 🧠"
-path = "~/Documents/Second Brain/"
-startup_command = "nvim"
+# [[session]]
+# name = "Old Notes"
+# path = "~/OneDrive/Second Brain/"
+# startup_command = "nvim"
+#
+# [[session]]
+# name = "Second Brain 🧠"
+# path = "~/Documents/Second Brain/"
+# startup_command = "nvim"
