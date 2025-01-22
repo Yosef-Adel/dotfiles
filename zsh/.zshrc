@@ -181,7 +181,7 @@ alias free='free -m'
 
 # alias for vim 
 alias v='nvim'
-alias vim='nvim'
+# alias vim='nvim'
 
 
 # alias for tmux 
@@ -301,3 +301,4 @@ function git_prompt_string() {
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+export PATH=$HOME/.local/bin:$PATH
