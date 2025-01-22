@@ -1,6 +1,6 @@
 #!/bin/bash
 
-session=$(find ~/.config/ ~/Courses/  ~/lua_nvim/ ~/dotfiles/  ~/rest-collection/ ~/Personal ~/work ~/labs ~/dev ~/Documents ~/ -mindepth 1 -maxdepth 1 -type d | fzf --height 100% --layout=reverse --border)
+session=$(find ~/.config/ ~/dotfiles/ ~/work ~/dev ~/Documents ~/ -mindepth 1 -maxdepth 1 -type d | fzf --height 100% --layout=reverse --border)
 
 session_name=$(basename "$session" | tr . _)
 
