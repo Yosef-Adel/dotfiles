@@ -93,5 +93,13 @@ return {
 				debounce_text_changes = 150,
 			},
 		})
+
+		-- Setup up vim-dadbod
+		cmp.setup.filetype({ "sql" }, {
+			sources = {
+				{ name = "vim-dadbod-completion" },
+				{ name = "buffer" },
+			},
+		})
 	end,
 }
