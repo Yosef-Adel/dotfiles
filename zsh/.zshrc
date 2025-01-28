@@ -125,13 +125,13 @@ export PATH="/usr/local/bin:$PATH"
 # for scripts
 export PATH="/users/yosefsaaid/local/bin:$PATH"
 # java 
-export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.12
-export PATH="$JAVA_HOME/bin/:$PATH"
+#export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.12
+#export PATH="$JAVA_HOME/bin/:$PATH"
 # spark
 export SPARK_HOME=/usr/local/Cellar/apache-spark/3.2.1/libexec
 export PATH="$SPARK_HOME/bin/:$PATH"
 
-export JAVA_HOME=$(/usr/libexec/java_home -v 21)
+#export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 export PATH=$JAVA_HOME/bin:$PATH
 
 # History {{{
