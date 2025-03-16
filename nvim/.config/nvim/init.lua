@@ -10,6 +10,7 @@ if not vim.loop.fs_stat(lazypath) then
 	})
 end
 vim.opt.rtp:prepend(lazypath)
+
 -- Set global options, keymaps
 require("config.settings")
 require("config.keymap")
@@ -17,7 +18,8 @@ require("config.autocmds")
 
 -- Load plugins
 require("lazy").setup("plugins")
+
 -- Load Snippets
-require("after.luasnip")
+-- require("after.luasnip")
 require("after.functions")
-require("after.rest-snippets")
+-- require("after.rest-snippets")

@@ -1,12 +1,12 @@
--- Existing settings (keeping them as they are)
-vim.opt.guicursor = ""
-vim.opt.nu = true
+vim.opt.guicursor = "" -- making the cursor invisible in GUI
+vim.opt.nu = true -- Show line numbers
 vim.opt.relativenumber = true
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.smartindent = true
+vim.opt.clipboard = "unnamedplus"
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
@@ -33,8 +33,8 @@ vim.opt.title = true
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 vim.opt.showcmd = true
--- vim.opt.cmdheight = 0
--- vim.opt.laststatus = 0
+vim.opt.cmdheight = 0
+vim.opt.laststatus = 0
 vim.opt.smarttab = true
 vim.opt.breakindent = true
 vim.opt.backspace = { "start", "eol", "indent" }
@@ -51,6 +51,6 @@ vim.opt.formatoptions:append({ "r" })
 vim.scriptencoding = "utf-8"
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
+
 vim.opt.spelllang = "en_us"
 vim.opt.spell = true
-vim.opt.clipboard = "unnamedplus"

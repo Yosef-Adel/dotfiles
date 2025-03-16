@@ -1,4 +1,4 @@
 return {
-	"tpope/vim-unimpaired",
-	"tpope/vim-repeat",
+	-- "tpope/vim-unimpaired",
+	-- "tpope/vim-repeat",
 }
