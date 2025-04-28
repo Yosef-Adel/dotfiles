@@ -134,6 +134,9 @@ export PATH="$SPARK_HOME/bin/:$PATH"
 #export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 export PATH=$JAVA_HOME/bin:$PATH
 
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
 # History {{{
 HISTSIZE=10000
 SAVEHIST=9000
