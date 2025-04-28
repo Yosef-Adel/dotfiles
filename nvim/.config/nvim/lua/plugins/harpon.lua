@@ -10,13 +10,6 @@ return {
 		vim.keymap.set("n", "<leader>a", mark.add_file, { desc = "Add file to harpoon" })
 		vim.keymap.set("n", "<leader>t", ui.toggle_quick_menu, { desc = "Toggle harpoon menu" })
 
-		vim.keymap.set("n", "<leader>f", function()
-			ui.nav_file(1)
-		end, { desc = "Navigate to 1st file" })
-		vim.keymap.set("n", "<leader>j", function()
-			ui.nav_file(2)
-		end, { desc = "Navigate to 2nd file" })
-
 		-- numbers
 		vim.keymap.set("n", "<leader>1", function()
 			ui.nav_file(1)

@@ -18,6 +18,6 @@ require("config.autocmds")
 -- Load plugins
 require("lazy").setup("plugins")
 -- Load Snippets
-require("after.luasnip")
 require("after.functions")
-require("after.rest-snippets")
+require("snippets.luasnip")
+require("snippets.rest-snippets")
