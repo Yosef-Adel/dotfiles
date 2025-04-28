@@ -11,13 +11,13 @@ local w = require("utils/wallpaper")
 local config = {
 	background = {
 		--		w.get_wallpaper(wallpapers),
-		-- b.get_background(0.8, 0.8),
+		b.get_background(0.8, 0.8),
 	},
 	macos_window_background_blur = 50,
-	font_size = 16.0,
+	font_size = 18.0,
 	line_height = 1.1,
 	font = f.get_font({
-		"MesloLGS NF",
+		"JetBrains Mono",
 	}),
 	color_scheme = cs.get_color_scheme(),
 	window_padding = {
@@ -60,25 +60,24 @@ local config = {
 		k.cmd_to_tmux_prefix("8", "8"),
 		k.cmd_to_tmux_prefix("9", "9"),
 		k.cmd_to_alt_key("f"),
-		k.cmd_to_alt_key("b"),
-		{
-			mods = "CMD",
-			key = "RightArrow",
-			action = wezterm.action_callback(function()
-				wezterm.log_info("CMD+RightArrow pressed")
-				w.next_wallpaper(wallpapers)
-				wezterm.reload_configuration()
-			end),
-		},
-		{
-			mods = "CMD",
-			key = "LeftArrow",
-			action = wezterm.action_callback(function()
-				wezterm.log_info("CMD+LeftArrow pressed")
-				w.previous_wallpaper(wallpapers)
-				wezterm.reload_configuration()
-			end),
-		},
+		-- {
+		-- 	mods = "CMD",
+		-- 	key = "RightArrow",
+		-- 	action = wezterm.action_callback(function()
+		-- 		wezterm.log_info("CMD+RightArrow pressed")
+		-- 		w.next_wallpaper(wallpapers)
+		-- 		wezterm.reload_configuration()
+		-- 	end),
+		-- },
+		-- {
+		-- 	mods = "CMD",
+		-- 	key = "LeftArrow",
+		-- 	action = wezterm.action_callback(function()
+		-- 		wezterm.log_info("CMD+LeftArrow pressed")
+		-- 		w.previous_wallpaper(wallpapers)
+		-- 		wezterm.reload_configuration()
+		-- 	end),
+		-- },
 	},
 
 	wezterm.on("user-var-changed", function(window, pane, name, value)
