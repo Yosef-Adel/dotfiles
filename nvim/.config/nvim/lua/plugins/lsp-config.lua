@@ -1,10 +1,11 @@
 return {
+	-- Core LSP configuration
 	{
 		"neovim/nvim-lspconfig",
-		event = { "BufReadPre", "BufNewFile" }, -- Load LSP config on buffer read or new file creation
+		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
-			"nvim-lua/plenary.nvim", -- Add this line to include plenary.nvim
-			{ "antosha417/nvim-lsp-file-operations", config = true }, -- File operations for LSP
+			"nvim-lua/plenary.nvim",
+			{ "antosha417/nvim-lsp-file-operations", config = true },
 			{
 				"folke/lazydev.nvim",
 				ft = "lua",
@@ -16,10 +17,9 @@ return {
 			},
 		},
 		config = function()
-			local keymap = vim.keymap -- Aliasing for conciseness
-			-- Use a single source for LSP capabilities for consistency
+			local keymap = vim.keymap
 
-			-- Server-specific setup for lua_ls (Neovim-aware)
+			-- Manual config for Lua LSP
 			require("lspconfig").lua_ls.setup({
 				settings = {
 					Lua = {
@@ -30,10 +30,8 @@ return {
 				},
 			})
 
-			-- Enable LSP logging for debugging server issues
 			vim.lsp.set_log_level("warn")
 
-			-- Customizable keymaps table
 			local default_keymaps = {
 				{ "n", "gr", "<cmd>Telescope lsp_references<CR>", "Show LSP references" },
 				{ "n", "gD", vim.lsp.buf.declaration, "Go to declaration" },
@@ -46,17 +44,15 @@ return {
 				{ "n", "[d", vim.diagnostic.goto_prev, "Go to previous diagnostic" },
 				{ "n", "]d", vim.diagnostic.goto_next, "Go to next diagnostic" },
 				{ "n", "K", vim.lsp.buf.hover, "Show documentation for what is under cursor" },
-				{ "n", "<leader>rr", vim.diagnostic.open_float, "Show diagnostic [E]rror messages" },
-				{ "n", "<leader>q", vim.diagnostic.setloclist, "Open diagnostic [Q]uickfix list" },
+				{ "n", "<leader>rr", vim.diagnostic.open_float, "Show diagnostic messages" },
+				{ "n", "<leader>q", vim.diagnostic.setloclist, "Open diagnostic quickfix list" },
 				{ "n", "<leader>rs", ":LspRestart<CR>", "Restart LSP" },
 			}
 
-			-- Set up LSP keymaps on LSP attach
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 				callback = function(ev)
-					local opts = { buffer = ev.buf, silent = true } -- Options for keymaps
-					-- Apply customizable keymaps
+					local opts = { buffer = ev.buf, silent = true }
 					for _, mapping in ipairs(default_keymaps) do
 						opts.desc = mapping[4]
 						keymap.set(mapping[1], mapping[2], mapping[3], opts)
@@ -64,7 +60,6 @@ return {
 				end,
 			})
 
-			-- Define diagnostic signs
 			local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
 			for type, icon in pairs(signs) do
 				local hl = "DiagnosticSign" .. type
@@ -73,12 +68,11 @@ return {
 		end,
 	},
 
-	---------------------------------- Mason ------------------------------
+	-- Mason core installer
 	{
 		"williamboman/mason.nvim",
 		config = function()
-			local mason = require("mason")
-			mason.setup({
+			require("mason").setup({
 				ui = {
 					icons = {
 						package_installed = "✓",
@@ -90,27 +84,32 @@ return {
 		end,
 	},
 
-	---------------------------------- Mason LSP Config ------------------------------
+	-- Auto-LSP setup with mason-lspconfig (now simplified)
 	{
-		"williamboman/mason-lspconfig.nvim", -- LSP configuration extension for Mason
+		"williamboman/mason-lspconfig.nvim",
 		dependencies = {
 			"williamboman/mason.nvim",
-			"mfussenegger/nvim-lint", -- Linting support for Neovim
-			"zapling/mason-conform.nvim", -- Formatting support for Mason
+			"mfussenegger/nvim-lint",
+			"zapling/mason-conform.nvim",
 		},
 		config = function()
 			local mason_lspconfig = require("mason-lspconfig")
-			local lspconfig = require("lspconfig")
 
-			mason_lspconfig.setup_handlers({
-				-- Default handler for all servers
-				function(server_name)
-					lspconfig[server_name].setup({})
-				end,
-				-- Override for specific servers if needed (e.g., lua_ls already set above)
+			mason_lspconfig.setup({
+				ensure_installed = {
+					"lua_ls",
+					"tsserver",
+					"html",
+					"cssls",
+					"tailwindcss",
+					"jsonls",
+					"bashls",
+					"eslint",
+					"pyright",
+				},
 			})
 
-			-- Integrate linting with nvim-lint
+			-- Linting
 			require("lint").linters_by_ft = {
 				javascript = { "eslint" },
 				python = { "pylint" },
@@ -121,7 +120,7 @@ return {
 				end,
 			})
 
-			-- Integrate formatting with mason-conform
+			-- Formatting
 			require("conform").setup({
 				formatters_by_ft = {
 					lua = { "stylua" },
@@ -136,15 +135,14 @@ return {
 		end,
 	},
 
-	---------------------------------- Mason Tool Installer ------------------------------
+	-- Tool installer helper
 	{
-		"WhoIsSethDaniel/mason-tool-installer.nvim", -- Tool installer for Mason
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
 		dependencies = {
 			"williamboman/mason.nvim",
 		},
 		config = function()
-			local mason_tool_installer = require("mason-tool-installer")
-			mason_tool_installer.setup({
+			require("mason-tool-installer").setup({
 				ensure_installed = {
 					"typescript-language-server",
 					"html",
@@ -159,10 +157,10 @@ return {
 					"black",
 					"isort",
 					"pylint",
-					-- "pyright",
+					"pyright",
 				},
-				auto_update = true, -- Automatically update tools
-				run_on_start = true, -- Avoid startup delay; install manually with :MasonToolsInstall
+				auto_update = true,
+				run_on_start = true,
 			})
 		end,
 	},
