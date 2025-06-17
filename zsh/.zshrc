@@ -123,7 +123,7 @@ bindkey -s '\ef' 'tmux-sessionizer\n'
 # n node version control 
 export PATH="/usr/local/bin:$PATH"
 # for scripts
-export PATH="/users/yosefsaaid/local/bin:$PATH"
+export PATH="/home/neo/dotfiles/scripts/local/bin/:$PATH"
 # java 
 #export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.12
 #export PATH="$JAVA_HOME/bin/:$PATH"
@@ -136,6 +136,8 @@ export PATH=$JAVA_HOME/bin:$PATH
 
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
+
+export PATH=$PATH:$HOME/go/bin
 
 # History {{{
 HISTSIZE=10000

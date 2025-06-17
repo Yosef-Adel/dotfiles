@@ -1,7 +1,7 @@
-import = [
-   "~/.config/alacritty/tokyonight.toml"
-]
-
+# import = [
+#    "~/.config/alacritty/tokyonight.toml"
+# ]
+#
 live_config_reload = true
 [env]
 TERM = "screen-256color"
