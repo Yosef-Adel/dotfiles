@@ -76,13 +76,13 @@ end
 
 -- ===== Config =====
 local config = {
-  default_prog                               = { "wsl.exe", "-d", "Ubuntu" },
+  default_prog                               = { "wsl.exe", "-d", "Ubuntu", "--cd", "~" },
   -- background                                 = {
   --   get_background(0.9, 0.9),
   -- },
   -- window_background_opacity                  = 50,
   -- macos_window_background_blur               = 20,
-  font_size                                  = 15.0,
+  font_size                                  = 13.0,
   line_height                                = 1.1,
   font                                       = get_font({
     "JetBrains Mono",

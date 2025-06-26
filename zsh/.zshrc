@@ -111,9 +111,9 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # ==================== Path ====================
-export PATH="$HOME/.tmuxifierr/bin:$PATH"
+# export PATH="$HOME/.tmuxifierr/bin:$PATH"
 # Python3
-export PATH="/Users/yosefsaaid/Library/Python/3.9/bin:$PATH"
+# export PATH="/Users/yosefsaaid/Library/Python/3.9/bin:$PATH"
 
 # add path for mpj /Users/yosefsaaid/-_-/mpj
 export PATH="/Users/yosefsaaid/-_-/mpj:$PATH"
@@ -121,15 +121,15 @@ export PATH="/Users/yosefsaaid/-_-/mpj:$PATH"
 bindkey -s '\ef' 'tmux-sessionizer\n'
 
 # n node version control 
-export PATH="/usr/local/bin:$PATH"
+# export PATH="/usr/local/bin:$PATH"
 # for scripts
 export PATH="/home/neo/dotfiles/scripts/local/bin/:$PATH"
 # java 
 #export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.12
 #export PATH="$JAVA_HOME/bin/:$PATH"
 # spark
-export SPARK_HOME=/usr/local/Cellar/apache-spark/3.2.1/libexec
-export PATH="$SPARK_HOME/bin/:$PATH"
+# export SPARK_HOME=/usr/local/Cellar/apache-spark/3.2.1/libexec
+# export PATH="$SPARK_HOME/bin/:$PATH"
 
 #export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 export PATH=$JAVA_HOME/bin:$PATH
@@ -180,7 +180,6 @@ alias dcd='docker-compose down'
 alias ld='lazydocker'
 
 # System Monitoring Aliases
-alias top='htop'
 alias df='df -h'
 alias free='free -m'
 
@@ -296,5 +295,4 @@ function git_prompt_string() {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-. "$HOME/.local/bin/env"
+# . "$HOME/.local/bin/env"

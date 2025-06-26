@@ -1,5 +1,5 @@
 vim.opt.guicursor = "" -- making the cursor invisible in GUI
-vim.opt.nu = true -- Show line numbers
+vim.opt.nu = true      -- Show line numbers
 vim.opt.relativenumber = true
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
@@ -53,3 +53,8 @@ vim.opt.fileencoding = "utf-8"
 
 vim.opt.spelllang = "en_us"
 vim.opt.spell = true
+
+vim.diagnostic.config({
+  virtual_text = true,
+  virtual_lines = false,
+})
