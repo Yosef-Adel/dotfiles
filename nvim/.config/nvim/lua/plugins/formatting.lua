@@ -40,6 +40,7 @@ return {
       conform.format({
         lsp_fallback = true,
         timeout_ms = 5000,
+        async = true,
       })
     end)
   end,
