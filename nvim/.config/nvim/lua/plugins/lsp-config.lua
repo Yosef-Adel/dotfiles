@@ -5,6 +5,7 @@ return {
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope.nvim", -- Added missing dependency
 			{ "antosha417/nvim-lsp-file-operations", config = true },
 			{
 				"folke/lazydev.nvim",
@@ -19,19 +20,7 @@ return {
 		config = function()
 			local keymap = vim.keymap
 
-			-- Manual config for Lua LSP
-			require("lspconfig").lua_ls.setup({
-				settings = {
-					Lua = {
-						runtime = { version = "LuaJIT" },
-						diagnostics = { globals = { "vim" } },
-						workspace = { library = vim.api.nvim_get_runtime_file("", true) },
-					},
-				},
-			})
-
 			vim.lsp.set_log_level("warn")
-
 			local default_keymaps = {
 				{ "n", "gr", "<cmd>Telescope lsp_references<CR>", "Show LSP references" },
 				{ "n", "gD", vim.lsp.buf.declaration, "Go to declaration" },
@@ -59,15 +48,8 @@ return {
 					end
 				end,
 			})
-
-			local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-			for type, icon in pairs(signs) do
-				local hl = "DiagnosticSign" .. type
-				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-			end
 		end,
 	},
-
 	-- Mason core installer
 	{
 		"williamboman/mason.nvim",
@@ -84,21 +66,23 @@ return {
 		end,
 	},
 
-	-- Auto-LSP setup with mason-lspconfig (now simplified)
+	-- Auto-LSP setup with mason-lspconfig
 	{
 		"williamboman/mason-lspconfig.nvim",
 		dependencies = {
 			"williamboman/mason.nvim",
+			"neovim/nvim-lspconfig",
 			"mfussenegger/nvim-lint",
-			"zapling/mason-conform.nvim",
+			"stevearc/conform.nvim",
 		},
 		config = function()
 			local mason_lspconfig = require("mason-lspconfig")
+			local lspconfig = require("lspconfig")
 
 			mason_lspconfig.setup({
 				ensure_installed = {
 					"lua_ls",
-					"tsserver",
+					"ts_ls",
 					"html",
 					"cssls",
 					"tailwindcss",
@@ -107,7 +91,33 @@ return {
 					"eslint",
 					"pyright",
 				},
+				automatic_installation = true,
 			})
+
+			-- Manual setup for each LSP server
+			local servers = {
+				lua_ls = {
+					settings = {
+						Lua = {
+							runtime = { version = "LuaJIT" },
+							diagnostics = { globals = { "vim" } },
+							workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+						},
+					},
+				},
+				html = {},
+				cssls = {},
+				tailwindcss = {},
+				jsonls = {},
+				bashls = {},
+				eslint = {},
+				pyright = {},
+			}
+
+			-- Setup each server
+			for server, config in pairs(servers) do
+				lspconfig[server].setup(config)
+			end
 
 			-- Linting
 			require("lint").linters_by_ft = {
@@ -118,19 +128,6 @@ return {
 				callback = function()
 					require("lint").try_lint()
 				end,
-			})
-
-			-- Formatting
-			require("conform").setup({
-				formatters_by_ft = {
-					lua = { "stylua" },
-					python = { "black", "isort" },
-					javascript = { "prettier" },
-					typescript = { "prettier" },
-					html = { "prettier" },
-					css = { "prettier" },
-				},
-				format_on_save = { timeout_ms = 500, lsp_fallback = true },
 			})
 		end,
 	},
@@ -144,20 +141,26 @@ return {
 		config = function()
 			require("mason-tool-installer").setup({
 				ensure_installed = {
-					"typescript-language-server",
-					"html",
-					"cssls",
-					"tailwindcss",
-					"prettier",
+					-- Language servers
+					"html-lsp",
+					"css-lsp",
+					"tailwindcss-language-server",
+					"lua-language-server",
+					"emmet-ls",
+					"pyright",
 					"eslint-lsp",
-					"cspell",
-					"lua_ls",
-					"emmet_ls",
+					"json-lsp",
+					"bash-language-server",
+
+					-- Formatters
+					"prettier",
 					"stylua",
 					"black",
 					"isort",
+
+					-- Linters
 					"pylint",
-					"pyright",
+					"cspell",
 				},
 				auto_update = true,
 				run_on_start = true,

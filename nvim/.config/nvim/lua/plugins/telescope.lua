@@ -51,7 +51,7 @@ return {
 			map("n", "<leader>sm", builtin.marks, { desc = " Find marks buffers" })
 			map("n", "<leader>sj", builtin.jumplist, { desc = " Find jumplist" })
 
-			map("n", "<C-p>", builtin.git_files, { desc = "[P]roject [F]iles" })
+			map("n", "<C-p>", builtin.find_files, { desc = "[P]roject [F]iles" })
 			map("n", "<leader>ps", function()
 				builtin.grep_string({ search = vim.fn.input("Grep > ") })
 			end, { desc = "[P]roject [S]earch" })
