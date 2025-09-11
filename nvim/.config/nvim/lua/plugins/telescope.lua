@@ -24,7 +24,13 @@ return {
 						"--smart-case",
 						"--hidden",
 					},
-					file_ignore_patterns = {},
+					file_ignore_patterns = {
+						"node_modules/.*",
+						"%.git/.*",
+						"%.next/.*",
+						"dist/.*",
+						"build/.*",
+					},
 				},
 				extensions = {
 					["ui-select"] = {
@@ -32,13 +38,10 @@ return {
 					},
 				},
 			})
-
 			pcall(require("telescope").load_extension, "fzf")
 			pcall(require("telescope").load_extension, "ui-select")
-
 			local builtin = require("telescope.builtin")
 			local map = vim.keymap.set
-
 			map("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
 			map("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp Tags" })
 			map("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
@@ -50,25 +53,21 @@ return {
 			map("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
 			map("n", "<leader>sm", builtin.marks, { desc = " Find marks buffers" })
 			map("n", "<leader>sj", builtin.jumplist, { desc = " Find jumplist" })
-
 			map("n", "<C-p>", builtin.find_files, { desc = "[P]roject [F]iles" })
 			map("n", "<leader>ps", function()
 				builtin.grep_string({ search = vim.fn.input("Grep > ") })
 			end, { desc = "[P]roject [S]earch" })
-
 			map("n", "<leader>f", function()
 				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
 					previewer = false,
 				}))
 			end, { desc = "[/] Fuzzily search in current buffer" })
-
 			map("n", "<leader>s/", function()
 				builtin.live_grep({
 					grep_open_files = true,
 					prompt_title = "Live Grep in Open Files",
 				})
 			end, { desc = "[S]earch [/] in Open Files" })
-
 			map("n", "<leader>sc", function()
 				builtin.find_files({ cwd = vim.fn.stdpath("config") })
 			end, { desc = "[S]earch [N]eovim files" })
