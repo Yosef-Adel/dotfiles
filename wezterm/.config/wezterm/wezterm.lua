@@ -77,12 +77,10 @@ end
 -- ===== Config =====
 local config = {
   default_prog                               = { "wsl.exe", "-d", "Ubuntu", "--cd", "~" },
-  -- background                                 = {
-  --   get_background(0.9, 0.9),
-  -- },
-  -- window_background_opacity                  = 50,
-  -- macos_window_background_blur               = 20,
-  font_size                                  = 13.0,
+  background                                 = {
+    get_background(.90, .90),
+  },
+  font_size                                  = 12.0,
   line_height                                = 1.1,
   font                                       = get_font({
     "JetBrains Mono",
@@ -101,10 +99,13 @@ local config = {
   },
   adjust_window_size_when_changing_font_size = false,
   debug_key_events                           = true,
-  enable_tab_bar                             = true,
+  enable_tab_bar                             = false,
   native_macos_fullscreen_mode               = false,
   window_close_confirmation                  = "NeverPrompt",
-  window_decorations                         = "TITLE | RESIZE",
+  -- Remove title bar completely
+  window_decorations                         = "RESIZE",
+  -- Enable blur effect on Windows
+  win32_system_backdrop                      = "Acrylic",
   keys                                       = {
     cmd_to_tmux_prefix("t", "c"),
     cmd_to_tmux_prefix(",", ","),

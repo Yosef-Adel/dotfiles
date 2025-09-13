@@ -25,22 +25,22 @@ return {
         lua = { "stylua" },
         python = { "isort", "black" },
       },
-      -- format_on_save = {
-      --   lsp_fallback = true,
-      --   timeout_ms = 5000,
-      --   async = true,
-      -- },
-      format_after_save = {
+      format_on_save = {
         lsp_fallback = true,
-        timeout_ms = 10000,
+        timeout_ms = 5000,
         async = true,
       },
+      -- format_after_save = {
+      --   lsp_fallback = true,
+      --   timeout_ms = 5000,
+      --   async = false,
+      -- },
     })
     vim.keymap.set({ "n", "v" }, "<leader>mp", function()
       conform.format({
         lsp_fallback = true,
         timeout_ms = 5000,
-        async = true,
+        async = false,
       })
     end)
   end,
