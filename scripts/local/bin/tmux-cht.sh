@@ -2,33 +2,47 @@
 
 # Check if fzf is installed
 if ! command -v fzf &> /dev/null; then
-    echo "fzf could not be found. Please install fzf to use this script."
+    echo "Error: fzf is required. Install it with: brew install fzf (or your package manager)"
     exit 1
 fi
 
-# Define programming languages, core utilities, and DevOps tools
-languages=$(echo "mongodb express angular react nodejs golang c cpp typescript python javascript lua java rust kotlin ruby php swift scala clojure" | tr " " "\n")
-core_utils=$(echo "tar find xargs sed awk git docker kubectl jq curl wget grep" | tr " " "\n")  # Added more core utilities
-devops_tools=$(echo "terraform ansible chef puppet helm istio prometheus grafana elasticsearch logstash kibana filebeat telegraf influxdb kapacitor k6 consul vault nomad packer vagrant spinnaker argo-cd argo-workflows jenkins teamcity circleci travisci github-actions gitlab-ci" | tr " " "\n")
+# Define programming languages, core utilities, and DevOps tools with headers
+languages="golang\nc\ncpp\ntypescript\npython\njavascript\nrust\njava\nruby\nphp\nswift\nkotlin"
+core_utils="docker\nkubectl\ngit\ntar\nfind\nxargs\nsed\nawk\njq\ncurl\nwget\ngrep"
+devops_tools="terraform\nansible\nhelm\nprometheus\ngrafana\nargo-cd\njenkins\ngithub-actions\ngitlab-ci"
 
-# Combine all options
-options=$(echo -e "$languages\n$core_utils\n$devops_tools")
+# Combine with category headers
+options=$(echo -e "# Languages\n$languages\n# Core Utils\n$core_utils\n# DevOps\n$devops_tools")
 
-# Use fzf to select an option
-selected=$(echo "$options" | fzf --prompt="Select a language, utility, or DevOps tool: ")
+# Use fzf with better UI
+selected=$(echo -e "$options" | grep -v "^#" | fzf \
+    --prompt="🔍 Select tool: " \
+    --height=40% \
+    --border \
+    --preview="echo 'cht.sh/{}'" \
+    --preview-window=up:1)
 
-# Prompt for query
-read -p "Query: " query
-
-# Check if selected is empty
+# Exit if no selection
 if [ -z "$selected" ]; then
-    echo "No selection made. Exiting."
-    exit 1
+    exit 0
 fi
 
-# Open a new tmux window with the appropriate query to cht.sh
-if echo "$languages" | grep -qs "$selected"; then
-    tmux new-window bash -c "curl -s cht.sh/$selected/$(echo "$query" | tr ' ' '+') | less"
+# Prompt for query with the selected tool shown
+read -p "Query for $selected: " query
+
+# Exit if no query
+if [ -z "$query" ]; then
+    exit 0
+fi
+
+# URL encode the query
+query_encoded=$(echo "$query" | tr ' ' '+')
+
+# Check if we're in a tmux session
+if [ -n "$TMUX" ]; then
+    # Open in new tmux window
+    tmux new-window bash -c "curl -s cht.sh/$selected/$query_encoded | less -R"
 else
-    tmux new-window bash -c "curl -s cht.sh/$selected~$query | less"
+    # Fallback: just open in current terminal
+    curl -s "cht.sh/$selected/$query_encoded" | less -R
 fi
