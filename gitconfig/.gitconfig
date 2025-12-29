@@ -1,5 +1,12 @@
-[user]
-  email = yosef.adel.ext@siemens.com
-  name = Yosef Adel
+# Default to personal account (GitHub)
+[include]
+  path = ~/.gitconfig-personal
+
+# Use work account for work repos in ~/dev
+[includeIf "gitdir:~/dev/"]
+  path = ~/.gitconfig-work
+
+# Personal repos in ~/personal will use default (personal) config
+
 [safe]
 	directory = /mnt/c/Users/z005577u/dev/hc-backend
