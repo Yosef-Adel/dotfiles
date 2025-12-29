@@ -199,13 +199,6 @@ alias td='tmux detach'
 
 
 # ==================== Functions ====================
-#
-function reload_wm() {
-    echo "Reloading skhd and restarting yabai..."
-    skhd --reload
-    yabai --restart-service
-    echo "Done!"
-}
 
 # Git Add and Commit
 function gac() { git add . && git commit -m "$1"; }
@@ -298,3 +291,4 @@ function git_prompt_string() {
 # . "$HOME/.local/bin/env"
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 export PATH=$PATH:$JAVA_HOME/bin
+export DISPLAY=:0

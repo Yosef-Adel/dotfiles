@@ -1,5 +1,5 @@
 vim.opt.guicursor = "" -- making the cursor invisible in GUI
-vim.opt.nu = true      -- Show line numbers
+vim.opt.nu = true -- Show line numbers
 vim.opt.relativenumber = true
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
@@ -31,7 +31,6 @@ vim.opt.showmode = false
 vim.opt.number = true
 vim.opt.title = true
 vim.opt.autoindent = true
-vim.opt.smartindent = true
 vim.opt.showcmd = true
 vim.opt.laststatus = 2
 vim.opt.smarttab = true
@@ -45,7 +44,6 @@ vim.opt.splitkeep = "cursor"
 vim.o.wrap = true
 vim.o.showbreak = "⤷ "
 vim.o.linebreak = true
-vim.o.conceallevel = 2
 vim.opt.formatoptions:append({ "r" })
 vim.scriptencoding = "utf-8"
 vim.opt.encoding = "utf-8"
@@ -53,8 +51,3 @@ vim.opt.fileencoding = "utf-8"
 
 vim.opt.spelllang = "en_us"
 vim.opt.spell = true
-
-vim.diagnostic.config({
-  virtual_text = true,
-  virtual_lines = false,
-})

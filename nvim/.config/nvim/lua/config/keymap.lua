@@ -12,10 +12,8 @@ vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
-
-vim.keymap.set("n", "gl", "$")
-vim.keymap.set("n", "gh", "^")
+vim.keymap.set({ "n", "v" }, "gl", "$")
+vim.keymap.set({ "n", "v" }, "gh", "^")
 -- for saving files
 vim.keymap.set("n", "<leader>w", "<cmd> w<CR>")
 
