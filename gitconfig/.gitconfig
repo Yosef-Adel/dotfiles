@@ -1,3 +1,5 @@
 [user]
   email = yosef.adel.ext@siemens.com
   name = Yosef Adel
+[safe]
+	directory = /mnt/c/Users/z005577u/dev/hc-backend
