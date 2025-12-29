@@ -77,7 +77,6 @@ return {
 		},
 		config = function()
 			local mason_lspconfig = require("mason-lspconfig")
-			local lspconfig = require("lspconfig")
 
 			mason_lspconfig.setup({
 				ensure_installed = {
@@ -114,9 +113,9 @@ return {
 				pyright = {},
 			}
 
-			-- Setup each server
+			-- Setup each server using new vim.lsp.config API
 			for server, config in pairs(servers) do
-				lspconfig[server].setup(config)
+				vim.lsp.enable(server, config)
 			end
 
 			-- Linting
