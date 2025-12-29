@@ -180,6 +180,7 @@ alias dcd='docker-compose down'
 alias ld='lazydocker'
 
 # System Monitoring Aliases
+alias top='htop'
 alias df='df -h'
 alias free='free -m'
 
@@ -199,6 +200,14 @@ alias td='tmux detach'
 
 
 # ==================== Functions ====================
+
+# Reload window manager (yabai and skhd)
+function reload_wm() {
+    echo "Reloading skhd and restarting yabai..."
+    skhd --reload
+    yabai --restart-service
+    echo "Done!"
+}
 
 # Git Add and Commit
 function gac() { git add . && git commit -m "$1"; }
