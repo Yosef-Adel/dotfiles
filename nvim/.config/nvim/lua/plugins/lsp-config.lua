@@ -22,19 +22,19 @@ return {
 
 			vim.lsp.set_log_level("warn")
 			local default_keymaps = {
-				{ "n", "gr", "<cmd>Telescope lsp_references<CR>", "Show LSP references" },
+				-- Use native LSP functions (no deprecated API warnings)
+				{ "n", "gd", vim.lsp.buf.definition, "Go to definition" },
 				{ "n", "gD", vim.lsp.buf.declaration, "Go to declaration" },
-				{ "n", "gd", "<cmd>Telescope lsp_definitions<CR>", "Show LSP definitions" },
-				{ "n", "gi", "<cmd>Telescope lsp_implementations<CR>", "Show LSP implementations" },
-				{ "n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", "Show LSP type definitions" },
+				{ "n", "gr", vim.lsp.buf.references, "Show references" },
+				{ "n", "gi", vim.lsp.buf.implementation, "Go to implementation" },
+				{ "n", "gt", vim.lsp.buf.type_definition, "Go to type definition" },
 				{ { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "See available code actions" },
 				{ "n", "<leader>rn", vim.lsp.buf.rename, "Smart rename" },
-				{ "n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", "Show buffer diagnostics" },
+				{ "n", "K", vim.lsp.buf.hover, "Show documentation for what is under cursor" },
 				{ "n", "[d", vim.diagnostic.goto_prev, "Go to previous diagnostic" },
 				{ "n", "]d", vim.diagnostic.goto_next, "Go to next diagnostic" },
-				{ "n", "K", vim.lsp.buf.hover, "Show documentation for what is under cursor" },
 				{ "n", "<leader>rr", vim.diagnostic.open_float, "Show diagnostic messages" },
-				{ "n", "<leader>q", vim.diagnostic.setloclist, "Open diagnostic quickfix list" },
+				{ "n", "<leader>D", vim.diagnostic.setloclist, "Open diagnostic list" },
 				{ "n", "<leader>rs", ":LspRestart<CR>", "Restart LSP" },
 			}
 
@@ -78,6 +78,13 @@ return {
 		config = function()
 			local mason_lspconfig = require("mason-lspconfig")
 
+			-- Add folding capabilities for nvim-ufo
+			local capabilities = vim.lsp.protocol.make_client_capabilities()
+			capabilities.textDocument.foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true,
+			}
+
 			mason_lspconfig.setup({
 				ensure_installed = {
 					"lua_ls",
@@ -93,30 +100,40 @@ return {
 				automatic_installation = true,
 			})
 
-			-- Manual setup for each LSP server
-			local servers = {
-				lua_ls = {
-					settings = {
-						Lua = {
-							runtime = { version = "LuaJIT" },
-							diagnostics = { globals = { "vim" } },
-							workspace = { library = vim.api.nvim_get_runtime_file("", true) },
-						},
+			-- Configure servers using new vim.lsp.config API (Neovim 0.11+)
+			-- Special configuration for lua_ls
+			vim.lsp.config["lua_ls"] = {
+				capabilities = capabilities,
+				settings = {
+					Lua = {
+						runtime = { version = "LuaJIT" },
+						diagnostics = { globals = { "vim" } },
+						workspace = { library = vim.api.nvim_get_runtime_file("", true) },
 					},
 				},
-				html = {},
-				cssls = {},
-				tailwindcss = {},
-				jsonls = {},
-				bashls = {},
-				eslint = {},
-				pyright = {},
 			}
 
-			-- Setup each server using new vim.lsp.config API
-			for server, config in pairs(servers) do
-				vim.lsp.enable(server, config)
+			-- Configure other servers with default settings
+			local servers = { "ts_ls", "html", "cssls", "tailwindcss", "jsonls", "bashls", "eslint", "pyright" }
+			for _, server in ipairs(servers) do
+				vim.lsp.config[server] = {
+					capabilities = capabilities,
+				}
 			end
+
+			-- Auto-enable LSP servers when their filetypes are detected
+			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("UserLspStart", {}),
+				callback = function(args)
+					-- Enable LSP for known servers
+					local servers_to_enable = { "lua_ls", "ts_ls", "html", "cssls", "tailwindcss", "jsonls", "bashls", "eslint", "pyright" }
+					for _, server in ipairs(servers_to_enable) do
+						if not vim.lsp.get_clients({ bufnr = args.buf, name = server })[1] then
+							vim.lsp.enable(server)
+						end
+					end
+				end,
+			})
 
 			-- Linting
 			require("lint").linters_by_ft = {

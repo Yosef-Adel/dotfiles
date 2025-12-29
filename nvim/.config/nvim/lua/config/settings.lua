@@ -31,7 +31,6 @@ vim.opt.showmode = false
 vim.opt.number = true
 vim.opt.title = true
 vim.opt.autoindent = true
-vim.opt.smartindent = true
 vim.opt.showcmd = true
 vim.opt.laststatus = 2
 vim.opt.smarttab = true
@@ -45,7 +44,6 @@ vim.opt.splitkeep = "cursor"
 vim.o.wrap = true
 vim.o.showbreak = "⤷ "
 vim.o.linebreak = true
-vim.o.conceallevel = 2
 vim.opt.formatoptions:append({ "r" })
 vim.scriptencoding = "utf-8"
 vim.opt.encoding = "utf-8"
