@@ -17,7 +17,5 @@ require("config.autocmds")
 
 -- Load plugins
 require("lazy").setup("plugins")
--- Load Snippets
+-- Load custom functions
 require("after.functions")
-require("snippets.luasnip")
-require("snippets.rest-snippets")

@@ -1,0 +1,65 @@
+{
+  "HTML5 Boilerplate": {
+    "prefix": "html5",
+    "body": [
+      "<!DOCTYPE html>",
+      "<html lang=\"${1:en}\">",
+      "<head>",
+      "  <meta charset=\"UTF-8\">",
+      "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+      "  <title>${2:Document}</title>",
+      "</head>",
+      "<body>",
+      "  $0",
+      "</body>",
+      "</html>"
+    ],
+    "description": "HTML5 boilerplate"
+  },
+  "Link Stylesheet": {
+    "prefix": "link",
+    "body": [
+      "<link rel=\"stylesheet\" href=\"${1:styles.css}\">"
+    ],
+    "description": "Link stylesheet"
+  },
+  "Script Tag": {
+    "prefix": "script",
+    "body": [
+      "<script src=\"${1:script.js}\"></script>"
+    ],
+    "description": "Script tag"
+  },
+  "Script Module": {
+    "prefix": "scriptm",
+    "body": [
+      "<script type=\"module\" src=\"${1:script.js}\"></script>"
+    ],
+    "description": "Script tag with module type"
+  },
+  "Input": {
+    "prefix": "input",
+    "body": [
+      "<input type=\"${1:text}\" name=\"${2:name}\" id=\"${3:id}\" placeholder=\"${4:placeholder}\" />"
+    ],
+    "description": "Input element"
+  },
+  "Button": {
+    "prefix": "btn",
+    "body": [
+      "<button type=\"${1|button,submit,reset|}\" ${2:onClick=\"${3:handler}\"}>",
+      "  $0",
+      "</button>"
+    ],
+    "description": "Button element"
+  },
+  "Form": {
+    "prefix": "form",
+    "body": [
+      "<form onSubmit=\"${1:handleSubmit}\">",
+      "  $0",
+      "</form>"
+    ],
+    "description": "Form element"
+  }
+}

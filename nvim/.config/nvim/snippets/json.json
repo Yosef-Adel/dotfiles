@@ -1,0 +1,47 @@
+{
+  "Package.json": {
+    "prefix": "pkgjson",
+    "body": [
+      "{",
+      "  \"name\": \"${1:project-name}\",",
+      "  \"version\": \"${2:1.0.0}\",",
+      "  \"description\": \"${3:description}\",",
+      "  \"main\": \"${4:index.js}\",",
+      "  \"scripts\": {",
+      "    \"${5:start}\": \"${6:command}\"",
+      "  },",
+      "  \"keywords\": [${7}],",
+      "  \"author\": \"${8:author}\",",
+      "  \"license\": \"${9:MIT}\",",
+      "  \"dependencies\": {",
+      "    $0",
+      "  }",
+      "}"
+    ],
+    "description": "package.json template"
+  },
+  "TSConfig": {
+    "prefix": "tsconfig",
+    "body": [
+      "{",
+      "  \"compilerOptions\": {",
+      "    \"target\": \"${1:ES2020}\",",
+      "    \"module\": \"${2:ESNext}\",",
+      "    \"lib\": [\"${3:ES2020}\", \"${4:DOM}\"],",
+      "    \"jsx\": \"${5:react-jsx}\",",
+      "    \"strict\": true,",
+      "    \"esModuleInterop\": true,",
+      "    \"skipLibCheck\": true,",
+      "    \"forceConsistentCasingInFileNames\": true,",
+      "    \"moduleResolution\": \"node\",",
+      "    \"resolveJsonModule\": true,",
+      "    \"isolatedModules\": true,",
+      "    \"noEmit\": true",
+      "  },",
+      "  \"include\": [\"${6:src}\"],",
+      "  \"exclude\": [\"node_modules\"]",
+      "}"
+    ],
+    "description": "tsconfig.json template"
+  }
+}
