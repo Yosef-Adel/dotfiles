@@ -1,0 +1,89 @@
+{
+  "Flexbox Container": {
+    "prefix": "flex",
+    "body": [
+      "display: flex;",
+      "justify-content: ${1|flex-start,center,flex-end,space-between,space-around,space-evenly|};",
+      "align-items: ${2|flex-start,center,flex-end,stretch,baseline|};",
+      "${3:gap: ${4:1rem};}"
+    ],
+    "description": "Flexbox container"
+  },
+  "Grid Container": {
+    "prefix": "grid",
+    "body": [
+      "display: grid;",
+      "grid-template-columns: ${1:repeat(auto-fit, minmax(250px, 1fr))};",
+      "gap: ${2:1rem};"
+    ],
+    "description": "Grid container"
+  },
+  "Media Query": {
+    "prefix": "mq",
+    "body": [
+      "@media (${1|min,max|}-width: ${2:768px}) {",
+      "  $0",
+      "}"
+    ],
+    "description": "Media query"
+  },
+  "Absolute Center": {
+    "prefix": "abscenter",
+    "body": [
+      "position: absolute;",
+      "top: 50%;",
+      "left: 50%;",
+      "transform: translate(-50%, -50%);"
+    ],
+    "description": "Absolute center positioning"
+  },
+  "Transition": {
+    "prefix": "trans",
+    "body": [
+      "transition: ${1:all} ${2:0.3s} ${3:ease};"
+    ],
+    "description": "CSS transition"
+  },
+  "Animation": {
+    "prefix": "anim",
+    "body": [
+      "animation: ${1:name} ${2:1s} ${3:ease} ${4:0s} ${5:1} ${6:normal} ${7:forwards};"
+    ],
+    "description": "CSS animation"
+  },
+  "Keyframes": {
+    "prefix": "keyframes",
+    "body": [
+      "@keyframes ${1:name} {",
+      "  0% {",
+      "    $2",
+      "  }",
+      "  100% {",
+      "    $0",
+      "  }",
+      "}"
+    ],
+    "description": "CSS keyframes"
+  },
+  "Box Shadow": {
+    "prefix": "bxsh",
+    "body": [
+      "box-shadow: ${1:0} ${2:4px} ${3:6px} ${4:rgba(0, 0, 0, 0.1)};"
+    ],
+    "description": "Box shadow"
+  },
+  "Text Shadow": {
+    "prefix": "tsh",
+    "body": [
+      "text-shadow: ${1:2px} ${2:2px} ${3:4px} ${4:rgba(0, 0, 0, 0.5)};"
+    ],
+    "description": "Text shadow"
+  },
+  "Border Radius": {
+    "prefix": "br",
+    "body": [
+      "border-radius: ${1:0.5rem};"
+    ],
+    "description": "Border radius"
+  }
+}

@@ -1,0 +1,154 @@
+{
+  "React Testing Library - test block": {
+    "prefix": "test",
+    "body": [
+      "test('${1:should}', async () => {",
+      "  $0",
+      "});"
+    ],
+    "description": "Test block"
+  },
+  "React Testing Library - describe block": {
+    "prefix": "desc",
+    "body": [
+      "describe('${1:ComponentName}', () => {",
+      "  test('${2:should}', async () => {",
+      "    $0",
+      "  });",
+      "});"
+    ],
+    "description": "Describe block with test"
+  },
+  "React Testing Library - render": {
+    "prefix": "rtlrender",
+    "body": [
+      "const { ${1|getByText,getByRole,getByTestId,queryByText,findByText|} } = render(<${2:Component} $3/>);"
+    ],
+    "description": "Render component"
+  },
+  "React Testing Library - render with user": {
+    "prefix": "rtluser",
+    "body": [
+      "const user = userEvent.setup();",
+      "const { ${1|getByText,getByRole,getByTestId,queryByText,findByText|} } = render(<${2:Component} $3/>);"
+    ],
+    "description": "Render with userEvent setup"
+  },
+  "React Testing Library - act wrapper": {
+    "prefix": "act",
+    "body": [
+      "await act(async () => {",
+      "  $0",
+      "});"
+    ],
+    "description": "Act wrapper for async operations"
+  },
+  "React Testing Library - act with userEvent": {
+    "prefix": "actuser",
+    "body": [
+      "await act(async () => {",
+      "  await userEvent.${1|click,type,clear,upload,selectOptions,hover,unhover,tab,keyboard|}(${2:element});",
+      "});"
+    ],
+    "description": "Wrap userEvent in act()"
+  },
+  "userEvent click": {
+    "prefix": "uclick",
+    "body": [
+      "await userEvent.click(${1:element});"
+    ],
+    "description": "userEvent click"
+  },
+  "userEvent type": {
+    "prefix": "utype",
+    "body": [
+      "await userEvent.type(${1:element}, '${2:text}');"
+    ],
+    "description": "userEvent type"
+  },
+  "userEvent clear": {
+    "prefix": "uclear",
+    "body": [
+      "await userEvent.clear(${1:element});"
+    ],
+    "description": "userEvent clear input"
+  },
+  "userEvent selectOptions": {
+    "prefix": "uselect",
+    "body": [
+      "await userEvent.selectOptions(${1:element}, '${2:value}');"
+    ],
+    "description": "userEvent select option"
+  },
+  "expect assertion": {
+    "prefix": "exp",
+    "body": [
+      "expect(${1:element}).${2|toBeInTheDocument,toHaveTextContent,toBeVisible,toHaveValue,toBeDisabled,toBeEnabled,toHaveClass,toHaveAttribute|}($3);"
+    ],
+    "description": "Expect assertion"
+  },
+  "screen query": {
+    "prefix": "screen",
+    "body": [
+      "screen.${1|getByText,getByRole,getByTestId,queryByText,findByText,getAllByText,queryAllByText,findAllByText|}(${2:'text'})"
+    ],
+    "description": "Screen query"
+  },
+  "waitFor": {
+    "prefix": "waitfor",
+    "body": [
+      "await waitFor(() => {",
+      "  expect($1).${2|toBeInTheDocument,toHaveTextContent,toBeVisible|}($3);",
+      "});"
+    ],
+    "description": "Wait for assertion"
+  },
+  "beforeEach": {
+    "prefix": "be",
+    "body": [
+      "beforeEach(() => {",
+      "  $0",
+      "});"
+    ],
+    "description": "beforeEach hook"
+  },
+  "afterEach": {
+    "prefix": "ae",
+    "body": [
+      "afterEach(() => {",
+      "  $0",
+      "});"
+    ],
+    "description": "afterEach hook"
+  },
+  "Mock function": {
+    "prefix": "mock",
+    "body": [
+      "const ${1:mockFn} = jest.fn($2);"
+    ],
+    "description": "Create mock function"
+  },
+  "Mock implementation": {
+    "prefix": "mockimpl",
+    "body": [
+      "${1:mockFn}.mockImplementation(($2) => {",
+      "  $0",
+      "});"
+    ],
+    "description": "Mock implementation"
+  },
+  "Mock resolved value": {
+    "prefix": "mockres",
+    "body": [
+      "${1:mockFn}.mockResolvedValue($2);"
+    ],
+    "description": "Mock resolved value for promise"
+  },
+  "Mock rejected value": {
+    "prefix": "mockrej",
+    "body": [
+      "${1:mockFn}.mockRejectedValue(${2:new Error('${3:error}')});"
+    ],
+    "description": "Mock rejected value for promise"
+  }
+}
