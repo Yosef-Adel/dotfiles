@@ -1,0 +1,236 @@
+{
+  "TypeScript Interface": {
+    "prefix": "int",
+    "body": [
+      "interface ${1:Name} {",
+      "  $0",
+      "}"
+    ],
+    "description": "TypeScript interface"
+  },
+  "TypeScript Type": {
+    "prefix": "type",
+    "body": [
+      "type ${1:Name} = $0;"
+    ],
+    "description": "TypeScript type alias"
+  },
+  "TypeScript Enum": {
+    "prefix": "enum",
+    "body": [
+      "enum ${1:Name} {",
+      "  $0",
+      "}"
+    ],
+    "description": "TypeScript enum"
+  },
+  "Arrow Function": {
+    "prefix": "af",
+    "body": [
+      "const ${1:name} = ($2) => {",
+      "  $0",
+      "};"
+    ],
+    "description": "Arrow function"
+  },
+  "Async Arrow Function": {
+    "prefix": "aaf",
+    "body": [
+      "const ${1:name} = async ($2) => {",
+      "  $0",
+      "};"
+    ],
+    "description": "Async arrow function"
+  },
+  "Promise": {
+    "prefix": "prom",
+    "body": [
+      "new Promise<${1:type}>((resolve, reject) => {",
+      "  $0",
+      "});"
+    ],
+    "description": "Promise"
+  },
+  "Async/Await": {
+    "prefix": "asy",
+    "body": [
+      "async ${1:function}() {",
+      "  try {",
+      "    const ${2:result} = await ${3:promise};",
+      "    $0",
+      "  } catch (error) {",
+      "    console.error(error);",
+      "  }",
+      "}"
+    ],
+    "description": "Async function with try/catch"
+  },
+  "Try/Catch": {
+    "prefix": "try",
+    "body": [
+      "try {",
+      "  $0",
+      "} catch (error) {",
+      "  console.error(error);",
+      "}"
+    ],
+    "description": "Try/catch block"
+  },
+  "Try/Catch/Finally": {
+    "prefix": "tryf",
+    "body": [
+      "try {",
+      "  $0",
+      "} catch (error) {",
+      "  console.error(error);",
+      "} finally {",
+      "  ${1:// cleanup}",
+      "}"
+    ],
+    "description": "Try/catch/finally block"
+  },
+  "Import": {
+    "prefix": "imp",
+    "body": [
+      "import { $2 } from '${1:module}';"
+    ],
+    "description": "ES6 import"
+  },
+  "Import Default": {
+    "prefix": "impd",
+    "body": [
+      "import ${2:name} from '${1:module}';"
+    ],
+    "description": "ES6 default import"
+  },
+  "Import Type": {
+    "prefix": "impt",
+    "body": [
+      "import type { $2 } from '${1:module}';"
+    ],
+    "description": "TypeScript type import"
+  },
+  "Export": {
+    "prefix": "exp",
+    "body": [
+      "export { $0 };"
+    ],
+    "description": "Named export"
+  },
+  "Export Default": {
+    "prefix": "expd",
+    "body": [
+      "export default $0;"
+    ],
+    "description": "Default export"
+  },
+  "Destructure Object": {
+    "prefix": "dob",
+    "body": [
+      "const { $2 } = $1;"
+    ],
+    "description": "Destructure object"
+  },
+  "Destructure Array": {
+    "prefix": "dar",
+    "body": [
+      "const [$2] = $1;"
+    ],
+    "description": "Destructure array"
+  },
+  "Ternary": {
+    "prefix": "ter",
+    "body": [
+      "${1:condition} ? ${2:true} : ${3:false}"
+    ],
+    "description": "Ternary operator"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "for (let ${1:i} = 0; ${1:i} < ${2:array}.length; ${1:i}++) {",
+      "  $0",
+      "}"
+    ],
+    "description": "For loop"
+  },
+  "For Of": {
+    "prefix": "fof",
+    "body": [
+      "for (const ${1:item} of ${2:array}) {",
+      "  $0",
+      "}"
+    ],
+    "description": "For...of loop"
+  },
+  "For In": {
+    "prefix": "fin",
+    "body": [
+      "for (const ${1:key} in ${2:object}) {",
+      "  if (${2:object}.hasOwnProperty(${1:key})) {",
+      "    $0",
+      "  }",
+      "}"
+    ],
+    "description": "For...in loop"
+  },
+  "Map": {
+    "prefix": "map",
+    "body": [
+      "${1:array}.map((${2:item}) => $0)"
+    ],
+    "description": "Array map"
+  },
+  "Filter": {
+    "prefix": "filter",
+    "body": [
+      "${1:array}.filter((${2:item}) => $0)"
+    ],
+    "description": "Array filter"
+  },
+  "Reduce": {
+    "prefix": "reduce",
+    "body": [
+      "${1:array}.reduce((${2:acc}, ${3:item}) => {",
+      "  $0",
+      "  return ${2:acc};",
+      "}, ${4:initialValue})"
+    ],
+    "description": "Array reduce"
+  },
+  "Find": {
+    "prefix": "find",
+    "body": [
+      "${1:array}.find((${2:item}) => $0)"
+    ],
+    "description": "Array find"
+  },
+  "Console Log": {
+    "prefix": "cl",
+    "body": [
+      "console.log($0);"
+    ],
+    "description": "Console log"
+  },
+  "Console Error": {
+    "prefix": "ce",
+    "body": [
+      "console.error($0);"
+    ],
+    "description": "Console error"
+  },
+  "Console Warn": {
+    "prefix": "cw",
+    "body": [
+      "console.warn($0);"
+    ],
+    "description": "Console warn"
+  },
+  "Console Table": {
+    "prefix": "ct",
+    "body": [
+      "console.table($0);"
+    ],
+    "description": "Console table"
+  }
+}
