@@ -1,0 +1,204 @@
+{
+  "React Functional Component": {
+    "prefix": "rfc",
+    "body": [
+      "interface ${1:Component}Props {",
+      "  $2",
+      "}",
+      "",
+      "export const ${1:Component} = ({ $3 }: ${1:Component}Props) => {",
+      "  return (",
+      "    <div>",
+      "      $0",
+      "    </div>",
+      "  );",
+      "};"
+    ],
+    "description": "React functional component with TypeScript"
+  },
+  "React Functional Component with Export Default": {
+    "prefix": "rfce",
+    "body": [
+      "interface ${1:Component}Props {",
+      "  $2",
+      "}",
+      "",
+      "const ${1:Component} = ({ $3 }: ${1:Component}Props) => {",
+      "  return (",
+      "    <div>",
+      "      $0",
+      "    </div>",
+      "  );",
+      "};",
+      "",
+      "export default ${1:Component};"
+    ],
+    "description": "React functional component with default export"
+  },
+  "React Arrow Function Component": {
+    "prefix": "rafc",
+    "body": [
+      "export const ${1:Component} = () => {",
+      "  return (",
+      "    <div>",
+      "      $0",
+      "    </div>",
+      "  );",
+      "};"
+    ],
+    "description": "Simple React arrow function component"
+  },
+  "useState Hook": {
+    "prefix": "us",
+    "body": [
+      "const [${1:state}, set${1/(.*)/${1:/capitalize}/}] = useState$2(${3:initialValue});"
+    ],
+    "description": "React useState hook"
+  },
+  "useEffect Hook": {
+    "prefix": "ue",
+    "body": [
+      "useEffect(() => {",
+      "  $0",
+      "}, [${1:dependencies}]);"
+    ],
+    "description": "React useEffect hook"
+  },
+  "useEffect Cleanup": {
+    "prefix": "uec",
+    "body": [
+      "useEffect(() => {",
+      "  $0",
+      "  ",
+      "  return () => {",
+      "    ${1:// cleanup}",
+      "  };",
+      "}, [${2:dependencies}]);"
+    ],
+    "description": "React useEffect with cleanup"
+  },
+  "useRef Hook": {
+    "prefix": "ur",
+    "body": [
+      "const ${1:ref} = useRef$2(${3:null});"
+    ],
+    "description": "React useRef hook"
+  },
+  "useMemo Hook": {
+    "prefix": "um",
+    "body": [
+      "const ${1:memoized} = useMemo(() => {",
+      "  return $0;",
+      "}, [${2:dependencies}]);"
+    ],
+    "description": "React useMemo hook"
+  },
+  "useCallback Hook": {
+    "prefix": "uc",
+    "body": [
+      "const ${1:callback} = useCallback(() => {",
+      "  $0",
+      "}, [${2:dependencies}]);"
+    ],
+    "description": "React useCallback hook"
+  },
+  "useContext Hook": {
+    "prefix": "ux",
+    "body": [
+      "const ${1:context} = useContext(${2:Context});"
+    ],
+    "description": "React useContext hook"
+  },
+  "useReducer Hook": {
+    "prefix": "ured",
+    "body": [
+      "const [${1:state}, ${2:dispatch}] = useReducer(${3:reducer}, ${4:initialState});"
+    ],
+    "description": "React useReducer hook"
+  },
+  "Custom Hook": {
+    "prefix": "uch",
+    "body": [
+      "export const use${1:Custom} = ($2) => {",
+      "  const [${3:state}, set${3/(.*)/${1:/capitalize}/}] = useState($4);",
+      "  ",
+      "  useEffect(() => {",
+      "    $0",
+      "  }, [${5:dependencies}]);",
+      "  ",
+      "  return { ${3:state}, set${3/(.*)/${1:/capitalize}/} };",
+      "};"
+    ],
+    "description": "Custom React hook template"
+  },
+  "React Context Provider": {
+    "prefix": "rcp",
+    "body": [
+      "import { createContext, useContext, useState, ReactNode } from 'react';",
+      "",
+      "interface ${1:Context}Type {",
+      "  $2",
+      "}",
+      "",
+      "const ${1:Context} = createContext<${1:Context}Type | undefined>(undefined);",
+      "",
+      "interface ${1:Context}ProviderProps {",
+      "  children: ReactNode;",
+      "}",
+      "",
+      "export const ${1:Context}Provider = ({ children }: ${1:Context}ProviderProps) => {",
+      "  const [${3:state}, set${3/(.*)/${1:/capitalize}/}] = useState($4);",
+      "  ",
+      "  return (",
+      "    <${1:Context}.Provider value={{ ${3:state}, set${3/(.*)/${1:/capitalize}/} }}>",
+      "      {children}",
+      "    </${1:Context}.Provider>",
+      "  );",
+      "};",
+      "",
+      "export const use${1:Context} = () => {",
+      "  const context = useContext(${1:Context});",
+      "  if (!context) {",
+      "    throw new Error('use${1:Context} must be used within ${1:Context}Provider');",
+      "  }",
+      "  return context;",
+      "};"
+    ],
+    "description": "React Context with Provider and custom hook"
+  },
+  "React forwardRef": {
+    "prefix": "rfr",
+    "body": [
+      "interface ${1:Component}Props {",
+      "  $2",
+      "}",
+      "",
+      "export const ${1:Component} = forwardRef<${3:HTMLDivElement}, ${1:Component}Props>(",
+      "  ({ $4 }, ref) => {",
+      "    return (",
+      "      <div ref={ref}>",
+      "        $0",
+      "      </div>",
+      "    );",
+      "  }",
+      ");",
+      "",
+      "${1:Component}.displayName = '${1:Component}';"
+    ],
+    "description": "React component with forwardRef"
+  },
+  "Import React": {
+    "prefix": "imr",
+    "body": [
+      "import { $0 } from 'react';"
+    ],
+    "description": "Import from React"
+  },
+  "Console Log JSX": {
+    "prefix": "clg",
+    "body": [
+      "console.log('$1:', $1);"
+    ],
+    "description": "Console log with label"
+  }
+}
