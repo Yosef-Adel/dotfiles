@@ -39,6 +39,7 @@ local config = {
 	window_decorations = "RESIZE",
 	keys = {
 		k.cmd_to_tmux_prefix("t", "c"),
+		k.cmd_to_tmux_prefix("i", "i"),
 		k.cmd_to_tmux_prefix(",", ","),
 		k.cmd_to_tmux_prefix("j", "T"),
 		k.cmd_to_tmux_prefix("k", "K"),
