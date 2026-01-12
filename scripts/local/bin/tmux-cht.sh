@@ -1,34 +1,80 @@
 #!/bin/bash
 
-# Check if fzf is installed
-if ! command -v fzf &> /dev/null; then
-    echo "fzf could not be found. Please install fzf to use this script."
-    exit 1
-fi
+# Simple documentation system - like Vim's :help
+# All docs stored locally in ~/dotfiles/docs/
 
-# Define programming languages, core utilities, and DevOps tools
-languages=$(echo "mongodb express angular react nodejs golang c cpp typescript python javascript lua java rust kotlin ruby php swift scala clojure" | tr " " "\n")
-core_utils=$(echo "tar find xargs sed awk git docker kubectl jq curl wget grep" | tr " " "\n")  # Added more core utilities
-devops_tools=$(echo "terraform ansible chef puppet helm istio prometheus grafana elasticsearch logstash kibana filebeat telegraf influxdb kapacitor k6 consul vault nomad packer vagrant spinnaker argo-cd argo-workflows jenkins teamcity circleci travisci github-actions gitlab-ci" | tr " " "\n")
+# Check if required tools are installed
+for cmd in fzf; do
+    if ! command -v "$cmd" &> /dev/null; then
+        echo "Error: $cmd is required. Install it with: brew install $cmd"
+        exit 1
+    fi
+done
 
-# Combine all options
-options=$(echo -e "$languages\n$core_utils\n$devops_tools")
+# Docs directory
+DOCS_DIR="${HOME}/dotfiles/docs"
 
-# Use fzf to select an option
-selected=$(echo "$options" | fzf --prompt="Select a language, utility, or DevOps tool: ")
+# Setup history file
+HISTORY_FILE="${XDG_CACHE_HOME:-$HOME/.cache}/tmux-cht-history"
+mkdir -p "$(dirname "$HISTORY_FILE")"
+touch "$HISTORY_FILE"
 
-# Prompt for query
-read -p "Query: " query
+# Build list of available docs from directory
+build_docs_list() {
+    local docs=""
+    for file in "$DOCS_DIR"/*.md; do
+        if [ -f "$file" ] && [ "$(basename "$file")" != "README.md" ]; then
+            local name=$(basename "$file" .md)
+            docs="${docs}${name}:${file}\n"
+        fi
+    done
+    echo -e "$docs"
+}
 
-# Check if selected is empty
-if [ -z "$selected" ]; then
-    echo "No selection made. Exiting."
-    exit 1
-fi
+# Get documentation source for a tool
+get_doc_source() {
+    local tool="$1"
+    build_docs_list | grep "^$tool:" | cut -d: -f2-
+}
 
-# Open a new tmux window with the appropriate query to cht.sh
-if echo "$languages" | grep -qs "$selected"; then
-    tmux new-window bash -c "curl -s cht.sh/$selected/$(echo "$query" | tr ' ' '+') | less"
-else
-    tmux new-window bash -c "curl -s cht.sh/$selected~$query | less"
-fi
+# Main loop
+while true; do
+    # Build options list from actual files in docs directory
+    available_docs=$(build_docs_list)
+    options=$(echo -e "$available_docs" | cut -d: -f1 | sort)
+
+    # Use fzf for tool selection
+    selected=$(echo -e "$options" | fzf \
+        --ansi \
+        --prompt="📚 Select docs: " \
+        --height=100% \
+        --border=rounded \
+        --margin=1 \
+        --padding=1 \
+        --header="Select documentation (Esc to exit)" \
+        --color="border:#589ed7,header:#589ed7,prompt:#589ed7")
+
+    # Exit if no selection
+    if [ -z "$selected" ]; then
+        exit 0
+    fi
+
+    # Get the documentation source
+    source=$(get_doc_source "$selected")
+
+    if [ -z "$source" ]; then
+        echo "Error: No documentation found for $selected"
+        sleep 2
+        continue
+    fi
+
+    # Open markdown file (read-only mode)
+    if command -v nvim &> /dev/null; then
+        nvim -R "$source"
+    elif command -v vim &> /dev/null; then
+        vim -R "$source"
+    else
+        less -RSX "$source"
+    fi
+done
+
