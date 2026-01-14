@@ -1,740 +1,702 @@
-# jq Reference
-
-Quick reference for jq (JSON query). Use `/` to search in vim.
-
-## Table of Contents
-
-- [Basics](#basics)
-  - [Identity](#identity)
-  - [Pipe](#pipe)
-  - [Comma](#comma)
-- [Selectors](#selectors)
-  - [Index](#index)
-  - [Slice](#slice)
-  - [Recursive Descent](#recursive-descent)
-  - [Optional](#optional)
-- [Array & Object Operations](#array--object-operations)
-  - [keys / keys_unsorted](#keys--keys_unsorted)
-  - [values](#values)
-  - [length](#length)
-  - [reverse](#reverse)
-  - [sort / sort_by](#sort--sort_by)
-  - [group_by](#group_by)
-  - [unique / unique_by](#unique--unique_by)
-  - [min / max / min_by / max_by](#min--max--min_by--max_by)
-  - [add](#add)
-  - [map](#map)
-  - [select](#select)
-  - [empty](#empty)
-- [Type Operations](#type-operations)
-  - [type](#type)
-  - [has](#has)
-  - [in](#in)
-  - [contains / inside](#contains--inside)
-  - [startswith / endswith](#startswith--endswith)
-- [String Operations](#string-operations)
-  - [split / join](#split--join)
-  - [ltrimstr / rtrimstr](#ltrimstr--rtrimstr)
-  - [ascii_downcase / ascii_upcase](#ascii_downcase--ascii_upcase)
-  - [tostring / tonumber](#tostring--tonumber)
-  - [test / match / capture](#test--match--capture)
-  - [sub / gsub](#sub--gsub)
-- [Math Operations](#math-operations)
-  - [add](#add-1)
-  - [min / max](#min--max)
-  - [floor / ceil / round](#floor--ceil--round)
-- [Conditionals](#conditionals)
-  - [if-then-else](#if-then-else)
-  - [and / or / not](#and--or--not)
-- [Reduce & Recursion](#reduce--recursion)
-  - [reduce](#reduce)
-  - [recurse](#recurse)
-  - [walk](#walk)
-- [Variable Binding](#variable-binding)
-  - [as](#as)
-  - [def](#def)
-- [Input/Output](#inputoutput)
-  - [input / inputs](#input--inputs)
-  - [@base64 / @uri / @csv / @json](#base64--uri--csv--json)
-- [Advanced](#advanced)
-  - [try-catch](#try-catch)
-  - [path / paths](#path--paths)
-  - [getpath / setpath / delpaths](#getpath--setpath--delpaths)
-  - [to_entries / from_entries / with_entries](#to_entries--from_entries--with_entries)
-  - [limit](#limit)
-  - [first / last / nth](#first--last--nth)
-
-## Basics
-
-### Identity
-
-The `.` operator returns the entire input.
-
-```bash
-echo '{"name": "John"}' | jq '.'
-# {"name":"John"}
-
-echo '[1,2,3]' | jq '.'
-# [1,2,3]
-```
-
-### Pipe
-
-Chain operations with `|`.
-
-```bash
-echo '{"user": {"name": "John"}}' | jq '.user | .name'
-# "John"
-
-echo '[1,2,3]' | jq '.[] | . * 2'
-# 2, 4, 6
-```
-
-### Comma
-
-Output multiple values with `,`.
-
-```bash
-echo '{"a":1,"b":2}' | jq '.a, .b'
-# 1
-# 2
-
-echo '[1,2,3]' | jq '.[] | ., . * 2'
-# 1, 2, 2, 4, 3, 6
-```
+*jq.txt*  jq Reference
+
+==============================================================================
+CONTENTS                                                          *jq-contents*
+
+1. Basics ................................ |jq-basics|
+   - Identity ............................ |jq-identity|
+   - Pipe ................................ |jq-pipe|
+   - Comma ............................... |jq-comma|
+2. Selectors ............................. |jq-selectors|
+   - Index ............................... |jq-index|
+   - Slice ............................... |jq-slice|
+   - Recursive Descent ................... |jq-recursive|
+   - Optional ............................ |jq-optional|
+3. Array & Object Operations ............. |jq-array-object|
+   - keys / keys_unsorted ................ |jq-keys|
+   - values .............................. |jq-values|
+   - length .............................. |jq-length|
+   - reverse ............................. |jq-reverse|
+   - sort / sort_by ...................... |jq-sort|
+   - group_by ............................ |jq-group-by|
+   - unique / unique_by .................. |jq-unique|
+   - min / max / min_by / max_by ......... |jq-min-max|
+   - add ................................. |jq-add|
+   - map ................................. |jq-map|
+   - select .............................. |jq-select|
+   - empty ............................... |jq-empty|
+4. Type Operations ....................... |jq-type-ops|
+   - type ................................ |jq-type|
+   - has ................................. |jq-has|
+   - in .................................. |jq-in|
+   - contains / inside ................... |jq-contains|
+   - startswith / endswith ............... |jq-startswith|
+5. String Operations ..................... |jq-string-ops|
+   - split / join ........................ |jq-split|
+   - ltrimstr / rtrimstr ................. |jq-trimstr|
+   - ascii_downcase / ascii_upcase ....... |jq-case|
+   - tostring / tonumber ................. |jq-convert|
+   - test / match / capture .............. |jq-regex|
+   - sub / gsub .......................... |jq-sub|
+6. Math Operations ....................... |jq-math-ops|
+   - add ................................. |jq-math-add|
+   - min / max ........................... |jq-math-minmax|
+   - floor / ceil / round ................ |jq-round|
+7. Conditionals .......................... |jq-conditionals|
+   - if-then-else ........................ |jq-if|
+   - and / or / not ...................... |jq-logical|
+8. Reduce & Recursion .................... |jq-reduce-recursion|
+   - reduce .............................. |jq-reduce|
+   - recurse ............................. |jq-recurse|
+   - walk ................................ |jq-walk|
+9. Variable Binding ...................... |jq-variables|
+   - as .................................. |jq-as|
+   - def ................................. |jq-def|
+10. Input/Output ......................... |jq-io|
+    - input / inputs ..................... |jq-input|
+    - @base64 / @uri / @csv / @json ...... |jq-format|
+11. Advanced ............................. |jq-advanced|
+    - try-catch .......................... |jq-try|
+    - path / paths ....................... |jq-path|
+    - getpath / setpath / delpaths ....... |jq-getpath|
+    - to_entries / from_entries .......... |jq-entries|
+    - limit .............................. |jq-limit|
+    - first / last / nth ................. |jq-first|
+
+==============================================================================
+1. BASICS                                                          *jq-basics*
+
+Identity~                                                       *jq-identity*
+>
+    The . operator returns the entire input.
+
+    echo '{"name": "John"}' | jq '.'
+    # {"name":"John"}
+
+    echo '[1,2,3]' | jq '.'
+    # [1,2,3]
+<
+
+Pipe~                                                              *jq-pipe*
+>
+    Chain operations with |.
+
+    echo '{"user": {"name": "John"}}' | jq '.user | .name'
+    # "John"
+
+    echo '[1,2,3]' | jq '.[] | . * 2'
+    # 2, 4, 6
+<
+
+Comma~                                                            *jq-comma*
+>
+    Output multiple values with ,.
+
+    echo '{"a":1,"b":2}' | jq '.a, .b'
+    # 1
+    # 2
+
+    echo '[1,2,3]' | jq '.[] | ., . * 2'
+    # 1, 2, 2, 4, 3, 6
+<
 
-## Selectors
+==============================================================================
+2. SELECTORS                                                   *jq-selectors*
 
-### Index
+Index~                                                            *jq-index*
+>
+    Access object properties or array elements.
 
-Access object properties or array elements.
+    echo '{"name": "John", "age": 30}' | jq '.name'
+    # "John"
 
-```bash
-echo '{"name": "John", "age": 30}' | jq '.name'
-# "John"
+    echo '["a","b","c"]' | jq '.[0]'
+    # "a"
 
-echo '["a","b","c"]' | jq '.[0]'
-# "a"
+    echo '["a","b","c"]' | jq '.[-1]'
+    # "c"
 
-echo '["a","b","c"]' | jq '.[-1]'
-# "c"
+    # Iterate array
+    echo '["a","b","c"]' | jq '.[]'
+    # "a", "b", "c"
+<
 
-# Iterate array
-echo '["a","b","c"]' | jq '.[]'
-# "a", "b", "c"
-```
+Slice~                                                            *jq-slice*
+>
+    Extract array subsequences.
 
-### Slice
+    echo '[0,1,2,3,4,5]' | jq '.[2:4]'
+    # [2,3]
 
-Extract array subsequences.
+    echo '[0,1,2,3,4,5]' | jq '.[2:]'
+    # [2,3,4,5]
 
-```bash
-echo '[0,1,2,3,4,5]' | jq '.[2:4]'
-# [2,3]
+    echo '[0,1,2,3,4,5]' | jq '.[:3]'
+    # [0,1,2]
 
-echo '[0,1,2,3,4,5]' | jq '.[2:]'
-# [2,3,4,5]
+    echo '[0,1,2,3,4,5]' | jq '.[-2:]'
+    # [4,5]
+<
 
-echo '[0,1,2,3,4,5]' | jq '.[:3]'
-# [0,1,2]
+Recursive Descent~                                           *jq-recursive*
+>
+    Search all levels with ..
 
-echo '[0,1,2,3,4,5]' | jq '.[-2:]'
-# [4,5]
-```
+    echo '{"a":{"b":{"c":1}}}' | jq '.. | numbers'
+    # 1
 
-### Recursive Descent
+    echo '{"a":1,"b":{"c":2}}' | jq '[.. | objects]'
+    # [{"a":1,"b":{"c":2}},{"c":2}]
+<
 
-Search all levels with `..`.
+Optional~                                                       *jq-optional*
+>
+    Use ? to suppress errors.
 
-```bash
-echo '{"a":{"b":{"c":1}}}' | jq '.. | numbers'
-# 1
+    echo '{"name":"John"}' | jq '.age'
+    # null
 
-echo '{"a":1,"b":{"c":2}}' | jq '[.. | objects]'
-# [{"a":1,"b":{"c":2}},{"c":2}]
-```
+    echo '{"name":"John"}' | jq '.age?'
+    # null
 
-### Optional
+    echo 'null' | jq '.foo'
+    # error
 
-Use `?` to suppress errors.
+    echo 'null' | jq '.foo?'
+    # null
+<
 
-```bash
-echo '{"name":"John"}' | jq '.age'
-# null
+==============================================================================
+3. ARRAY & OBJECT OPERATIONS                              *jq-array-object*
 
-echo '{"name":"John"}' | jq '.age?'
-# null
+keys / keys_unsorted~                                             *jq-keys*
+>
+    Get object keys or array indices.
 
-echo 'null' | jq '.foo'
-# error
+    echo '{"b":2,"a":1}' | jq 'keys'
+    # ["a","b"]
 
-echo 'null' | jq '.foo?'
-# null
-```
+    echo '{"b":2,"a":1}' | jq 'keys_unsorted'
+    # ["b","a"]
 
-## Array & Object Operations
+    echo '[10,20,30]' | jq 'keys'
+    # [0,1,2]
+<
 
-### keys / keys_unsorted
+values~                                                          *jq-values*
+>
+    Get all values from object or array.
 
-Get object keys or array indices.
+    echo '{"a":1,"b":2}' | jq '.[]'
+    # 1, 2
 
-```bash
-echo '{"b":2,"a":1}' | jq 'keys'
-# ["a","b"]
+    echo '{"a":1,"b":2}' | jq '[.[]]'
+    # [1,2]
+<
 
-echo '{"b":2,"a":1}' | jq 'keys_unsorted'
-# ["b","a"]
+length~                                                          *jq-length*
+>
+    Get length of array, object, string, or null.
 
-echo '[10,20,30]' | jq 'keys'
-# [0,1,2]
-```
+    echo '[1,2,3]' | jq 'length'
+    # 3
 
-### values
+    echo '"hello"' | jq 'length'
+    # 5
 
-Get all values from object or array.
+    echo '{"a":1,"b":2}' | jq 'length'
+    # 2
 
-```bash
-echo '{"a":1,"b":2}' | jq '.[]'
-# 1, 2
+    echo 'null' | jq 'length'
+    # null
+<
 
-echo '{"a":1,"b":2}' | jq '[.[]]'
-# [1,2]
-```
+reverse~                                                        *jq-reverse*
+>
+    Reverse array or string.
 
-### length
+    echo '[1,2,3]' | jq 'reverse'
+    # [3,2,1]
 
-Get length of array, object, string, or null.
+    echo '"hello"' | jq 'reverse'
+    # "olleh"
+<
 
-```bash
-echo '[1,2,3]' | jq 'length'
-# 3
+sort / sort_by~                                                   *jq-sort*
+>
+    Sort array.
 
-echo '"hello"' | jq 'length'
-# 5
+    echo '[3,1,4,1,5]' | jq 'sort'
+    # [1,1,3,4,5]
 
-echo '{"a":1,"b":2}' | jq 'length'
-# 2
+    echo '[{"age":30},{"age":20}]' | jq 'sort_by(.age)'
+    # [{"age":20},{"age":30}]
 
-echo 'null' | jq 'length'
-# null
-```
+    echo '[{"name":"Bob"},{"name":"Alice"}]' | jq 'sort_by(.name)'
+    # [{"name":"Alice"},{"name":"Bob"}]
+<
 
-### reverse
+group_by~                                                      *jq-group-by*
+>
+    Group array by expression.
 
-Reverse array or string.
+    echo '[{"type":"a","val":1},{"type":"b","val":2},{"type":"a","val":3}]' | jq 'group_by(.type)'
+    # [[{"type":"a","val":1},{"type":"a","val":3}],[{"type":"b","val":2}]]
+<
 
-```bash
-echo '[1,2,3]' | jq 'reverse'
-# [3,2,1]
+unique / unique_by~                                             *jq-unique*
+>
+    Remove duplicates.
 
-echo '"hello"' | jq 'reverse'
-# "olleh"
-```
+    echo '[1,2,1,3,2]' | jq 'unique'
+    # [1,2,3]
 
-### sort / sort_by
+    echo '[{"id":1,"n":"a"},{"id":1,"n":"b"},{"id":2,"n":"c"}]' | jq 'unique_by(.id)'
+    # [{"id":1,"n":"a"},{"id":2,"n":"c"}]
+<
 
-Sort array.
+min / max / min_by / max_by~                                   *jq-min-max*
+>
+    Find minimum or maximum.
 
-```bash
-echo '[3,1,4,1,5]' | jq 'sort'
-# [1,1,3,4,5]
+    echo '[3,1,4,1,5]' | jq 'min'
+    # 1
 
-echo '[{"age":30},{"age":20}]' | jq 'sort_by(.age)'
-# [{"age":20},{"age":30}]
+    echo '[3,1,4,1,5]' | jq 'max'
+    # 5
 
-echo '[{"name":"Bob"},{"name":"Alice"}]' | jq 'sort_by(.name)'
-# [{"name":"Alice"},{"name":"Bob"}]
-```
+    echo '[{"age":30},{"age":20},{"age":25}]' | jq 'min_by(.age)'
+    # {"age":20}
 
-### group_by
+    echo '[{"age":30},{"age":20},{"age":25}]' | jq 'max_by(.age)'
+    # {"age":30}
+<
 
-Group array by expression.
+add~                                                               *jq-add*
+>
+    Sum array elements or concatenate.
 
-```bash
-echo '[{"type":"a","val":1},{"type":"b","val":2},{"type":"a","val":3}]' | jq 'group_by(.type)'
-# [[{"type":"a","val":1},{"type":"a","val":3}],[{"type":"b","val":2}]]
-```
+    echo '[1,2,3]' | jq 'add'
+    # 6
 
-### unique / unique_by
+    echo '["a","b","c"]' | jq 'add'
+    # "abc"
 
-Remove duplicates.
+    echo '[[1,2],[3,4]]' | jq 'add'
+    # [1,2,3,4]
+<
 
-```bash
-echo '[1,2,1,3,2]' | jq 'unique'
-# [1,2,3]
+map~                                                               *jq-map*
+>
+    Transform each element.
 
-echo '[{"id":1,"n":"a"},{"id":1,"n":"b"},{"id":2,"n":"c"}]' | jq 'unique_by(.id)'
-# [{"id":1,"n":"a"},{"id":2,"n":"c"}]
-```
+    echo '[1,2,3]' | jq 'map(. * 2)'
+    # [2,4,6]
 
-### min / max / min_by / max_by
+    echo '[{"name":"John","age":30}]' | jq 'map(.name)'
+    # ["John"]
+<
 
-Find minimum or maximum.
+select~                                                          *jq-select*
+>
+    Filter elements by condition.
 
-```bash
-echo '[3,1,4,1,5]' | jq 'min'
-# 1
+    echo '[1,2,3,4,5]' | jq '[.[] | select(. > 2)]'
+    # [3,4,5]
 
-echo '[3,1,4,1,5]' | jq 'max'
-# 5
+    echo '[{"name":"John","age":30},{"name":"Jane","age":17}]' | jq '[.[] | select(.age >= 18)]'
+    # [{"name":"John","age":30}]
+<
 
-echo '[{"age":30},{"age":20},{"age":25}]' | jq 'min_by(.age)'
-# {"age":20}
+empty~                                                            *jq-empty*
+>
+    Produce no output.
 
-echo '[{"age":30},{"age":20},{"age":25}]' | jq 'max_by(.age)'
-# {"age":30}
-```
+    echo '[1,2,3]' | jq '[.[] | if . == 2 then empty else . end]'
+    # [1,3]
+<
 
-### add
+==============================================================================
+4. TYPE OPERATIONS                                            *jq-type-ops*
 
-Sum array elements or concatenate.
+type~                                                              *jq-type*
+>
+    Get type of value.
 
-```bash
-echo '[1,2,3]' | jq 'add'
-# 6
+    echo '123' | jq 'type'
+    # "number"
 
-echo '["a","b","c"]' | jq 'add'
-# "abc"
+    echo '"hello"' | jq 'type'
+    # "string"
 
-echo '[[1,2],[3,4]]' | jq 'add'
-# [1,2,3,4]
-```
+    echo '[]' | jq 'type'
+    # "array"
 
-### map
+    echo 'null' | jq 'type'
+    # "null"
+<
 
-Transform each element.
+has~                                                                *jq-has*
+>
+    Check if object has key or array has index.
 
-```bash
-echo '[1,2,3]' | jq 'map(. * 2)'
-# [2,4,6]
+    echo '{"a":1,"b":2}' | jq 'has("a")'
+    # true
 
-echo '[{"name":"John","age":30}]' | jq 'map(.name)'
-# ["John"]
-```
+    echo '{"a":1,"b":2}' | jq 'has("c")'
+    # false
 
-### select
+    echo '[1,2,3]' | jq 'has(1)'
+    # true
+<
 
-Filter elements by condition.
+in~                                                                  *jq-in*
+>
+    Check if key exists in object.
 
-```bash
-echo '[1,2,3,4,5]' | jq '[.[] | select(. > 2)]'
-# [3,4,5]
+    echo '{"a":1}' | jq '"a" | in({"a":1,"b":2})'
+    # true
+<
 
-echo '[{"name":"John","age":30},{"name":"Jane","age":17}]' | jq '[.[] | select(.age >= 18)]'
-# [{"name":"John","age":30}]
-```
+contains / inside~                                            *jq-contains*
+>
+    Check if value contains or is inside another.
 
-### empty
+    echo '"foobar"' | jq 'contains("foo")'
+    # true
 
-Produce no output.
+    echo '[1,2,3]' | jq 'contains([2])'
+    # true
 
-```bash
-echo '[1,2,3]' | jq '[.[] | if . == 2 then empty else . end]'
-# [1,3]
-```
+    echo '{"a":1,"b":2}' | jq 'contains({"a":1})'
+    # true
+<
 
-## Type Operations
+startswith / endswith~                                      *jq-startswith*
+>
+    Check string prefix/suffix.
 
-### type
+    echo '"hello"' | jq 'startswith("he")'
+    # true
 
-Get type of value.
+    echo '"hello"' | jq 'endswith("lo")'
+    # true
+<
 
-```bash
-echo '123' | jq 'type'
-# "number"
+==============================================================================
+5. STRING OPERATIONS                                        *jq-string-ops*
 
-echo '"hello"' | jq 'type'
-# "string"
+split / join~                                                    *jq-split*
+>
+    Split string or join array.
 
-echo '[]' | jq 'type'
-# "array"
+    echo '"a,b,c"' | jq 'split(",")'
+    # ["a","b","c"]
 
-echo 'null' | jq 'type'
-# "null"
-```
+    echo '["a","b","c"]' | jq 'join(",")'
+    # "a,b,c"
 
-### has
+    echo '["a","b","c"]' | jq 'join("-")'
+    # "a-b-c"
+<
 
-Check if object has key or array has index.
+ltrimstr / rtrimstr~                                           *jq-trimstr*
+>
+    Remove prefix or suffix.
 
-```bash
-echo '{"a":1,"b":2}' | jq 'has("a")'
-# true
+    echo '"hello"' | jq 'ltrimstr("he")'
+    # "llo"
 
-echo '{"a":1,"b":2}' | jq 'has("c")'
-# false
+    echo '"hello"' | jq 'rtrimstr("lo")'
+    # "hel"
+<
 
-echo '[1,2,3]' | jq 'has(1)'
-# true
-```
+ascii_downcase / ascii_upcase~                                    *jq-case*
+>
+    Change case.
 
-### in
+    echo '"Hello World"' | jq 'ascii_downcase'
+    # "hello world"
 
-Check if key exists in object.
+    echo '"Hello World"' | jq 'ascii_upcase'
+    # "HELLO WORLD"
+<
 
-```bash
-echo '{"a":1}' | jq '"a" | in({"a":1,"b":2})'
-# true
-```
+tostring / tonumber~                                           *jq-convert*
+>
+    Convert types.
 
-### contains / inside
+    echo '123' | jq 'tostring'
+    # "123"
 
-Check if value contains or is inside another.
+    echo '"123"' | jq 'tonumber'
+    # 123
+<
 
-```bash
-echo '"foobar"' | jq 'contains("foo")'
-# true
+test / match / capture~                                          *jq-regex*
+>
+    Test regex or extract matches.
 
-echo '[1,2,3]' | jq 'contains([2])'
-# true
+    echo '"test123"' | jq 'test("[0-9]+")'
+    # true
 
-echo '{"a":1,"b":2}' | jq 'contains({"a":1})'
-# true
-```
+    echo '"test123abc"' | jq 'match("[0-9]+")'
+    # {"offset":4,"length":3,"string":"123","captures":[]}
 
-### startswith / endswith
+    echo '"test123"' | jq '[match("[0-9]+"; "g")] | map(.string)'
+    # ["123"]
 
-Check string prefix/suffix.
+    echo '"foo123bar"' | jq 'capture("foo(?<num>[0-9]+)")'
+    # {"num":"123"}
+<
 
-```bash
-echo '"hello"' | jq 'startswith("he")'
-# true
+sub / gsub~                                                         *jq-sub*
+>
+    Replace first or all occurrences.
 
-echo '"hello"' | jq 'endswith("lo")'
-# true
-```
+    echo '"hello world"' | jq 'sub("world"; "earth")'
+    # "hello earth"
 
-## String Operations
+    echo '"hello world world"' | jq 'gsub("world"; "earth")'
+    # "hello earth earth"
+<
 
-### split / join
+==============================================================================
+6. MATH OPERATIONS                                            *jq-math-ops*
 
-Split string or join array.
+add~                                                           *jq-math-add*
+>
+    Sum array.
 
-```bash
-echo '"a,b,c"' | jq 'split(",")'
-# ["a","b","c"]
+    echo '[1,2,3,4]' | jq 'add'
+    # 10
+<
 
-echo '["a","b","c"]' | jq 'join(",")'
-# "a,b,c"
+min / max~                                                   *jq-math-minmax*
+>
+    Find minimum or maximum.
 
-echo '["a","b","c"]' | jq 'join("-")'
-# "a-b-c"
-```
+    echo '[3,1,4,1,5]' | jq 'min'
+    # 1
 
-### ltrimstr / rtrimstr
+    echo '[3,1,4,1,5]' | jq 'max'
+    # 5
+<
 
-Remove prefix or suffix.
+floor / ceil / round~                                            *jq-round*
+>
+    Round numbers.
 
-```bash
-echo '"hello"' | jq 'ltrimstr("he")'
-# "llo"
+    echo '3.7' | jq 'floor'
+    # 3
 
-echo '"hello"' | jq 'rtrimstr("lo")'
-# "hel"
-```
+    echo '3.2' | jq 'ceil'
+    # 4
 
-### ascii_downcase / ascii_upcase
+    echo '3.5' | jq 'round'
+    # 4
+<
 
-Change case.
+==============================================================================
+7. CONDITIONALS                                            *jq-conditionals*
 
-```bash
-echo '"Hello World"' | jq 'ascii_downcase'
-# "hello world"
+if-then-else~                                                       *jq-if*
+>
+    Conditional execution.
 
-echo '"Hello World"' | jq 'ascii_upcase'
-# "HELLO WORLD"
-```
+    echo '5' | jq 'if . > 3 then "big" else "small" end'
+    # "big"
 
-### tostring / tonumber
+    echo '[1,2,3,4,5]' | jq '[.[] | if . % 2 == 0 then "even" else "odd" end]'
+    # ["odd","even","odd","even","odd"]
+<
 
-Convert types.
+and / or / not~                                                 *jq-logical*
+>
+    Logical operators.
 
-```bash
-echo '123' | jq 'tostring'
-# "123"
+    echo 'null' | jq 'true and false'
+    # false
 
-echo '"123"' | jq 'tonumber'
-# 123
-```
+    echo 'null' | jq 'true or false'
+    # true
 
-### test / match / capture
+    echo 'true' | jq 'not'
+    # false
+<
 
-Test regex or extract matches.
+==============================================================================
+8. REDUCE & RECURSION                                   *jq-reduce-recursion*
 
-```bash
-echo '"test123"' | jq 'test("[0-9]+")'
-# true
+reduce~                                                          *jq-reduce*
+>
+    Accumulate values.
 
-echo '"test123abc"' | jq 'match("[0-9]+")'
-# {"offset":4,"length":3,"string":"123","captures":[]}
+    echo '[1,2,3,4]' | jq 'reduce .[] as $x (0; . + $x)'
+    # 10
 
-echo '"test123"' | jq '[match("[0-9]+"; "g")] | map(.string)'
-# ["123"]
+    echo '[{"name":"John","age":30},{"name":"Jane","age":25}]' | jq 'reduce .[] as $person ({}; .[$person.name] = $person.age)'
+    # {"John":30,"Jane":25}
+<
 
-echo '"foo123bar"' | jq 'capture("foo(?<num>[0-9]+)")'
-# {"num":"123"}
-```
+recurse~                                                        *jq-recurse*
+>
+    Recursively apply function.
 
-### sub / gsub
+    echo '{"a":{"b":{"c":1}}}' | jq 'recurse(.a?, .b?, .c?)'
+    # {"a":{"b":{"c":1}}}, {"b":{"c":1}}, {"c":1}, 1
+<
 
-Replace first or all occurrences.
+walk~                                                              *jq-walk*
+>
+    Recursively transform structure.
 
-```bash
-echo '"hello world"' | jq 'sub("world"; "earth")'
-# "hello earth"
+    echo '{"a":{"b":1}}' | jq 'walk(if type == "number" then . * 2 else . end)'
+    # {"a":{"b":2}}
+<
 
-echo '"hello world world"' | jq 'gsub("world"; "earth")'
-# "hello earth earth"
-```
+==============================================================================
+9. VARIABLE BINDING                                          *jq-variables*
 
-## Math Operations
+as~                                                                  *jq-as*
+>
+    Bind value to variable.
 
-### add
+    echo '[1,2,3]' | jq '.[] as $x | $x * $x'
+    # 1, 4, 9
 
-Sum array.
+    echo '{"a":1,"b":2}' | jq '.a as $x | .b as $y | $x + $y'
+    # 3
+<
 
-```bash
-echo '[1,2,3,4]' | jq 'add'
-# 10
-```
+def~                                                                *jq-def*
+>
+    Define reusable function.
 
-### min / max
+    echo '[1,2,3]' | jq 'def double: . * 2; map(double)'
+    # [2,4,6]
 
-Find minimum or maximum.
+    echo '[1,2,3,4]' | jq 'def is_even: . % 2 == 0; map(select(is_even))'
+    # [2,4]
+<
 
-```bash
-echo '[3,1,4,1,5]' | jq 'min'
-# 1
+==============================================================================
+10. INPUT/OUTPUT                                                     *jq-io*
 
-echo '[3,1,4,1,5]' | jq 'max'
-# 5
-```
+input / inputs~                                                  *jq-input*
+>
+    Read additional inputs.
 
-### floor / ceil / round
+    # Multiple JSON objects
+    echo -e '1\n2\n3' | jq -s 'add'
+    # 6
 
-Round numbers.
+    # First input
+    echo -e '1\n2\n3' | jq '[., input]'
+    # [1,2]
 
-```bash
-echo '3.7' | jq 'floor'
-# 3
+    # All inputs
+    echo -e '{"a":1}\n{"b":2}' | jq -s 'add'
+    # {"a":1,"b":2}
+<
 
-echo '3.2' | jq 'ceil'
-# 4
+@base64 / @uri / @csv / @json~                                  *jq-format*
+>
+    Format output.
 
-echo '3.5' | jq 'round'
-# 4
-```
+    echo '"hello"' | jq '@base64'
+    # "aGVsbG8="
 
-## Conditionals
+    echo '"hello world"' | jq '@uri'
+    # "hello%20world"
 
-### if-then-else
+    echo '["a","b","c"]' | jq '@csv'
+    # "\"a\",\"b\",\"c\""
 
-Conditional execution.
+    echo '{"a":1}' | jq '@json'
+    # "{\"a\":1}"
+<
 
-```bash
-echo '5' | jq 'if . > 3 then "big" else "small" end'
-# "big"
+==============================================================================
+11. ADVANCED                                                   *jq-advanced*
 
-echo '[1,2,3,4,5]' | jq '[.[] | if . % 2 == 0 then "even" else "odd" end]'
-# ["odd","even","odd","even","odd"]
-```
+try-catch~                                                          *jq-try*
+>
+    Handle errors.
 
-### and / or / not
+    echo '{"a":1}' | jq 'try .b.c catch "error"'
+    # null
 
-Logical operators.
+    echo '"not a number"' | jq 'try tonumber catch "invalid"'
+    # "invalid"
+<
 
-```bash
-echo 'null' | jq 'true and false'
-# false
+path / paths~                                                      *jq-path*
+>
+    Get paths to all values.
 
-echo 'null' | jq 'true or false'
-# true
+    echo '{"a":{"b":1,"c":2}}' | jq 'paths'
+    # ["a"], ["a","b"], ["a","c"]
 
-echo 'true' | jq 'not'
-# false
-```
+    echo '{"a":{"b":1,"c":2}}' | jq 'paths(scalars)'
+    # ["a","b"], ["a","c"]
+<
 
-## Reduce & Recursion
+getpath / setpath / delpaths~                                   *jq-getpath*
+>
+    Manipulate nested structures.
 
-### reduce
+    echo '{"a":{"b":1}}' | jq 'getpath(["a","b"])'
+    # 1
 
-Accumulate values.
+    echo '{"a":{"b":1}}' | jq 'setpath(["a","c"]; 2)'
+    # {"a":{"b":1,"c":2}}
 
-```bash
-echo '[1,2,3,4]' | jq 'reduce .[] as $x (0; . + $x)'
-# 10
+    echo '{"a":{"b":1,"c":2}}' | jq 'delpaths([["a","b"]])'
+    # {"a":{"c":2}}
+<
 
-echo '[{"name":"John","age":30},{"name":"Jane","age":25}]' | jq 'reduce .[] as $person ({}; .[$person.name] = $person.age)'
-# {"John":30,"Jane":25}
-```
+to_entries / from_entries / with_entries~                       *jq-entries*
+>
+    Transform between objects and key-value pairs.
 
-### recurse
+    echo '{"a":1,"b":2}' | jq 'to_entries'
+    # [{"key":"a","value":1},{"key":"b","value":2}]
 
-Recursively apply function.
+    echo '[{"key":"a","value":1}]' | jq 'from_entries'
+    # {"a":1}
 
-```bash
-echo '{"a":{"b":{"c":1}}}' | jq 'recurse(.a?, .b?, .c?)'
-# {"a":{"b":{"c":1}}}, {"b":{"c":1}}, {"c":1}, 1
+    echo '{"a":1,"b":2}' | jq 'with_entries(.value = .value * 2)'
+    # {"a":2,"b":4}
+<
 
-echo '2' | jq '[., 1] | recurse(.[0] - 1; . >= 0)'
-# [2,1], [1,1], [0,1]
-```
+limit~                                                            *jq-limit*
+>
+    Limit output count.
 
-### walk
+    echo 'null' | jq '[limit(3; range(10))]'
+    # [0,1,2]
 
-Recursively transform structure.
+    echo '[1,2,3,4,5]' | jq '[limit(2; .[])]'
+    # [1,2]
+<
 
-```bash
-echo '{"a":{"b":1}}' | jq 'walk(if type == "number" then . * 2 else . end)'
-# {"a":{"b":2}}
-```
+first / last / nth~                                              *jq-first*
+>
+    Get specific elements.
 
-## Variable Binding
+    echo 'null' | jq 'first(range(10))'
+    # 0
 
-### as
+    echo '[1,2,3,4,5]' | jq 'first(.[])'
+    # 1
 
-Bind value to variable.
+    echo '[1,2,3,4,5]' | jq 'last(.[])'
+    # 5
 
-```bash
-echo '[1,2,3]' | jq '.[] as $x | $x * $x'
-# 1, 4, 9
+    echo 'null' | jq 'nth(2; range(10))'
+    # 2
+<
 
-echo '{"a":1,"b":2}' | jq '.a as $x | .b as $y | $x + $y'
-# 3
-```
-
-### def
-
-Define reusable function.
-
-```bash
-echo '[1,2,3]' | jq 'def double: . * 2; map(double)'
-# [2,4,6]
-
-echo '[1,2,3,4]' | jq 'def is_even: . % 2 == 0; map(select(is_even))'
-# [2,4]
-```
-
-## Input/Output
-
-### input / inputs
-
-Read additional inputs.
-
-```bash
-# Multiple JSON objects
-echo -e '1\n2\n3' | jq -s 'add'
-# 6
-
-# First input
-echo -e '1\n2\n3' | jq '[., input]'
-# [1,2]
-
-# All inputs
-echo -e '{"a":1}\n{"b":2}' | jq -s 'add'
-# {"a":1,"b":2}
-```
-
-### @base64 / @uri / @csv / @json
-
-Format output.
-
-```bash
-echo '"hello"' | jq '@base64'
-# "aGVsbG8="
-
-echo '"hello world"' | jq '@uri'
-# "hello%20world"
-
-echo '["a","b","c"]' | jq '@csv'
-# "\"a\",\"b\",\"c\""
-
-echo '{"a":1}' | jq '@json'
-# "{\"a\":1}"
-```
-
-## Advanced
-
-### try-catch
-
-Handle errors.
-
-```bash
-echo '{"a":1}' | jq 'try .b.c catch "error"'
-# null
-
-echo '"not a number"' | jq 'try tonumber catch "invalid"'
-# "invalid"
-```
-
-### path / paths
-
-Get paths to all values.
-
-```bash
-echo '{"a":{"b":1,"c":2}}' | jq 'paths'
-# ["a"], ["a","b"], ["a","c"]
-
-echo '{"a":{"b":1,"c":2}}' | jq 'paths(scalars)'
-# ["a","b"], ["a","c"]
-```
-
-### getpath / setpath / delpaths
-
-Manipulate nested structures.
-
-```bash
-echo '{"a":{"b":1}}' | jq 'getpath(["a","b"])'
-# 1
-
-echo '{"a":{"b":1}}' | jq 'setpath(["a","c"]; 2)'
-# {"a":{"b":1,"c":2}}
-
-echo '{"a":{"b":1,"c":2}}' | jq 'delpaths([["a","b"]])'
-# {"a":{"c":2}}
-```
-
-### to_entries / from_entries / with_entries
-
-Transform between objects and key-value pairs.
-
-```bash
-echo '{"a":1,"b":2}' | jq 'to_entries'
-# [{"key":"a","value":1},{"key":"b","value":2}]
-
-echo '[{"key":"a","value":1}]' | jq 'from_entries'
-# {"a":1}
-
-echo '{"a":1,"b":2}' | jq 'with_entries(.value = .value * 2)'
-# {"a":2,"b":4}
-```
-
-### limit
-
-Limit output count.
-
-```bash
-echo 'null' | jq '[limit(3; range(10))]'
-# [0,1,2]
-
-echo '[1,2,3,4,5]' | jq '[limit(2; .[])]'
-# [1,2]
-```
-
-### first / last / nth
-
-Get specific elements.
-
-```bash
-echo 'null' | jq 'first(range(10))'
-# 0
-
-echo '[1,2,3,4,5]' | jq 'first(.[])'
-# 1
-
-echo '[1,2,3,4,5]' | jq 'last(.[])'
-# 5
-
-echo 'null' | jq 'nth(2; range(10))'
-# 2
-```
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
