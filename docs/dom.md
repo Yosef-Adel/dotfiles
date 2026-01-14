@@ -1,919 +1,944 @@
-# DOM APIs Reference
-
-Quick reference for DOM APIs. Use `/` to search in vim.
-
-## Table of Contents
-
-- [DOM APIs Reference](#dom-apis-reference)
-  - [Table of Contents](#table-of-contents)
-  - [Selecting Elements](#selecting-elements)
-    - [querySelector / querySelectorAll](#queryselector--queryselectorall)
-    - [getElementById](#getelementbyid)
-    - [getElementsByClassName](#getelementsbyclassname)
-    - [getElementsByTagName](#getelementsbytagname)
-  - [Creating \& Modifying Elements](#creating--modifying-elements)
-    - [createElement](#createelement)
-    - [appendChild / insertBefore](#appendchild--insertbefore)
-    - [removeChild](#removechild)
-    - [replaceChild](#replacechild)
-    - [innerHTML / textContent / innerText](#innerhtml--textcontent--innertext)
-  - [Element Properties](#element-properties)
-    - [className / classList](#classname--classlist)
-    - [id / setAttribute](#id--setattribute)
-    - [style](#style)
-    - [dataset](#dataset)
-  - [DOM Traversal](#dom-traversal)
-    - [parentElement](#parentelement)
-    - [children / childNodes](#children--childnodes)
-    - [nextSibling / previousSibling](#nextsibling--previoussibling)
-    - [closest](#closest)
-  - [Events](#events)
-    - [addEventListener](#addeventlistener)
-    - [removeEventListener](#removeeventlistener)
-    - [Event Object](#event-object)
-    - [Event Delegation](#event-delegation)
-  - [Forms](#forms)
-    - [Getting Form Values](#getting-form-values)
-    - [Form Events](#form-events)
-    - [Form Validation](#form-validation)
-  - [Window \& Document](#window--document)
-    - [window.location](#windowlocation)
-    - [window.history](#windowhistory)
-    - [document.title](#documenttitle)
-    - [window.innerHeight / innerWidth](#windowinnerheight--innerwidth)
-  - [Timing Functions](#timing-functions)
-    - [requestAnimationFrame](#requestanimationframe)
-  - [Window \& Document Events](#window--document-events)
-    - [Document Lifecycle Events](#document-lifecycle-events)
-    - [Window Events](#window-events)
-    - [Visibility Events](#visibility-events)
-  - [Local \& Session Storage](#local--session-storage)
-    - [localStorage](#localstorage)
-    - [sessionStorage](#sessionstorage)
-  - [AJAX \& Fetch](#ajax--fetch)
-    - [Fetch GET](#fetch-get)
-    - [Fetch POST](#fetch-post)
-
-## Selecting Elements
-
-### querySelector / querySelectorAll
-
-```javascript
-// querySelector - returns first match
-const element = document.querySelector(".my-class");
-const element2 = document.querySelector("#my-id");
-const element3 = document.querySelector("div.container > p");
-
-// querySelectorAll - returns NodeList of all matches
-const elements = document.querySelectorAll(".my-class");
-// Convert to array if needed
-const arr = Array.from(elements);
-// or
-const arr2 = [...elements];
-
-// Loop through
-elements.forEach((el) => {
-  console.log(el);
-});
-```
-
-### getElementById
-
-```javascript
-const element = document.getElementById("my-id");
-```
-
-### getElementsByClassName
-
-```javascript
-const elements = document.getElementsByClassName("my-class");
-// Returns HTMLCollection (live collection)
-```
-
-### getElementsByTagName
-
-```javascript
-const paragraphs = document.getElementsByTagName("p");
-// Returns HTMLCollection (live collection)
-```
-
-## Creating & Modifying Elements
-
-### createElement
-
-```javascript
-const div = document.createElement("div");
-const button = document.createElement("button");
-const input = document.createElement("input");
-
-button.textContent = "Click me";
-input.type = "text";
-```
-
-### appendChild / insertBefore
-
-```javascript
-const parent = document.getElementById("container");
-const child = document.createElement("div");
-
-// Add to end
-parent.appendChild(child);
-
-// Insert at specific position
-const referenceNode = parent.firstChild;
-parent.insertBefore(child, referenceNode);
-```
-
-### removeChild
-
-```javascript
-const parent = document.getElementById("container");
-const child = parent.getElementById("my-child");
-
-parent.removeChild(child);
-
-// Or simpler:
-child.remove();
-```
-
-### replaceChild
-
-```javascript
-const parent = document.getElementById("container");
-const oldChild = document.getElementById("old");
-const newChild = document.createElement("div");
-
-parent.replaceChild(newChild, oldChild);
-```
-
-### innerHTML / textContent / innerText
-
-```javascript
-const element = document.getElementById("my-div");
-
-// innerHTML - includes HTML tags
-element.innerHTML = "<p>Hello <strong>World</strong></p>";
-const content = element.innerHTML; // "<p>Hello <strong>World</strong></p>"
-
-// textContent - only text (includes hidden elements)
-element.textContent = "Hello World";
-const text = element.textContent; // "Hello World"
-
-// innerText - only visible text (respects CSS)
-element.innerText = "Hello World";
-const visibleText = element.innerText; // "Hello World"
-```
-
-## Element Properties
-
-### className / classList
-
-```javascript
-const element = document.getElementById("my-element");
-
-// className - replace all classes
-element.className = "new-class";
-element.className = "class1 class2 class3";
-
-// classList - manage individual classes
-element.classList.add("active");
-element.classList.remove("inactive");
-element.classList.toggle("highlight");
-element.classList.contains("active"); // true/false
-element.classList.replace("old-class", "new-class");
-
-// Get all classes as array-like
-for (const cls of element.classList) {
-  console.log(cls);
-}
-```
-
-### id / setAttribute
-
-```javascript
-const element = document.getElementById("my-id");
-
-// id
-element.id = "new-id";
-console.log(element.id); // "new-id"
-
-// setAttribute / getAttribute / removeAttribute
-element.setAttribute("data-role", "admin");
-const role = element.getAttribute("data-role"); // "admin"
-element.removeAttribute("data-role");
-
-// hasAttribute
-if (element.hasAttribute("disabled")) {
-  console.log("Element is disabled");
-}
-```
-
-### style
-
-```javascript
-const element = document.getElementById("my-element");
-
-// Inline styles
-element.style.color = "red";
-element.style.backgroundColor = "blue";
-element.style.fontSize = "16px";
-element.style.display = "none";
-
-// Get computed style
-const color = getComputedStyle(element).color;
-const display = getComputedStyle(element).display;
-
-// Multiple styles
-element.style.cssText = "color: red; background: blue; font-size: 16px;";
-```
-
-### dataset
-
-```javascript
-// HTML: <div id="user" data-user-id="123" data-role="admin"></div>
-const element = document.getElementById("user");
-
-// Access data attributes
-console.log(element.dataset.userId); // "123"
-console.log(element.dataset.role); // "admin"
-
-// Set data attributes
-element.dataset.userId = "456";
-element.dataset.newAttr = "value";
-
-// Matches: data-user-id, data-role, data-new-attr
-```
-
-## DOM Traversal
-
-### parentElement
-
-```javascript
-const element = document.getElementById("child");
-
-const parent = element.parentElement;
-const grandparent = parent.parentElement;
-```
-
-### children / childNodes
-
-```javascript
-const parent = document.getElementById("container");
-
-// children - only Element nodes (preferred)
-for (const child of parent.children) {
-  console.log(child);
-}
-
-// childNodes - all nodes including text/comment
-for (const node of parent.childNodes) {
-  console.log(node);
-}
-
-// First/last child
-const first = parent.firstElementChild; // or firstChild
-const last = parent.lastElementChild; // or lastChild
-```
-
-### nextSibling / previousSibling
-
-```javascript
-const element = document.getElementById("item2");
-
-// Element-based (preferred)
-const next = element.nextElementSibling;
-const prev = element.previousElementSibling;
-
-// Node-based (includes text nodes)
-const nextNode = element.nextSibling;
-const prevNode = element.previousSibling;
-```
-
-### closest
-
-```javascript
-// HTML: <div class="container"><div class="item"><button id="btn">Click</button></div></div>
-const button = document.getElementById("btn");
-
-// Find closest parent matching selector
-const item = button.closest(".item");
-const container = button.closest(".container");
-const notFound = button.closest(".missing"); // null
-```
-
-## Events
-
-### addEventListener
-
-```javascript
-const button = document.getElementById("my-button");
-
-// Simple event
-button.addEventListener("click", (event) => {
-  console.log("Button clicked!");
-});
-
-// Multiple listeners
-button.addEventListener("click", handleClick);
-button.addEventListener("click", logClick);
-
-// With options
-element.addEventListener("scroll", handleScroll, { passive: true });
-element.addEventListener("click", handleClick, { once: true }); // Only once
-element.addEventListener("input", handleInput, { capture: true }); // Capture phase
-
-// Common events
-element.addEventListener("focus", () => {});
-element.addEventListener("blur", () => {});
-element.addEventListener("change", () => {});
-element.addEventListener("input", () => {});
-element.addEventListener("submit", () => {});
-element.addEventListener("keydown", () => {});
-element.addEventListener("keyup", () => {});
-element.addEventListener("mouseenter", () => {});
-element.addEventListener("mouseleave", () => {});
-element.addEventListener("mousedown", () => {});
-element.addEventListener("mouseup", () => {});
-```
-
-### removeEventListener
-
-```javascript
-const button = document.getElementById("my-button");
-
-function handleClick(event) {
-  console.log("Clicked");
-}
-
-button.addEventListener("click", handleClick);
-button.removeEventListener("click", handleClick);
-```
-
-### Event Object
-
-```javascript
-element.addEventListener("click", (event) => {
-  // Common properties
-  console.log(event.type); // "click"
-  console.log(event.target); // Element that triggered event
-  console.log(event.currentTarget); // Element with listener
-  console.log(event.pageX); // X position relative to page
-  console.log(event.pageY); // Y position relative to page
-
-  // Methods
-  event.preventDefault(); // Prevent default behavior
-  event.stopPropagation(); // Stop event bubbling
-  event.stopImmediatePropagation(); // Stop all propagation
-
-  // Keyboard events
-  if (event.key === "Enter") {
-    console.log("Enter pressed");
-  }
-  console.log(event.ctrlKey); // true if Ctrl held
-  console.log(event.shiftKey);
-  console.log(event.altKey);
-});
-```
-
-### Event Delegation
-
-```javascript
-// HTML: <ul id="list"><li><button>Delete</button></li><li><button>Delete</button></li></ul>
-const list = document.getElementById("list");
-
-list.addEventListener("click", (event) => {
-  if (event.target.tagName === "BUTTON") {
-    const item = event.target.closest("li");
-    item.remove();
-  }
-});
-```
-
-## Forms
-
-### Getting Form Values
-
-```javascript
-// HTML:
-// <form id="myForm">
-//   <input type="text" name="username" value="john">
-//   <input type="password" name="password" value="secret">
-//   <textarea name="bio">My bio</textarea>
-//   <select name="country"><option value="us">USA</option></select>
-//   <input type="checkbox" name="agree" checked>
-// </form>
-
-const form = document.getElementById("myForm");
-
-// Get values
-const username = form.elements.username.value;
-const password = form.elements.password.value;
-const bio = form.elements.bio.value;
-const country = form.elements.country.value;
-const agree = form.elements.agree.checked;
-
-// Or via FormData
-const formData = new FormData(form);
-const username2 = formData.get("username");
-const data = Object.fromEntries(formData);
-// {username: 'john', password: 'secret', bio: 'My bio', ...}
-
-// Multiple selects/checkboxes
-const selected = Array.from(form.elements.options)
-  .filter((option) => option.selected)
-  .map((option) => option.value);
-```
-
-### Form Events
-
-```javascript
-const form = document.getElementById("myForm");
-const input = form.elements.username;
-
-// submit - form submission
-form.addEventListener("submit", (event) => {
-  event.preventDefault(); // Prevent default submission
-  const formData = new FormData(form);
-  // Send to server, etc.
-});
-
-// change - value changed and element loses focus
-input.addEventListener("change", (event) => {
-  console.log("Final value:", event.target.value);
-});
-
-// input - value changed (fires on every keystroke)
-input.addEventListener("input", (event) => {
-  console.log("Current value:", event.target.value);
-});
-
-// focus / blur
-input.addEventListener("focus", () => {
-  console.log("Input focused");
-});
-
-input.addEventListener("blur", () => {
-  console.log("Input lost focus");
-});
-```
-
-### Form Validation
-
-```javascript
-const form = document.getElementById("myForm");
-const email = form.elements.email;
-
-// HTML5 validation
-form.addEventListener("submit", (event) => {
-  if (!form.checkValidity()) {
-    event.preventDefault();
-    // Show errors
-  }
-});
-
-// Custom validation
-email.addEventListener("blur", () => {
-  if (!email.value.includes("@")) {
-    email.classList.add("error");
-    email.setAttribute("aria-invalid", "true");
-  } else {
-    email.classList.remove("error");
-    email.removeAttribute("aria-invalid");
-  }
-});
-
-// Check validity
-console.log(email.validity.valid); // true/false
-console.log(email.validity.valueMissing);
-console.log(email.validity.typeMismatch);
-```
-
-## Window & Document
-
-### window.location
-
-```javascript
-// Current URL
-console.log(window.location.href); // Full URL
-console.log(window.location.protocol); // "https:"
-console.log(window.location.hostname); // "example.com"
-console.log(window.location.pathname); // "/page"
-console.log(window.location.search); // "?id=123"
-console.log(window.location.hash); // "#section"
-
-// Navigate
-window.location.href = "https://example.com";
-window.location.replace("https://example.com"); // Replace history
-location.reload(); // Reload page
-```
-
-### window.history
-
-```javascript
-// Navigate
-window.history.back(); // Go back
-window.history.forward(); // Go forward
-window.history.go(-1); // Go back 1 page
-window.history.go(2); // Go forward 2 pages
-
-// Add to history
-window.history.pushState({ data: "value" }, "Title", "/new-url");
-// Change URL without reload
-window.history.replaceState({ data: "value" }, "Title", "/replaced-url");
-
-// Listen for changes
-window.addEventListener("popstate", (event) => {
-  console.log("History changed:", event.state);
-});
-```
-
-### document.title
-
-```javascript
-// Get title
-console.log(document.title); // "Page Title"
-
-// Set title
-document.title = "New Title";
-```
-
-### window.innerHeight / innerWidth
-
-```javascript
-// Viewport dimensions
-console.log(window.innerHeight); // 768
-console.log(window.innerWidth); // 1024
-
-// Scroll position
-console.log(window.scrollX); // Horizontal scroll
-console.log(window.scrollY); // Vertical scroll
-
-// Scroll to position
-window.scrollTo(0, 0); // Top of page
-window.scrollTo({ top: 500, behavior: "smooth" });
-
-// Element scroll into view
-element.scrollIntoView();
-element.scrollIntoView({ behavior: "smooth", block: "center" });
-```
-
-## Timing Functions
-
-### requestAnimationFrame
-
-```javascript
-// Schedule function before next repaint
-let animationId = requestAnimationFrame(() => {
-  console.log("This runs before paint");
-});
-
-// Cancel animation
-cancelAnimationFrame(animationId);
-
-// Smooth animation example
-let position = 0;
-
-function animate() {
-  position += 5;
-  element.style.left = position + "px";
-
-  if (position < 500) {
-    requestAnimationFrame(animate);
-  }
-}
-
-requestAnimationFrame(animate);
-```
-
-## Window & Document Events
-
-### Document Lifecycle Events
-
-```javascript
-// DOMContentLoaded - DOM is fully loaded, styles and images may still be loading
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("DOM ready");
-  const element = document.getElementById("my-element"); // Safe to access
-});
-
-// load - entire page is loaded (images, stylesheets, scripts)
-window.addEventListener("load", () => {
-  console.log("Page fully loaded");
-});
-
-// unload - user is leaving the page
-window.addEventListener("unload", () => {
-  // Cleanup code
-});
-
-// beforeunload - before page unload (can show confirmation)
-window.addEventListener("beforeunload", (event) => {
-  if (hasUnsavedChanges) {
-    event.preventDefault();
-    event.returnValue = "Are you sure?"; // Some browsers show this
-  }
-});
-
-// readystatechange - track loading progress
-document.addEventListener("readystatechange", () => {
-  console.log(document.readyState);
-  // 'loading' - document is still loading
-  // 'interactive' - DOM parsed, DOMContentLoaded fired
-  // 'complete' - all resources loaded, load event fired
-});
-```
-
-### Window Events
-
-```javascript
-// resize - window/viewport resized
-window.addEventListener("resize", () => {
-  console.log("Window size:", window.innerWidth, window.innerHeight);
-});
-
-// scroll - page scrolled
-window.addEventListener("scroll", () => {
-  console.log("Scroll position:", window.scrollY);
-  // Debounce for better performance
-});
-
-// Debounced scroll
-let scrollTimeout;
-window.addEventListener("scroll", () => {
-  clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(() => {
-    console.log("Scroll ended");
-  }, 150);
-});
-
-// error - JavaScript error occurs
-window.addEventListener("error", (event) => {
-  console.error("Error:", event.message, event.filename, event.lineno);
-});
-
-// unhandledrejection - unhandled Promise rejection
-window.addEventListener("unhandledrejection", (event) => {
-  console.error("Unhandled rejection:", event.reason);
-  event.preventDefault(); // Suppress error
-});
-
-// hashchange - URL hash changed
-window.addEventListener("hashchange", () => {
-  console.log("Hash changed to:", window.location.hash);
-});
-
-// online / offline - network status changed
-window.addEventListener("online", () => {
-  console.log("Connected to internet");
-});
-
-window.addEventListener("offline", () => {
-  console.log("Disconnected from internet");
-});
-
-// Check current status
-if (navigator.onLine) {
-  console.log("Online");
-}
-
-// beforeprint / afterprint - printing
-window.addEventListener("beforeprint", () => {
-  console.log("About to print");
-});
-
-window.addEventListener("afterprint", () => {
-  console.log("Print dialog closed");
-});
-
-// message - receive message from other window/worker
-window.addEventListener("message", (event) => {
-  if (event.origin !== "https://example.com") return; // Security check
-  console.log("Message received:", event.data);
-});
-
-// Send message to other window
-const popup = window.open("popup.html");
-popup.postMessage({ type: "greeting", text: "Hello" }, "https://example.com");
-
-// storage - localStorage/sessionStorage changed from another tab
-window.addEventListener("storage", (event) => {
-  console.log("Storage changed:", event.key, event.newValue);
-});
-```
-
-### Visibility Events
-
-```javascript
-// Page Visibility API - detect if page is visible/hidden
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    console.log("Page is hidden");
-    // Pause videos, stop animations, etc.
-  } else {
-    console.log("Page is visible");
-    // Resume
-  }
-});
-
-// Check current state
-if (document.hidden) {
-  console.log("Page is currently hidden");
-} else {
-  console.log("Page is currently visible");
-}
-
-// visibilityState
-const state = document.visibilityState; // 'visible', 'hidden', 'prerender'
-
-// Intersection Observer - detect when elements enter/leave viewport
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      console.log("Element is in viewport");
-      // Lazy load images, start animations, etc.
-    } else {
-      console.log("Element left viewport");
+*dom.txt*  DOM APIs Reference
+
+==============================================================================
+CONTENTS                                                       *dom-contents*
+
+1. Selecting Elements .................... |dom-selecting|
+2. Node Relationships .................... |dom-nodes|
+3. Creating & Modifying .................. |dom-modifying|
+4. Events ................................ |dom-events|
+5. Forms ................................. |dom-forms|
+6. Storage ............................... |dom-storage|
+7. Web Components ........................ |dom-web-components|
+8. Web APIs .............................. |dom-apis|
+
+==============================================================================
+1. Selecting Elements                                      *dom-selecting*
+
+querySelector()~                                           *dom-querySelector()*
+querySelectorAll()~                                        *dom-querySelectorAll()*
+>
+    const el = document.querySelector('.my-class');
+    const el2 = document.querySelector('#my-id');
+    const el3 = document.querySelector('div.container > p');
+
+    const els = document.querySelectorAll('.my-class');
+    els.forEach(el => console.log(el));
+<
+
+getElementById()~                                          *dom-getElementById()*
+>
+    const el = document.getElementById('my-id');
+<
+
+getElementsByClassName()~                                  *dom-getElementsByClassName()*
+>
+    const els = document.getElementsByClassName('my-class');
+    // Returns HTMLCollection (live)
+<
+
+getElementsByTagName()~                                    *dom-getElementsByTagName()*
+>
+    const divs = document.getElementsByTagName('div');
+<
+
+closest()~                                                 *dom-closest()*
+    Find closest ancestor matching selector.
+>
+    const card = button.closest('.card');
+    const parent = el.closest('.parent');
+<
+
+matches()~                                                 *dom-matches()*
+    Test if element matches selector.
+>
+    if (el.matches('.active')) {
+      // Element has 'active' class
     }
-  });
-});
+<
 
-const element = document.getElementById("lazy-image");
-observer.observe(element);
+==============================================================================
+2. Node Relationships                                          *dom-nodes*
 
-// IntersectionObserver with options
-const observer2 = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      console.log(entry.isIntersecting, entry.intersectionRatio);
+Parent Nodes~                                              *dom-parent*
+>
+    const parent = el.parentNode;        // Parent node (any type)
+    const parent = el.parentElement;     // Parent element (null if parent is not element)
+
+    // Traverse up to root
+    let current = el;
+    while (current.parentElement) {
+      current = current.parentElement;
+    }
+<
+
+Child Nodes~                                               *dom-children*
+>
+    // All child nodes (including text, comments)
+    const nodes = el.childNodes;         // NodeList (live)
+    const first = el.firstChild;
+    const last = el.lastChild;
+
+    // Only element children
+    const elements = el.children;        // HTMLCollection (live)
+    const first = el.firstElementChild;
+    const last = el.lastElementChild;
+    const count = el.childElementCount;
+
+    // Iterate children
+    for (const child of el.children) {
+      console.log(child);
+    }
+
+    // Check if has children
+    if (el.hasChildNodes()) {
+      // Has children
+    }
+<
+
+Sibling Nodes~                                             *dom-siblings*
+>
+    // All sibling nodes (including text, comments)
+    const next = el.nextSibling;
+    const prev = el.previousSibling;
+
+    // Only element siblings
+    const next = el.nextElementSibling;
+    const prev = el.previousElementSibling;
+
+    // Get all siblings
+    const siblings = Array.from(el.parentElement.children)
+      .filter(child => child !== el);
+<
+
+Node Types~                                                *dom-node-types*
+>
+    el.nodeType                          // Node type constant
+    el.nodeName                          // Tag name (uppercase)
+    el.nodeValue                         // Node value (text nodes)
+
+    // Common node types
+    Node.ELEMENT_NODE                    // 1 - <div>, <p>, etc.
+    Node.TEXT_NODE                       // 3 - Text content
+    Node.COMMENT_NODE                    // 8 - <!-- comment -->
+    Node.DOCUMENT_NODE                   // 9 - document
+
+    // Check node type
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      // Is element
+    }
+<
+
+NodeList vs HTMLCollection~                                *dom-collections*
+>
+    // NodeList - static or live, can contain any node type
+    const nodes = document.querySelectorAll('.item');  // Static
+    const childNodes = el.childNodes;                   // Live
+
+    // HTMLCollection - always live, only elements
+    const elements = document.getElementsByClassName('item');  // Live
+    const children = el.children;                             // Live
+
+    // Convert to array
+    const arr1 = Array.from(nodes);
+    const arr2 = [...nodes];
+
+    // NodeList has forEach
+    nodes.forEach(node => console.log(node));
+
+    // HTMLCollection doesn't have forEach
+    Array.from(elements).forEach(el => console.log(el));
+<
+
+Document vs Window~                                        *dom-document-window*
+>
+    // Document - represents the page
+    document.querySelector()
+    document.createElement()
+    document.body
+    document.documentElement             // <html> element
+
+    // Window - browser window
+    window.innerWidth
+    window.innerHeight
+    window.scrollTo()
+    window.addEventListener()
+
+    // Both have event listeners
+    document.addEventListener('DOMContentLoaded', () => {});
+    window.addEventListener('load', () => {});
+<
+
+==============================================================================
+3. Creating & Modifying                                    *dom-modifying*
+
+createElement()~                                           *dom-createElement()*
+>
+    const div = document.createElement('div');
+    div.textContent = 'Hello';
+    div.className = 'container';
+<
+
+appendChild()~                                             *dom-appendChild()*
+>
+    parent.appendChild(child);
+<
+
+insertBefore()~                                            *dom-insertBefore()*
+>
+    parent.insertBefore(newNode, referenceNode);
+<
+
+append()~                                                  *dom-append()*
+prepend()~                                                 *dom-prepend()*
+>
+    parent.append(child1, child2, 'text');
+    parent.prepend(child);
+<
+
+insertAdjacentHTML()~                                      *dom-insertAdjacentHTML()*
+>
+    el.insertAdjacentHTML('beforebegin', '<div>Before</div>');
+    el.insertAdjacentHTML('afterbegin', '<div>Start</div>');
+    el.insertAdjacentHTML('beforeend', '<div>End</div>');
+    el.insertAdjacentHTML('afterend', '<div>After</div>');
+<
+
+insertAdjacentElement()~                                   *dom-insertAdjacentElement()*
+    Insert element (not HTML string) at position.
+>
+    const newEl = document.createElement('div');
+    newEl.textContent = 'New element';
+
+    el.insertAdjacentElement('beforebegin', newEl);  // Before el
+    el.insertAdjacentElement('afterbegin', newEl);   // First child of el
+    el.insertAdjacentElement('beforeend', newEl);    // Last child of el
+    el.insertAdjacentElement('afterend', newEl);     // After el
+<
+
+before()~                                                  *dom-before()*
+after()~                                                   *dom-after()*
+    Insert nodes or strings before/after element.
+>
+    const div = document.createElement('div');
+
+    el.before(div);                      // Insert div before el
+    el.after(div);                       // Insert div after el
+
+    // Can insert multiple items
+    el.before('Text', div, 'More text');
+    el.after(div1, div2, div3);
+
+    // Insert sibling
+    const sibling = document.createElement('p');
+    el.after(sibling);
+<
+
+createTextNode()~                                          *dom-createTextNode()*
+    Create text node (not element).
+>
+    const text = document.createTextNode('Hello World');
+    parent.appendChild(text);
+
+    // Useful for avoiding XSS
+    const userInput = getUserInput();
+    const text = document.createTextNode(userInput);  // Safe
+    div.appendChild(text);
+
+    // vs innerHTML (can be XSS vulnerable)
+    // div.innerHTML = userInput;        // Unsafe if userInput has <script>
+<
+
+removeChild()~                                             *dom-removeChild()*
+remove()~                                                  *dom-remove()*
+>
+    parent.removeChild(child);
+    child.remove();                      // Easier
+<
+
+replaceChild()~                                            *dom-replaceChild()*
+>
+    parent.replaceChild(newChild, oldChild);
+<
+
+replaceWith()~                                             *dom-replaceWith()*
+    Modern alternative to replaceChild. Replace element with new nodes.
+>
+    oldElement.replaceWith(newElement);
+
+    // Can replace with multiple nodes
+    oldElement.replaceWith(div1, div2, 'text');
+
+    // Simpler than replaceChild
+    // parent.replaceChild(newElement, oldElement);  // Old way
+<
+
+cloneNode()~                                               *dom-cloneNode()*
+>
+    const clone = el.cloneNode(true);    // Deep clone
+    const shallow = el.cloneNode(false);
+<
+
+innerHTML~                                                 *dom-innerHTML*
+textContent~                                               *dom-textContent*
+innerText~                                                 *dom-innerText*
+>
+    el.innerHTML = '<strong>Bold</strong>';
+    el.textContent = 'Plain text';       // Faster, safer
+    el.innerText = 'Respects CSS';       // Slower
+<
+
+className~                                                 *dom-className*
+classList~                                                 *dom-classList*
+>
+    el.className = 'active';
+
+    el.classList.add('active');
+    el.classList.remove('inactive');
+    el.classList.toggle('hidden');
+    el.classList.contains('active');     // true/false
+    el.classList.replace('old', 'new');
+<
+
+setAttribute()~                                            *dom-setAttribute()*
+getAttribute()~                                            *dom-getAttribute()*
+>
+    el.setAttribute('data-id', '123');
+    const id = el.getAttribute('data-id');
+    el.removeAttribute('data-id');
+    el.hasAttribute('data-id');          // true/false
+<
+
+style~                                                     *dom-style*
+>
+    el.style.color = 'red';
+    el.style.backgroundColor = 'blue';
+    el.style.cssText = 'color: red; background: blue;';
+
+    // Get computed style
+    const style = window.getComputedStyle(el);
+    const color = style.color;
+<
+
+dataset~                                                   *dom-dataset*
+>
+    // <div data-user-id="123" data-role="admin">
+    el.dataset.userId;                   // '123'
+    el.dataset.role;                     // 'admin'
+    el.dataset.newProp = 'value';
+<
+
+getBoundingClientRect()~                                   *dom-getBoundingClientRect()*
+    Get element position and dimensions.
+>
+    const rect = el.getBoundingClientRect();
+    rect.top;                            // Distance from top of viewport
+    rect.left;                           // Distance from left of viewport
+    rect.right;                          // Distance from left to right edge
+    rect.bottom;                         // Distance from top to bottom edge
+    rect.width;                          // Element width
+    rect.height;                         // Element height
+    rect.x;                              // Same as left
+    rect.y;                              // Same as top
+<
+
+Element Dimensions~                                        *dom-dimensions*
+>
+    // Content + padding
+    el.clientWidth;
+    el.clientHeight;
+
+    // Content + padding + border
+    el.offsetWidth;
+    el.offsetHeight;
+
+    // Content + padding + scrollable overflow
+    el.scrollWidth;
+    el.scrollHeight;
+
+    // Scroll position
+    el.scrollTop;                        // Vertical scroll
+    el.scrollLeft;                       // Horizontal scroll
+
+    // Offset from positioned parent
+    el.offsetTop;
+    el.offsetLeft;
+    el.offsetParent;
+<
+
+Scrolling~                                                 *dom-scrolling*
+>
+    // Scroll to position
+    window.scrollTo(0, 100);
+    window.scrollTo({ top: 100, left: 0, behavior: 'smooth' });
+
+    // Scroll by amount
+    window.scrollBy(0, 100);
+    window.scrollBy({ top: 100, behavior: 'smooth' });
+
+    // Scroll element into view
+    el.scrollIntoView();
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+<
+
+==============================================================================
+3. Events                                                      *dom-events*
+
+addEventListener()~                                        *dom-addEventListener()*
+>
+    el.addEventListener('click', (e) => {
+      console.log('Clicked');
     });
-  },
-  {
-    threshold: 0.5, // Trigger when 50% visible
-    rootMargin: "50px", // Start detecting 50px before element enters
-  }
-);
 
-// Stop observing
-observer2.unobserve(element);
-observer2.disconnect(); // Stop all
+    // With options
+    el.addEventListener('scroll', handler, {
+      passive: true,
+      once: true,
+      capture: false
+    });
+<
 
-// Mutation Observer - detect DOM changes
-const mutationObserver = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    console.log("DOM changed:", mutation.type);
-    console.log(mutation.target);
-  });
-});
+removeEventListener()~                                     *dom-removeEventListener()*
+>
+    function handler(e) { console.log(e); }
 
-const config = {
-  attributes: true, // Watch attribute changes
-  attributeFilter: ["class", "id"], // Only these attributes
-  childList: true, // Watch children added/removed
-  subtree: true, // Watch all descendants
-  characterData: true, // Watch text changes
-  characterDataOldValue: true, // Include old value
-};
+    el.addEventListener('click', handler);
+    el.removeEventListener('click', handler);
+<
 
-mutationObserver.observe(element, config);
-mutationObserver.disconnect();
+Event Object~                                              *dom-event-object*
+>
+    el.addEventListener('click', (e) => {
+      e.target;                          // Element that triggered event
+      e.currentTarget;                   // Element with listener
+      e.type;                            // 'click'
+      e.preventDefault();                // Prevent default action
+      e.stopPropagation();               // Stop bubbling
+      e.stopImmediatePropagation();      // Stop other handlers too
+    });
+<
 
-// ResizeObserver - detect element size changes
-const resizeObserver = new ResizeObserver((entries) => {
-  entries.forEach((entry) => {
-    console.log("New size:", entry.contentRect.width, entry.contentRect.height);
-  });
-});
+Event target vs currentTarget~                            *dom-target-currentTarget*
+    target - Element that triggered the event
+    currentTarget - Element that has the event listener attached
+>
+    <div class="parent">
+      <button class="child">Click</button>
+    </div>
 
-resizeObserver.observe(element);
-resizeObserver.disconnect();
-```
+    document.querySelector('.parent').addEventListener('click', (e) => {
+      console.log(e.target);             // <button> (clicked element)
+      console.log(e.currentTarget);      // <div class="parent"> (listener element)
+      console.log(e.target === e.currentTarget);  // false
+    });
 
-## Local & Session Storage
+    document.querySelector('.child').addEventListener('click', (e) => {
+      console.log(e.target);             // <button>
+      console.log(e.currentTarget);      // <button>
+      console.log(e.target === e.currentTarget);  // true
+    });
+<
 
-### localStorage
+Event Bubbling and Capturing~                             *dom-event-phases*
+    Events propagate through three phases: capturing, target, bubbling.
 
-```javascript
-// Set item (persists across sessions)
-localStorage.setItem("user", "John");
-localStorage.setItem("theme", "dark");
+    Phases:
+    1. Capturing (down) - Window → Document → ... → Parent → Target
+    2. Target           - Event at target element
+    3. Bubbling (up)    - Target → Parent → ... → Document → Window
 
-// Get item
-const user = localStorage.getItem("user"); // "John"
-const theme = localStorage.getItem("theme"); // "dark"
+>
+    <div id="grandparent">
+      <div id="parent">
+        <button id="child">Click</button>
+      </div>
+    </div>
 
-// Check exists
-if (localStorage.getItem("user")) {
-  console.log("User found");
-}
+    // Bubbling (default) - executes bottom-up
+    grandparent.addEventListener('click', () => {
+      console.log('Grandparent bubbling');
+    });
+    parent.addEventListener('click', () => {
+      console.log('Parent bubbling');
+    });
+    child.addEventListener('click', () => {
+      console.log('Child bubbling');
+    });
+    // Click button: Child → Parent → Grandparent
 
-// Remove item
-localStorage.removeItem("user");
+    // Capturing - executes top-down
+    grandparent.addEventListener('click', () => {
+      console.log('Grandparent capturing');
+    }, true);  // true = capture phase
+    parent.addEventListener('click', () => {
+      console.log('Parent capturing');
+    }, true);
+    child.addEventListener('click', () => {
+      console.log('Child capturing');
+    }, true);
+    // Click button: Grandparent → Parent → Child
 
-// Clear all
-localStorage.clear();
+    // Stop propagation
+    parent.addEventListener('click', (e) => {
+      e.stopPropagation();               // Stop bubbling to grandparent
+    });
 
-// Get all keys
-for (let i = 0; i < localStorage.length; i++) {
-  const key = localStorage.key(i);
-  const value = localStorage.getItem(key);
-}
+    // Stop immediate propagation
+    parent.addEventListener('click', (e) => {
+      e.stopImmediatePropagation();      // Stop other listeners on same element
+    });
+<
 
-// Store objects
-const user = { name: "John", age: 30 };
-localStorage.setItem("user", JSON.stringify(user));
+DOMContentLoaded~                                          *dom-DOMContentLoaded*
+    Fired when HTML parsed, before images/stylesheets fully loaded.
+>
+    document.addEventListener('DOMContentLoaded', () => {
+      // DOM ready - safe to manipulate
+      const button = document.querySelector('button');
+      button.addEventListener('click', handleClick);
+    });
 
-const retrieved = JSON.parse(localStorage.getItem("user"));
-// {name: 'John', age: 30}
+    // vs window.load - waits for everything (images, etc.)
+    window.addEventListener('load', () => {
+      // Everything loaded
+      console.log('All resources loaded');
+    });
+<
 
-// Listen for changes
-window.addEventListener("storage", (event) => {
-  console.log("Storage changed:", event.key, event.newValue);
-});
-```
+Event Delegation~                                          *dom-event-delegation*
+>
+    // Instead of adding listener to each item
+    document.querySelector('.list').addEventListener('click', (e) => {
+      if (e.target.matches('.item')) {
+        console.log('Item clicked:', e.target);
+      }
+    });
+<
 
-### sessionStorage
+Common Events~                                             *dom-events-common*
+>
+    // Mouse
+    'click', 'dblclick', 'mousedown', 'mouseup', 'mousemove',
+    'mouseenter', 'mouseleave', 'mouseover', 'mouseout'
 
-```javascript
-// Same API as localStorage, but cleared when tab closes
-sessionStorage.setItem("tempData", "value");
-const data = sessionStorage.getItem("tempData");
-sessionStorage.removeItem("tempData");
-sessionStorage.clear();
-```
+    // Keyboard
+    'keydown', 'keyup', 'keypress'
 
-## AJAX & Fetch
+    // Form
+    'submit', 'change', 'input', 'focus', 'blur'
 
-### Fetch GET
+    // Document
+    'DOMContentLoaded', 'load', 'beforeunload', 'unload'
 
-```javascript
-// Basic GET
-fetch("/api/users")
-  .then((response) => response.json())
-  .then((data) => console.log(data))
-  .catch((error) => console.error(error));
+    // Window
+    'resize', 'scroll'
+<
 
-// With async/await
-async function getUsers() {
-  try {
-    const response = await fetch("/api/users");
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+Custom Events~                                             *dom-custom-events*
+>
+    const event = new CustomEvent('myevent', {
+      detail: { data: 'value' },
+      bubbles: true,
+      cancelable: true
+    });
+
+    el.dispatchEvent(event);
+
+    el.addEventListener('myevent', (e) => {
+      console.log(e.detail.data);        // 'value'
+    });
+<
+
+==============================================================================
+4. Forms                                                       *dom-forms*
+
+Form Values~                                               *dom-form-values*
+>
+    const form = document.querySelector('form');
+    const input = form.querySelector('input[name="email"]');
+
+    input.value;                         // Get value
+    input.value = 'new value';           // Set value
+
+    // Checkbox/Radio
+    checkbox.checked;                    // true/false
+    radio.checked = true;
+
+    // Select
+    select.value;                        // Selected value
+    select.selectedIndex;                // Selected index
+    select.options[0].selected = true;
+<
+
+Form Events~                                               *dom-form-events*
+>
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      for (const [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+    });
+
+    input.addEventListener('input', (e) => {
+      console.log('Value changed:', e.target.value);
+    });
+
+    input.addEventListener('change', (e) => {
+      console.log('Value committed:', e.target.value);
+    });
+<
+
+FormData~                                                  *dom-FormData*
+>
+    const formData = new FormData(form);
+
+    formData.append('key', 'value');
+    formData.get('key');
+    formData.set('key', 'new value');
+    formData.delete('key');
+    formData.has('key');
+
+    // Convert to object
+    const data = Object.fromEntries(formData);
+<
+
+Validation~                                                *dom-form-validation*
+>
+    input.setCustomValidity('Invalid email');
+    input.reportValidity();              // Show validation message
+
+    input.checkValidity();               // true/false
+    form.checkValidity();                // Check all inputs
+
+    // HTML5 validation attributes
+    // required, pattern, min, max, minlength, maxlength
+<
+
+==============================================================================
+5. Storage                                                    *dom-storage*
+
+localStorage~                                              *dom-localStorage*
+    Persistent storage (no expiration).
+>
+    localStorage.setItem('key', 'value');
+    const value = localStorage.getItem('key');
+    localStorage.removeItem('key');
+    localStorage.clear();
+
+    // Store objects
+    localStorage.setItem('user', JSON.stringify(user));
+    const user = JSON.parse(localStorage.getItem('user'));
+<
+
+sessionStorage~                                            *dom-sessionStorage*
+    Storage cleared when tab closes.
+>
+    sessionStorage.setItem('key', 'value');
+    const value = sessionStorage.getItem('key');
+<
+
+Storage Event~                                             *dom-storage-event*
+    Listen for storage changes in other tabs.
+>
+    window.addEventListener('storage', (e) => {
+      console.log('Key:', e.key);
+      console.log('Old value:', e.oldValue);
+      console.log('New value:', e.newValue);
+    });
+<
+
+==============================================================================
+6. Web Components                                     *dom-web-components*
+
+Custom Elements~                                           *dom-custom-elements*
+>
+    class MyButton extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+      }
+
+      connectedCallback() {
+        this.shadowRoot.innerHTML = `
+          <style>button { color: blue; }</style>
+          <button><slot>Click</slot></button>
+        `;
+      }
+
+      disconnectedCallback() {
+        // Cleanup
+      }
+
+      attributeChangedCallback(name, oldVal, newVal) {
+        // Attribute changed
+      }
+
+      static get observedAttributes() {
+        return ['disabled'];
+      }
     }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
 
-// With query parameters
-const params = new URLSearchParams({ page: 1, limit: 10 });
-fetch(`/api/users?${params}`);
+    customElements.define('my-button', MyButton);
+<
 
-// With headers
-fetch("/api/users", {
-  headers: {
-    Accept: "application/json",
-    Authorization: "Bearer token",
-  },
-});
-```
+Shadow DOM~                                                *dom-shadow-dom*
+>
+    const shadow = element.attachShadow({ mode: 'open' });
+    shadow.innerHTML = `
+      <style>p { color: red; }</style>
+      <p>Shadow content</p>
+    `;
 
-### Fetch POST
+    // Slots
+    shadow.innerHTML = `
+      <slot name="header"></slot>
+      <slot></slot>
+    `;
+<
 
-```javascript
-// POST with JSON
-fetch("/api/users", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    name: "John",
-    email: "john@example.com",
-  }),
-})
-  .then((response) => response.json())
-  .then((data) => console.log(data));
+Templates~                                                 *dom-templates*
+>
+    const template = document.createElement('template');
+    template.innerHTML = `
+      <div class="card">
+        <h2></h2>
+        <p></p>
+      </div>
+    `;
 
-// POST with FormData
-const formData = new FormData();
-formData.append("name", "John");
-formData.append("file", fileInput.files[0]);
+    const clone = template.content.cloneNode(true);
+    document.body.appendChild(clone);
+<
 
-fetch("/api/upload", {
-  method: "POST",
-  body: formData,
-});
+==============================================================================
+7. Web APIs                                                    *dom-apis*
 
-// PUT / DELETE
-fetch("/api/users/1", {
-  method: "PUT",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ name: "Jane" }),
-});
+Clipboard API~                                            *dom-clipboard*
+>
+    // Write text
+    await navigator.clipboard.writeText('Hello');
 
-fetch("/api/users/1", {
-  method: "DELETE",
-});
-```
+    // Read text
+    const text = await navigator.clipboard.readText();
+
+    // Write rich content
+    const blob = new Blob(['<p>HTML</p>'], { type: 'text/html' });
+    await navigator.clipboard.write([
+      new ClipboardItem({ 'text/html': blob })
+    ]);
+<
+
+Drag and Drop~                                            *dom-drag-drop*
+>
+    // Make draggable
+    el.draggable = true;
+
+    el.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('text/plain', 'data');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+
+    // Drop zone
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const data = e.dataTransfer.getData('text/plain');
+      const files = e.dataTransfer.files;
+    });
+<
+
+File API~                                                  *dom-file-api*
+>
+    const input = document.querySelector('input[type="file"]');
+
+    input.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        console.log(e.target.result);
+      };
+
+      reader.readAsText(file);           // Text
+      reader.readAsDataURL(file);        // Data URL (base64)
+      reader.readAsArrayBuffer(file);    // Binary
+    });
+<
+
+Intersection Observer~                                     *dom-intersection-observer*
+>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.5,
+      rootMargin: '0px'
+    });
+
+    observer.observe(element);
+    observer.disconnect();
+<
+
+Mutation Observer~                                         *dom-mutation-observer*
+>
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach(mutation => {
+        console.log('Type:', mutation.type);
+        console.log('Target:', mutation.target);
+      });
+    });
+
+    observer.observe(element, {
+      childList: true,
+      attributes: true,
+      subtree: true,
+      attributeOldValue: true
+    });
+
+    observer.disconnect();
+<
+
+Resize Observer~                                           *dom-resize-observer*
+>
+    const observer = new ResizeObserver((entries) => {
+      entries.forEach(entry => {
+        console.log('Width:', entry.contentRect.width);
+        console.log('Height:', entry.contentRect.height);
+      });
+    });
+
+    observer.observe(element);
+<
+
+Fetch API~                                                 *dom-fetch*
+    See |javascript-fetch|.
+
+requestAnimationFrame()~                                   *dom-requestAnimationFrame()*
+>
+    function animate() {
+      // Update animation
+      element.style.left = `${x}px`;
+      requestAnimationFrame(animate);
+    }
+
+    const id = requestAnimationFrame(animate);
+    cancelAnimationFrame(id);
+<
+
+window.location~                                           *dom-location*
+>
+    window.location.href;                // Full URL
+    window.location.pathname;            // /path
+    window.location.search;              // ?query=value
+    window.location.hash;                // #anchor
+    window.location.reload();            // Reload page
+    window.location.assign('/new');      // Navigate
+<
+
+window.history~                                            *dom-history*
+>
+    history.pushState({ page: 1 }, 'Title', '/page1');
+    history.replaceState({ page: 2 }, 'Title', '/page2');
+    history.back();
+    history.forward();
+    history.go(-2);
+
+    window.addEventListener('popstate', (e) => {
+      console.log('State:', e.state);
+    });
+<
+
+URLSearchParams~                                           *dom-URLSearchParams*
+>
+    const params = new URLSearchParams(window.location.search);
+    params.get('id');                    // Get value
+    params.set('id', '123');             // Set value
+    params.append('tag', 'news');        // Add value
+    params.delete('id');                 // Remove
+    params.has('id');                    // Check existence
+
+    // Convert to string
+    params.toString();                   // 'id=123&tag=news'
+
+    // Iterate
+    for (const [key, value] of params) {
+      console.log(key, value);
+    }
+<
+
+Page Visibility~                                           *dom-page-visibility*
+>
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        pauseVideo();
+      } else {
+        playVideo();
+      }
+    });
+<
+
+Performance API~                                           *dom-performance*
+>
+    // Navigation timing
+    const navigation = performance.getEntriesByType('navigation')[0];
+    navigation.loadEventEnd;             // Page load time
+    navigation.domContentLoadedEventEnd; // DOM ready time
+
+    // Mark points in time
+    performance.mark('start');
+    doSomething();
+    performance.mark('end');
+
+    // Measure between marks
+    performance.measure('operation', 'start', 'end');
+    const measure = performance.getEntriesByName('operation')[0];
+    console.log(measure.duration);
+
+    // High resolution timestamp
+    const start = performance.now();
+    doSomething();
+    const duration = performance.now() - start;
+
+    // Resource timing
+    const resources = performance.getEntriesByType('resource');
+    resources.forEach(r => {
+      console.log(r.name, r.duration);
+    });
+<
+
+Web Workers~                                               *dom-web-workers*
+    Run JavaScript in background thread.
+>
+    // Main thread
+    const worker = new Worker('worker.js');
+
+    worker.postMessage({ data: 'hello' });
+
+    worker.onmessage = (e) => {
+      console.log('From worker:', e.data);
+    };
+
+    worker.onerror = (error) => {
+      console.error('Worker error:', error);
+    };
+
+    worker.terminate();
+
+    // worker.js
+    self.onmessage = (e) => {
+      const result = heavyComputation(e.data);
+      self.postMessage(result);
+    };
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
