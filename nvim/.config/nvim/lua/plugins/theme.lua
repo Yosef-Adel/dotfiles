@@ -1,44 +1,75 @@
 return {
 	{
-		"folke/tokyonight.nvim",
+		"catppuccin/nvim",
+		name = "catppuccin",
 		lazy = false,
 		priority = 1000,
-		opts = {},
 		config = function()
-			require("tokyonight").setup({
-				style = "moon",
-				light_style = "moon",
-				transparent = true,
-				terminal_colors = true,
-				styles = {
-					comments = { italic = true },
-					keywords = { italic = true },
-					functions = {},
-					variables = {},
-					sidebars = "transparent",
-					floats = "transparent",
+			require("catppuccin").setup({
+				flavour = "mocha", -- Best for long coding sessions
+				background = {
+					light = "latte",
+					dark = "mocha",
 				},
-				sidebars = { "qf", "help" },
-				day_brightness = 0.3,
-				hide_inactive_statusline = false,
-				dim_inactive = false,
+				transparent_background = false, -- Better for eyes
+				show_end_of_buffer = false,
+				term_colors = true,
+				dim_inactive = {
+					enabled = true,
+					shade = "dark",
+					percentage = 0.15,
+				},
+				styles = {
+					comments = { "italic" },
+					conditionals = { "italic" },
+					loops = {},
+					functions = {},
+					keywords = {},
+					strings = {},
+					variables = {},
+					numbers = {},
+					booleans = {},
+					properties = {},
+					types = {},
+					operators = {},
+				},
+				color_overrides = {
+					mocha = {
+						-- Slightly warmer background for comfort
+						base = "#1e1e2e",
+						mantle = "#181825",
+						crust = "#11111b",
+					},
+				},
+				integrations = {
+					cmp = true,
+					gitsigns = true,
+					nvimtree = true,
+					treesitter = true,
+					telescope = true,
+					notify = false,
+					mini = {
+						enabled = true,
+						indentscope_color = "",
+					},
+				},
 			})
-			vim.cmd([[colorscheme tokyonight]])
+			vim.cmd.colorscheme("catppuccin")
 		end,
 	},
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "VeryLazy",
 		dependencies = {
-			"nvim-tree/nvim-web-devicons", -- Optional, for file icons
+			"nvim-tree/nvim-web-devicons",
 		},
 		config = function()
 			require("lualine").setup({
 				options = {
-					theme = "tokyonight",
+					theme = "catppuccin",
 					icons_enabled = true,
-					component_separators = { left = "", right = "" },
-					section_separators = { left = "", right = "" },
+					component_separators = { left = "", right = "" },
+					section_separators = { left = "", right = "" },
 					globalstatus = true,
 					disabled_filetypes = {
 						statusline = { "dashboard", "alpha" },
@@ -61,10 +92,6 @@ return {
 					lualine_y = {},
 					lualine_z = {},
 				},
-				tabline = {},
-				winbar = {},
-				inactive_winbar = {},
-				extensions = {},
 			})
 		end,
 	},
