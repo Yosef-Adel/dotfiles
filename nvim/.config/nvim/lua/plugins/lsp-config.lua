@@ -126,7 +126,8 @@ return {
 				group = vim.api.nvim_create_augroup("UserLspStart", {}),
 				callback = function(args)
 					-- Enable LSP for known servers
-					local servers_to_enable = { "lua_ls", "ts_ls", "html", "cssls", "tailwindcss", "jsonls", "bashls", "eslint", "pyright" }
+					local servers_to_enable =
+						{ "lua_ls", "ts_ls", "html", "cssls", "tailwindcss", "jsonls", "bashls", "eslint", "pyright" }
 					for _, server in ipairs(servers_to_enable) do
 						if not vim.lsp.get_clients({ bufnr = args.buf, name = server })[1] then
 							vim.lsp.enable(server)
