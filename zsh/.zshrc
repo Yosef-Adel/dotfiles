@@ -1,3 +1,5 @@
+# Add deno completions to search path
+if [[ ":$FPATH:" != *":/Users/neo/.zsh/completions:"* ]]; then export FPATH="/Users/neo/.zsh/completions:$FPATH"; fi
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -111,33 +113,31 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # ==================== Path ====================
-# export PATH="$HOME/.tmuxifierr/bin:$PATH"
+export PATH="$HOME/.tmuxifierr/bin:$PATH"
 # Python3
-# export PATH="/Users/yosefsaaid/Library/Python/3.9/bin:$PATH"
+export PATH="/Users/neo/Library/Python/3.9/bin:$PATH"
 
-# add path for mpj /Users/yosefsaaid/-_-/mpj
-export PATH="/Users/yosefsaaid/-_-/mpj:$PATH"
+# add path for mpj /Users/neo/-_-/mpj
+export PATH="/Users/neo/-_-/mpj:$PATH"
 
 bindkey -s '\ef' 'tmux-sessionizer\n'
 
 # n node version control 
-# export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/bin:$PATH"
 # for scripts
-export PATH="/home/neo/dotfiles/scripts/local/bin/:$PATH"
+export PATH="/users/neo/local/bin:$PATH"
 # java 
 #export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.12
 #export PATH="$JAVA_HOME/bin/:$PATH"
 # spark
-# export SPARK_HOME=/usr/local/Cellar/apache-spark/3.2.1/libexec
-# export PATH="$SPARK_HOME/bin/:$PATH"
+export SPARK_HOME=/usr/local/Cellar/apache-spark/3.2.1/libexec
+export PATH="$SPARK_HOME/bin/:$PATH"
 
 #export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 export PATH=$JAVA_HOME/bin:$PATH
 
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
-
-export PATH=$PATH:$HOME/go/bin
 
 # History {{{
 HISTSIZE=10000
@@ -200,8 +200,7 @@ alias td='tmux detach'
 
 
 # ==================== Functions ====================
-
-# Reload window manager (yabai and skhd)
+#
 function reload_wm() {
     echo "Reloading skhd and restarting yabai..."
     skhd --reload
@@ -297,7 +296,9 @@ function git_prompt_string() {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-# . "$HOME/.local/bin/env"
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-export PATH=$PATH:$JAVA_HOME/bin
-export DISPLAY=:0
+
+. "$HOME/.local/bin/env"
+. "/Users/neo/.deno/env"
+# Initialize zsh completions (added by deno install script)
+autoload -Uz compinit
+compinit

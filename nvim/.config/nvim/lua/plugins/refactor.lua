@@ -45,9 +45,9 @@ return {
 			refactor.debug.printf({ below = false })
 		end, { desc = "Refactor: Add debug print" })
 
-		vim.keymap.set("n", "<leader>rc", function()
-			refactor.debug.cleanup({})
-		end, { desc = "Refactor: Cleanup debug statements" })
+		-- vim.keymap.set("n", "<leader>rc", function()
+		-- 	refactor.debug.cleanup({})
+		-- end, { desc = "Refactor: Cleanup debug statements" })
 
 		-- Optional: auto-reload treesitter queries when updating
 		vim.api.nvim_create_autocmd("BufWritePost", {
