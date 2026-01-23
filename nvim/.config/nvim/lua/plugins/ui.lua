@@ -6,6 +6,12 @@ return {
 			background_colour = "#000000",
 			render = "wrapped-compact",
 		},
+		config = function(_, opts)
+			local notify = require("notify")
+			notify.setup(opts)
+			-- Set as default notification handler
+			vim.notify = notify
+		end,
 	},
 	-- {
 	--
