@@ -2,12 +2,35 @@ return {
 	{
 		"ThePrimeagen/vim-be-good",
 	},
-	-- {
-	-- 	"m4xshen/hardtime.nvim",
-	-- 	event = "VeryLazy",
-	-- 	dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-	-- 	opts = {},
-	-- },
+	{
+		"m4xshen/hardtime.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"MunifTanjim/nui.nvim",
+			"nvim-lua/plenary.nvim",
+			"rcarriga/nvim-notify", -- Add as dependency
+		},
+		opts = {
+			disable_mouse = false,
+			restriction_mode = "hint",
+			hint_delay = 1000,
+
+			-- Use nvim-notify instead of command line
+			notification_provider = function(msg)
+				require("notify")(msg, "warn", {
+					title = "Hardtime",
+					timeout = 2000, -- Duration in ms
+				})
+			end,
+
+			disabled_keys = {
+				["<Up>"] = {},
+				["<Down>"] = {},
+				["<Left>"] = {},
+				["<Right>"] = {},
+			},
+		},
+	},
 	-- {
 	-- 	"tris203/precognition.nvim",
 	-- 	event = "VeryLazy",
