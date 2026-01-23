@@ -267,7 +267,7 @@ return {
 			map("n", "<leader>sl", function()
 				local layer_configs = {
 					{
-						name = "Interactors (files)",
+						name = "Interactors (files)            <leader>si",
 						action = function()
 							builtin.find_files({
 								prompt_title = "🎯 Find Interactor Files",
@@ -276,7 +276,7 @@ return {
 						end,
 					},
 					{
-						name = "Interactors (content)",
+						name = "Interactors (content)          <leader>sI",
 						action = function()
 							builtin.live_grep({
 								prompt_title = "🎯 Search in Interactors",
@@ -285,7 +285,7 @@ return {
 						end,
 					},
 					{
-						name = "Stores (files)",
+						name = "Stores (files)                 <leader>ss",
 						action = function()
 							builtin.find_files({
 								prompt_title = "💾 Find Store Files",
@@ -294,7 +294,7 @@ return {
 						end,
 					},
 					{
-						name = "Stores (content)",
+						name = "Stores (content)               <leader>sS",
 						action = function()
 							builtin.live_grep({
 								prompt_title = "💾 Search in Stores",
@@ -303,7 +303,7 @@ return {
 						end,
 					},
 					{
-						name = "Gateways (files)",
+						name = "Gateways (files)               <leader>sg",
 						action = function()
 							builtin.find_files({
 								prompt_title = "🌐 Find Gateway Files",
@@ -312,7 +312,7 @@ return {
 						end,
 					},
 					{
-						name = "Gateways (content)",
+						name = "Gateways (content)             <leader>sG",
 						action = function()
 							builtin.live_grep({
 								prompt_title = "🌐 Search in Gateways",
@@ -321,7 +321,7 @@ return {
 						end,
 					},
 					{
-						name = "Presenters (files)",
+						name = "Presenters (files)             <leader>sp",
 						action = function()
 							builtin.find_files({
 								prompt_title = "🎨 Find Presenter Files",
@@ -342,7 +342,7 @@ return {
 						end,
 					},
 					{
-						name = "Presenters (content)",
+						name = "Presenters (content)           <leader>sP",
 						action = function()
 							builtin.live_grep({
 								prompt_title = "🎨 Search in Presenters",
@@ -351,7 +351,7 @@ return {
 						end,
 					},
 					{
-						name = "Components (files)",
+						name = "Components (files)             <leader>so",
 						action = function()
 							builtin.find_files({
 								prompt_title = "🧩 Find Component Files",
@@ -360,7 +360,7 @@ return {
 						end,
 					},
 					{
-						name = "Components (content)",
+						name = "Components (content)           <leader>sO",
 						action = function()
 							builtin.live_grep({
 								prompt_title = "🧩 Search in Components",
@@ -369,7 +369,7 @@ return {
 						end,
 					},
 					{
-						name = "Entities (files)",
+						name = "Entities (files)               <leader>se",
 						action = function()
 							builtin.find_files({
 								prompt_title = "📦 Find Entity Files",
@@ -378,7 +378,7 @@ return {
 						end,
 					},
 					{
-						name = "Abstract Tokens (files)",
+						name = "Abstract Tokens (files)        <leader>sa",
 						action = function()
 							builtin.find_files({
 								prompt_title = "🔗 Find Abstract Token Files",
@@ -387,7 +387,7 @@ return {
 						end,
 					},
 					{
-						name = "Abstract Tokens (content)",
+						name = "Abstract Tokens (content)      <leader>sA",
 						action = function()
 							builtin.live_grep({
 								prompt_title = "🔗 Search in Abstract Tokens",
@@ -396,7 +396,7 @@ return {
 						end,
 					},
 					{
-						name = "DI Containers (files)",
+						name = "DI Containers (files)          <leader>sd",
 						action = function()
 							builtin.find_files({
 								prompt_title = "🏗️  Find DI Container Files",
@@ -405,7 +405,7 @@ return {
 						end,
 					},
 					{
-						name = "DI Containers (content)",
+						name = "DI Containers (content)        <leader>sD",
 						action = function()
 							builtin.live_grep({
 								prompt_title = "🏗️  Search in DI Containers",
@@ -414,7 +414,7 @@ return {
 						end,
 					},
 					{
-						name = "Tests (files)",
+						name = "Tests (files)                  <leader>st",
 						action = function()
 							builtin.find_files({
 								prompt_title = "🧪 Find Test Files",
@@ -423,7 +423,7 @@ return {
 						end,
 					},
 					{
-						name = "Tests (content)",
+						name = "Tests (content)                <leader>sT",
 						action = function()
 							builtin.live_grep({
 								prompt_title = "🧪 Search in Tests",
@@ -432,7 +432,7 @@ return {
 						end,
 					},
 					{
-						name = "Core Package (files)",
+						name = "Core Package (files)           <leader>sC",
 						action = function()
 							builtin.find_files({
 								prompt_title = "⚡ Find Files in @moika/core",
@@ -441,7 +441,7 @@ return {
 						end,
 					},
 					{
-						name = "Core Package (content)",
+						name = "Core Package (content)         <leader>sc",
 						action = function()
 							builtin.live_grep({
 								prompt_title = "⚡ Search in @moika/core",
@@ -450,7 +450,7 @@ return {
 						end,
 					},
 					{
-						name = "Feature Domains",
+						name = "Feature Domains                <leader>sF",
 						action = function()
 							builtin.find_files({
 								prompt_title = "🎯 Browse Core Feature Domains",
@@ -460,7 +460,7 @@ return {
 						end,
 					},
 					{
-						name = "Execute Methods",
+						name = "Execute Methods                <leader>sx",
 						action = function()
 							builtin.live_grep({
 								prompt_title = "▶️  Search Execute Methods",
