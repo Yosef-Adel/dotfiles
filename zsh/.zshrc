@@ -120,7 +120,7 @@ export PATH="/Users/yosefsaaid/Library/Python/3.9/bin:$PATH"
 # add path for mpj /Users/yosefsaaid/-_-/mpj
 export PATH="/Users/yosefsaaid/-_-/mpj:$PATH"
 
-bindkey -s '\ef' 'tmux-sessionizer\n'
+bindkey -s '^f' 'tmux-sessionizer\n'
 
 # n node version control 
 export PATH="/usr/local/bin:$PATH"
