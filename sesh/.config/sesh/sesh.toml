@@ -38,9 +38,12 @@ name = "Home 🏡"
 path = "~/"
 startup_command = "clear"
 
-
-
 [[session]]
 name = "Notes 📝"
 path = "/Users/yosefsaaid/Library/Mobile Documents/iCloud~md~obsidian/Documents/Second Brain"
 startup_command = "nvim"
+
+[[session]]
+name = "Windows 🏡"
+path = "/mnt/c/Users/z005577u/"
+startup_command = "clear"
