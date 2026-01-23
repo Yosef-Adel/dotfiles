@@ -77,4 +77,3 @@ while true; do
         less -RSX "$source"
     fi
 done
-
