@@ -18,4 +18,4 @@ require("config.autocmds")
 -- Load plugins
 require("lazy").setup("plugins")
 -- Load custom functions
-require("after.functions")
+require("config.functions")

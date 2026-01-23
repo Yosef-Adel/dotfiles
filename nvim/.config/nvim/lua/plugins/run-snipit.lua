@@ -1,6 +1,10 @@
 return {
 	"michaelb/sniprun",
 	build = "sh install.sh",
+	keys = {
+		{ "<leader>cr", ":'<,'>SnipRun<CR>", mode = "v", desc = "Run selected code" },
+		{ "<leader>cc", ":SnipClose<CR>", desc = "Close Sniprun output" },
+	},
 	config = function()
 		require("sniprun").setup({
 			display = {
