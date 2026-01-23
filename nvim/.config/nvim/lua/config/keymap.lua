@@ -24,5 +24,11 @@ vim.keymap.set("n", "<A-f>", "<cmd> !tmux neww tmux-sessionizer<CR>")
 vim.keymap.set("n", "<leader>nt", "<cmd>tabNext<CR>")
 vim.keymap.set("n", "<leader>pt", "<cmd>tabprevious<CR>")
 
--- Map Leader + vs to the scratch buffer function
-vim.keymap.set("n", "<Leader>vs", ":lua Open_scratch_buffer()<CR>", { noremap = true, silent = true })
+-- Scratch buffers
+vim.keymap.set("n", "<Leader>vs", function()
+	require("config.functions").scratch({ split = "vertical" })
+end, { desc = "Vertical scratch buffer" })
+
+vim.keymap.set("n", "<Leader>fs", function()
+	require("config.functions").scratch({ split = "float" })
+end, { desc = "Floating scratch buffer" })
