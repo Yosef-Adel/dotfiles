@@ -120,7 +120,7 @@ export PATH="/Users/neo/Library/Python/3.9/bin:$PATH"
 # add path for mpj /Users/neo/-_-/mpj
 export PATH="/Users/neo/-_-/mpj:$PATH"
 
-bindkey -s '\ef' 'tmux-sessionizer\n'
+bindkey -s '^f' 'tmux-sessionizer\n'
 
 # n node version control 
 export PATH="/usr/local/bin:$PATH"
