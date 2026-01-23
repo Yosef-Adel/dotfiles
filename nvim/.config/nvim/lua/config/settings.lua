@@ -1,5 +1,4 @@
 vim.opt.guicursor = "" -- making the cursor invisible in GUI
-vim.opt.nu = true -- Show line numbers
 vim.opt.relativenumber = true
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
