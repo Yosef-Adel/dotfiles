@@ -4,9 +4,16 @@
 
 # Use work account for work repos in ~/dev
 [includeIf "gitdir:~/dev/"]
-  path = ~/.gitconfig-work
+    path = ~/.gitconfig-work
+
 
 # Personal repos in ~/personal will use default (personal) config
 
 [safe]
 	directory = /mnt/c/Users/z005577u/dev/hc-backend
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
