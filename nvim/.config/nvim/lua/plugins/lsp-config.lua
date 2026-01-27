@@ -169,7 +169,10 @@ return {
 					"json-lsp",
 					"bash-language-server",
 
-					-- Formatters
+					-- Java
+				"jdtls",
+
+				-- Formatters
 					"prettier",
 					"stylua",
 					"black",
