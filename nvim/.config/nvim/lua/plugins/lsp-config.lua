@@ -96,6 +96,7 @@ return {
 					"bashls",
 					"eslint",
 					"pyright",
+					"jdtls",
 				},
 				automatic_installation = true,
 			})
@@ -181,6 +182,11 @@ return {
 					-- Linters
 					"pylint",
 					"cspell",
+
+					-- Java
+					"jdtls",
+					"java-debug-adapter",
+					"java-test",
 				},
 				auto_update = true,
 				run_on_start = true,
