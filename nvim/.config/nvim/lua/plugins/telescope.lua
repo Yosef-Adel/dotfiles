@@ -14,6 +14,16 @@ return {
 		config = function()
 			require("telescope").setup({
 				defaults = {
+					layout_config = {
+						width = 0.95,
+						preview_width = 0.4,
+					},
+					path_display = function(_, path)
+						-- Strip Maven layout + base package noise from Java paths
+						path = path:gsub("/src/main/java/com/siemens/ct/heedsconnect/", "/")
+						path = path:gsub("/src/test/java/com/siemens/ct/heedsconnect/", "/[test]/")
+						return path
+					end,
 					vimgrep_arguments = {
 						"rg",
 						"--color=never",
