@@ -16,6 +16,14 @@ return {
 		dependencies = {
 			"mfussenegger/nvim-jdtls",
 		},
-		opts = {},
+		opts = function()
+			-- Check custom install path from setup-java-nvim script
+			local xdg_data = vim.env.XDG_DATA_HOME or (vim.env.HOME .. "/.local/share")
+			local custom_ls = xdg_data .. "/spring-boot-ls/language-server"
+			if vim.fn.isdirectory(custom_ls) == 1 then
+				return { ls_path = custom_ls }
+			end
+			return {}
+		end,
 	},
 }
