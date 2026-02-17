@@ -1,5 +1,5 @@
 # Add deno completions to search path
-if [[ ":$FPATH:" != *":/Users/neo/.zsh/completions:"* ]]; then export FPATH="/Users/neo/.zsh/completions:$FPATH"; fi
+if [[ ":$FPATH:" != *":$HOME/.zsh/completions:"* ]]; then export FPATH="$HOME/.zsh/completions:$FPATH"; fi
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -120,12 +120,12 @@ export PATH="/Users/neo/Library/Python/3.9/bin:$PATH"
 # add path for mpj /Users/neo/-_-/mpj
 export PATH="/Users/neo/-_-/mpj:$PATH"
 
-bindkey -s '^f' 'tmux-sessionizer\n'
+bindkey -s '\ef' 'tmux-sessionizer\n'
 
 # n node version control 
 export PATH="/usr/local/bin:$PATH"
 # for scripts
-export PATH="/users/neo/local/bin:$PATH"
+export PATH="/home/neo/local/bin:$PATH"
 # java 
 #export JAVA_HOME=/usr/local/Cellar/openjdk@11/11.0.12
 #export PATH="$JAVA_HOME/bin/:$PATH"
@@ -297,8 +297,13 @@ function git_prompt_string() {
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-. "$HOME/.local/bin/env"
-. "/Users/neo/.deno/env"
+# Source environment files if they exist
+[[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
+[[ -f "$HOME/.deno/env" ]] && . "$HOME/.deno/env"
 # Initialize zsh completions (added by deno install script)
 autoload -Uz compinit
 compinit
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
