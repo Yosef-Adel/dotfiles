@@ -43,7 +43,17 @@ end
 -- Spring Boot extensions
 local spring_ok, spring_boot = pcall(require, "spring_boot")
 if spring_ok then
-	vim.list_extend(bundles, spring_boot.java_extensions())
+	-- Try spring-boot.nvim's built-in discovery (Mason, VSCode extensions)
+	local spring_jars = spring_boot.java_extensions()
+	if #spring_jars == 0 then
+		-- Fallback: check our custom install path from setup-java-nvim script
+		local xdg_data = vim.env.XDG_DATA_HOME or (vim.env.HOME .. "/.local/share")
+		local custom_jars_path = xdg_data .. "/spring-boot-ls/jars"
+		if vim.fn.isdirectory(custom_jars_path) == 1 then
+			spring_jars = spring_boot.java_extensions(custom_jars_path)
+		end
+	end
+	vim.list_extend(bundles, spring_jars)
 end
 
 local config = {
@@ -109,17 +119,40 @@ local config = {
 				useBlocks = true,
 			},
 			configuration = {
-				runtimes = {
-					{
-						name = "JavaSE-21",
-						path = vim.fn.expand("~/.sdkman/candidates/java/21.0.6-tem"),
-						default = true,
-					},
-					{
-						name = "JavaSE-24",
-						path = vim.fn.expand("~/.sdkman/candidates/java/24.0.2-graalce"),
-					},
-				},
+				runtimes = (function()
+					local runtimes = {}
+					local sdkman_java = vim.fn.expand("~/.sdkman/candidates/java")
+					if vim.fn.isdirectory(sdkman_java) == 1 then
+						-- Discover installed Java versions from SDKMAN
+						local dirs = vim.fn.globpath(sdkman_java, "*", true, true)
+						for _, dir in ipairs(dirs) do
+							local name = vim.fn.fnamemodify(dir, ":t")
+							if name ~= "current" and vim.fn.isdirectory(dir .. "/bin") == 1 then
+								-- Extract major version number
+								local major = name:match("^(%d+)")
+								if major then
+									table.insert(runtimes, {
+										name = "JavaSE-" .. major,
+										path = dir,
+									})
+								end
+							end
+						end
+					end
+					-- Mark the first one as default, prefer Java 21
+					table.sort(runtimes, function(a, b)
+						local a_num = tonumber(a.name:match("%d+")) or 0
+						local b_num = tonumber(b.name:match("%d+")) or 0
+						-- Put 21 first, then sort ascending
+						if a_num == 21 then return true end
+						if b_num == 21 then return false end
+						return a_num < b_num
+					end)
+					if #runtimes > 0 then
+						runtimes[1].default = true
+					end
+					return runtimes
+				end)(),
 			},
 		},
 	},
