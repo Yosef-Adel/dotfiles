@@ -17,11 +17,12 @@ return {
 			"mfussenegger/nvim-jdtls",
 		},
 		opts = function()
-			-- Check custom install path from setup-java-nvim script
+			-- ls_path must be the exec JAR, not the directory (spring-boot.nvim runs: java -jar ls_path)
 			local xdg_data = vim.env.XDG_DATA_HOME or (vim.env.HOME .. "/.local/share")
-			local custom_ls = xdg_data .. "/spring-boot-ls/language-server"
-			if vim.fn.isdirectory(custom_ls) == 1 then
-				return { ls_path = custom_ls }
+			local ls_dir = xdg_data .. "/spring-boot-ls/language-server"
+			local jar = vim.fn.glob(ls_dir .. "/*-exec.jar")
+			if jar ~= "" then
+				return { ls_path = jar }
 			end
 			return {}
 		end,

@@ -9,7 +9,10 @@ if vim.fn.isdirectory(jdtls_path) == 0 then
 end
 
 -- Find root of java project
-local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" })
+-- Prefer .git/mvnw/gradlew over pom.xml so multi-module Maven projects use the
+-- repo root instead of stopping at the nearest submodule pom.xml
+local root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" })
+	or require("jdtls.setup").find_root({ "pom.xml", "build.gradle" })
 
 -- Workspace directory (unique per project)
 local project_name = vim.fn.fnamemodify(root_dir or vim.fn.getcwd(), ":p:h:t")
@@ -36,7 +39,10 @@ end
 -- java-test
 local test_path = mason_path .. "/java-test"
 if vim.fn.isdirectory(test_path) == 1 then
-	local test_jars = vim.fn.glob(test_path .. "/extension/server/*.jar", true, true)
+	local test_jars = vim.tbl_filter(function(jar)
+		-- runner-jar and jacocoagent are not OSGi bundles and cause "Failed to get bundleInfo" errors
+		return not jar:match("runner%-jar%-with%-dependencies") and not jar:match("jacocoagent")
+	end, vim.fn.glob(test_path .. "/extension/server/*.jar", true, true))
 	vim.list_extend(bundles, test_jars)
 end
 

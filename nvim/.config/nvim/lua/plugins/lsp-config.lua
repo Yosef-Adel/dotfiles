@@ -96,9 +96,8 @@ return {
 					"bashls",
 					"eslint",
 					"pyright",
-					"jdtls",
 				},
-				automatic_installation = true,
+				automatic_installation = { exclude = { "jdtls" } },
 			})
 
 			-- Configure servers using new vim.lsp.config API (Neovim 0.11+)
