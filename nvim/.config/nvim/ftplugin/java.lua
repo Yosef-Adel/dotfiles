@@ -190,7 +190,30 @@ local config = {
 		vim.keymap.set("n", "<leader>jn", jdtls.test_nearest_method, vim.tbl_extend("force", opts, { desc = "Test nearest method" }))
 
 		pcall(jdtls.setup_dap, { hotcodereplace = "auto" })
+
+		-- DAP keymaps
+		local dap = require("dap")
+		vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, vim.tbl_extend("force", opts, { desc = "Toggle breakpoint" }))
+		vim.keymap.set("n", "<leader>dB", function()
+			dap.set_breakpoint(vim.fn.input("Condition: "))
+		end, vim.tbl_extend("force", opts, { desc = "Conditional breakpoint" }))
+		vim.keymap.set("n", "<leader>dc", dap.continue, vim.tbl_extend("force", opts, { desc = "Continue / Start" }))
+		vim.keymap.set("n", "<leader>dn", dap.step_over, vim.tbl_extend("force", opts, { desc = "Step over" }))
+		vim.keymap.set("n", "<leader>di", dap.step_into, vim.tbl_extend("force", opts, { desc = "Step into" }))
+		vim.keymap.set("n", "<leader>do", dap.step_out, vim.tbl_extend("force", opts, { desc = "Step out" }))
+		vim.keymap.set("n", "<leader>dq", dap.terminate, vim.tbl_extend("force", opts, { desc = "Terminate session" }))
+		vim.keymap.set("n", "<leader>dr", dap.repl.open, vim.tbl_extend("force", opts, { desc = "Open REPL" }))
 	end,
+}
+
+require("dap").configurations.java = {
+	{
+		type = "java",
+		request = "attach",
+		name = "Attach to hc-server (5005)",
+		hostName = "localhost",
+		port = 5005,
+	},
 }
 
 jdtls.start_or_attach(config)

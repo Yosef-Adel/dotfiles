@@ -1,4 +1,19 @@
 return {
+	-- DAP UI: visual panels for variables, stack, breakpoints
+	{
+		"rcarriga/nvim-dap-ui",
+		dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+		config = function()
+			local dapui = require("dapui")
+			dapui.setup()
+			-- Auto-open/close UI when debug session starts/ends
+			local dap = require("dap")
+			dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open() end
+			dap.listeners.before.event_terminated["dapui_config"] = function() dapui.close() end
+			dap.listeners.before.event_exited["dapui_config"] = function() dapui.close() end
+		end,
+	},
+
 	-- nvim-jdtls: Java LSP with extended capabilities
 	{
 		"mfussenegger/nvim-jdtls",

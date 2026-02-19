@@ -43,7 +43,7 @@ return {
 				icons = { hint = "", info = "", warning = "", error = "" },
 			},
 
-			view = { width = 36 },
+			view = { width = 50 },
 			renderer = {
 				root_folder_label = false,
 				highlight_git = true,

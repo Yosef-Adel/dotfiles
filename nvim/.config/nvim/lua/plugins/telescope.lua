@@ -16,7 +16,9 @@ return {
 				defaults = {
 					layout_config = {
 						width = 0.95,
-						preview_width = 0.4,
+						horizontal = {
+							preview_width = 0.4,
+						},
 					},
 					path_display = function(_, path)
 						-- Strip Maven layout + base package noise from Java paths
