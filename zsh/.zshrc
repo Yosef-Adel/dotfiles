@@ -126,6 +126,7 @@ bindkey -s '\ef' 'tmux-sessionizer\n'
 export PATH="/usr/local/bin:$PATH"
 # for scripts
 export PATH="/users/neo/local/bin:$PATH"
+export PATH="/home/neo/local/bin:$PATH"
 # SDKMAN (must set JAVA_HOME before use)
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
@@ -142,6 +143,7 @@ HISTSIZE=10000
 SAVEHIST=9000
 HISTFILE=~/.zsh_history
 # }}}
+#
 
 # ==================== Aliases ====================
 # Tldr
