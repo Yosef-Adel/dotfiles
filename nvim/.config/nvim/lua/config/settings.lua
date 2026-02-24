@@ -8,7 +8,7 @@ vim.opt.smartindent = true
 vim.opt.clipboard = "unnamedplus"
 vim.opt.swapfile = false
 vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undodir = vim.fn.stdpath("state") .. "/undodir"
 vim.opt.undofile = true
 vim.opt.hlsearch = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")

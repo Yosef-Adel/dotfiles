@@ -17,7 +17,9 @@ vim.keymap.set({ "n", "v" }, "gh", "^")
 -- for saving files
 vim.keymap.set("n", "<leader>w", "<cmd> w<CR>")
 
-vim.keymap.set("n", "<C-f>", "<cmd>!tmux neww tmux-sessionizer<CR>", { desc = "Tmux sessionizer" })
+if vim.fn.has("win32") == 0 then
+	vim.keymap.set("n", "<C-f>", "<cmd>!tmux neww tmux-sessionizer<CR>", { desc = "Tmux sessionizer" })
+end
 
 -- tabs
 vim.keymap.set("n", "<leader>nt", "<cmd>tabNext<CR>")
