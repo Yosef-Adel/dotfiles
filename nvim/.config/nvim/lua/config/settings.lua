@@ -1,4 +1,4 @@
-vim.opt.guicursor = "" -- making the cursor invisible in GUI
+vim.opt.guicursor = "a:block"
 vim.opt.relativenumber = true
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
@@ -16,7 +16,7 @@ vim.opt.termguicolors = true
 vim.opt.scrolloff = 10
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
-vim.opt.updatetime = 50
+vim.opt.updatetime = 250
 vim.opt.colorcolumn = "90"
 vim.opt.conceallevel = 2
 vim.g.netrw_banner = 0
@@ -49,4 +49,3 @@ vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 
 vim.opt.spelllang = "en_us"
-vim.opt.spell = true
