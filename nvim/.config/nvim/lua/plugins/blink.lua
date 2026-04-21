@@ -1,6 +1,14 @@
 return {
 	"saghen/blink.cmp",
-	dependencies = { "rafamadriz/friendly-snippets" },
+	dependencies = {
+		"rafamadriz/friendly-snippets",
+		{
+			"fang2hou/blink-copilot",
+			opts = {
+				max_completions = 3,
+			},
+		},
+	},
 	version = "1.*",
 	opts = {
 		keymap = { preset = "default" },
@@ -12,8 +20,14 @@ return {
 		completion = { documentation = { auto_show = true } },
 
 		sources = {
-			default = { "lsp", "path", "snippets", "buffer" },
+			default = { "copilot", "lsp", "path", "snippets", "buffer" },
 			providers = {
+				copilot = {
+					name = "copilot",
+					module = "blink-copilot",
+					score_offset = 100,
+					async = true,
+				},
 				snippets = {
 					opts = {
 						friendly_snippets = true,

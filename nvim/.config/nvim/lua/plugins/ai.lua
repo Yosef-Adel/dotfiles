@@ -1,24 +1,12 @@
 return {
-	-- { "github/copilot.vim" },
-	-- {
-	-- 	"Exafunction/codeium.nvim",
-	-- 	dependencies = {
-	-- 		"nvim-lua/plenary.nvim",
-	-- 		"hrsh7th/nvim-cmp",
-	-- 	},
-	-- 	config = function()
-	-- 		require("codeium").setup({
-	-- 			chat = {
-	-- 				enable = true,
-	-- 				keymaps = {
-	-- 					open = "<leader>cc", -- Open chat window
-	-- 					reply = "<leader>cr", -- Send reply in chat
-	-- 					close = "<leader>cq", -- Close chat window
-	-- 				},
-	-- 			},
-	--
-	-- 			disable_bindings = false,
-	-- 		})
-	-- 	end,
-	-- },
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		opts = {
+			suggestion = { enabled = false },
+			panel = { enabled = false },
+			copilot_model = "claude-opus-4.6",
+		},
+	},
 }
