@@ -5,6 +5,14 @@ return {
 		"JoosepAlviste/nvim-ts-context-commentstring",
 	},
 	config = function()
+		-- Disable the plugin's own CursorHold autocmd: it errors with
+		-- "attempt to index local 'language_tree'" on buffers without an
+		-- active parser. Comment.nvim's pre_hook computes the commentstring
+		-- on demand instead, which doesn't have that problem.
+		require("ts_context_commentstring").setup({
+			enable_autocmd = false,
+		})
+
 		local comment = require("Comment")
 		local ts_context_commentstring = require("ts_context_commentstring.integrations.comment_nvim")
 		comment.setup({
