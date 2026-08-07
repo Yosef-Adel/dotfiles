@@ -15,7 +15,7 @@ startup_command = "nvim "
 
 [[session]]
 name = "karabinar 🔧"
-path = "~/.config/karabinar"
+path = "~/.config/karabiner"
 startup_command = "nvim"
 
 [[session]]
