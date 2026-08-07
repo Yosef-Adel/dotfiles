@@ -96,7 +96,11 @@ return {
 					"bashls",
 					"eslint",
 					"pyright",
-					"jdtls",
+					-- DevOps
+					"yamlls",
+					"dockerls",
+					"docker_compose_language_service",
+					"terraformls",
 				},
 				automatic_installation = true,
 			})
@@ -115,7 +119,20 @@ return {
 			}
 
 			-- Configure other servers with default settings
-			local servers = { "ts_ls", "html", "cssls", "tailwindcss", "jsonls", "bashls", "eslint", "pyright" }
+			local servers = {
+				"ts_ls",
+				"html",
+				"cssls",
+				"tailwindcss",
+				"jsonls",
+				"bashls",
+				"eslint",
+				"pyright",
+				"yamlls",
+				"dockerls",
+				"docker_compose_language_service",
+				"terraformls",
+			}
 			for _, server in ipairs(servers) do
 				vim.lsp.config[server] = {
 					capabilities = capabilities,
@@ -127,8 +144,21 @@ return {
 				group = vim.api.nvim_create_augroup("UserLspStart", {}),
 				callback = function(args)
 					-- Enable LSP for known servers
-					local servers_to_enable =
-						{ "lua_ls", "ts_ls", "html", "cssls", "tailwindcss", "jsonls", "bashls", "eslint", "pyright" }
+					local servers_to_enable = {
+						"lua_ls",
+						"ts_ls",
+						"html",
+						"cssls",
+						"tailwindcss",
+						"jsonls",
+						"bashls",
+						"eslint",
+						"pyright",
+						"yamlls",
+						"dockerls",
+						"docker_compose_language_service",
+						"terraformls",
+					}
 					for _, server in ipairs(servers_to_enable) do
 						if not vim.lsp.get_clients({ bufnr = args.buf, name = server })[1] then
 							vim.lsp.enable(server)
@@ -141,6 +171,11 @@ return {
 			require("lint").linters_by_ft = {
 				javascript = { "eslint" },
 				python = { "pylint" },
+				dockerfile = { "hadolint" },
+				yaml = { "yamllint" },
+				sh = { "shellcheck" },
+				bash = { "shellcheck" },
+				terraform = { "tflint" },
 			}
 			vim.api.nvim_create_autocmd("BufWritePost", {
 				callback = function()
@@ -180,10 +215,15 @@ return {
 					"pylint",
 					"cspell",
 
-					-- Java
-					"jdtls",
-					"java-debug-adapter",
-					"java-test",
+					-- DevOps
+					"yaml-language-server",
+					"dockerfile-language-server",
+					"docker-compose-language-service",
+					"terraform-ls",
+					"hadolint",
+					"yamllint",
+					"shellcheck",
+					"tflint",
 				},
 				auto_update = true,
 				run_on_start = true,
