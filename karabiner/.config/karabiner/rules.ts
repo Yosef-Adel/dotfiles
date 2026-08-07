@@ -56,28 +56,22 @@ const rules: KarabinerRules[] = [
     description: "Modifier key swaps",
     manipulators: [
       {
-        description: "Left Cmd -> Left Ctrl",
+        description: "Left Option -> Right Ctrl",
         type: "basic",
-        from: { key_code: "left_command", modifiers: { optional: ["any"] } },
-        to: [{ key_code: "left_control" }],
-      },
-      {
-        description: "Right Cmd -> Right Ctrl",
-        type: "basic",
-        from: { key_code: "right_command", modifiers: { optional: ["any"] } },
+        from: { key_code: "left_option", modifiers: { optional: ["any"] } },
         to: [{ key_code: "right_control" }],
       },
       {
-        description: "Left Ctrl -> Left Cmd",
-        type: "basic",
-        from: { key_code: "left_control", modifiers: { optional: ["any"] } },
-        to: [{ key_code: "left_command" }],
-      },
-      {
-        description: "Right Option -> Right Cmd",
+        description: "Right Option -> Left Ctrl",
         type: "basic",
         from: { key_code: "right_option", modifiers: { optional: ["any"] } },
-        to: [{ key_code: "right_command" }],
+        to: [{ key_code: "left_control" }],
+      },
+      {
+        description: "Left Ctrl -> Left Option",
+        type: "basic",
+        from: { key_code: "left_control", modifiers: { optional: ["any"] } },
+        to: [{ key_code: "left_option" }],
       },
       {
         description: "Caps Lock -> Escape",
@@ -128,7 +122,6 @@ const rules: KarabinerRules[] = [
       s: app("safari"),
       t: app("TickTick"),
       v: app("Preview"),
-      z: app("zen"),
     },
 
     // -------------------------------------------------------------------------
@@ -144,31 +137,6 @@ const rules: KarabinerRules[] = [
       y: rectangle("previous-display"),
       o: rectangle("next-display"),
 
-      // Tab navigation
-      u: {
-        description: "Previous Tab",
-        to: [{ key_code: "tab", modifiers: ["right_control", "right_shift"] }],
-      },
-      i: {
-        description: "Next Tab",
-        to: [{ key_code: "tab", modifiers: ["right_control"] }],
-      },
-
-      // Window navigation
-      n: {
-        description: "Next Window",
-        to: [
-          { key_code: "grave_accent_and_tilde", modifiers: ["right_command"] },
-        ],
-      },
-      b: {
-        description: "Back",
-        to: [{ key_code: "open_bracket", modifiers: ["right_command"] }],
-      },
-      m: {
-        description: "Forward",
-        to: [{ key_code: "close_bracket", modifiers: ["right_command"] }],
-      },
       semicolon: {
         description: "Hide Window",
         to: [{ key_code: "h", modifiers: ["right_command"] }],
