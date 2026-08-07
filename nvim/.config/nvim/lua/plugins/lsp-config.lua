@@ -103,6 +103,7 @@ return {
 					"terraformls",
 					"ansiblels",
 					"helm_ls",
+					"gitlab_ci_ls",
 				},
 				automatic_installation = true,
 			})
@@ -154,6 +155,7 @@ return {
 				"terraformls",
 				"ansiblels",
 				"helm_ls",
+				"gitlab_ci_ls",
 			}
 			for _, server in ipairs(servers) do
 				vim.lsp.config[server] = {
@@ -182,6 +184,7 @@ return {
 						"terraformls",
 						"ansiblels",
 						"helm_ls",
+						"gitlab_ci_ls",
 					}
 					for _, server in ipairs(servers_to_enable) do
 						if not vim.lsp.get_clients({ bufnr = args.buf, name = server })[1] then
@@ -251,6 +254,7 @@ return {
 					"ansible-language-server",
 					"ansible-lint",
 					"helm-ls",
+					"gitlab-ci-ls",
 				},
 				auto_update = true,
 				run_on_start = true,

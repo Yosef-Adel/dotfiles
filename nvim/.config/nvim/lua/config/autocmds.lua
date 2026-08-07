@@ -62,9 +62,11 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.filetype.add({
 	filename = {
 		["Jenkinsfile"] = "groovy",
+		[".gitlab-ci.yml"] = "yaml.gitlab", -- gitlab_ci_ls only attaches to this compound filetype
 	},
 	pattern = {
 		[".*%.Jenkinsfile"] = "groovy",
 		["Jenkinsfile%..*"] = "groovy",
+		[".*%.gitlab%-ci%.yml"] = "yaml.gitlab", -- included/child CI files
 	},
 })
