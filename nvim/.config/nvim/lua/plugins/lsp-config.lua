@@ -101,6 +101,8 @@ return {
 					"dockerls",
 					"docker_compose_language_service",
 					"terraformls",
+					"ansiblels",
+					"helm_ls",
 				},
 				automatic_installation = true,
 			})
@@ -118,6 +120,25 @@ return {
 				},
 			}
 
+			-- yamlls: enable SchemaStore so GitLab CI, GitHub Actions,
+			-- docker-compose, Kubernetes, etc. get schema-aware completion
+			-- based on filename, on top of explicit mappings as a fallback
+			vim.lsp.config["yamlls"] = {
+				capabilities = capabilities,
+				settings = {
+					yaml = {
+						schemaStore = { enable = true, url = "https://www.schemastore.org/api/json/catalog.json" },
+						schemas = {
+							["https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json"] = { ".gitlab-ci.yml" },
+							["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
+								"docker-compose*.yml",
+								"docker-compose*.yaml",
+							},
+						},
+					},
+				},
+			}
+
 			-- Configure other servers with default settings
 			local servers = {
 				"ts_ls",
@@ -128,10 +149,11 @@ return {
 				"bashls",
 				"eslint",
 				"pyright",
-				"yamlls",
 				"dockerls",
 				"docker_compose_language_service",
 				"terraformls",
+				"ansiblels",
+				"helm_ls",
 			}
 			for _, server in ipairs(servers) do
 				vim.lsp.config[server] = {
@@ -158,6 +180,8 @@ return {
 						"dockerls",
 						"docker_compose_language_service",
 						"terraformls",
+						"ansiblels",
+						"helm_ls",
 					}
 					for _, server in ipairs(servers_to_enable) do
 						if not vim.lsp.get_clients({ bufnr = args.buf, name = server })[1] then
@@ -224,6 +248,9 @@ return {
 					"yamllint",
 					"shellcheck",
 					"tflint",
+					"ansible-language-server",
+					"ansible-lint",
+					"helm-ls",
 				},
 				auto_update = true,
 				run_on_start = true,

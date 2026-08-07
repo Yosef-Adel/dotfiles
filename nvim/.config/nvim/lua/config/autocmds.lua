@@ -56,3 +56,15 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 	group = group,
 })
+
+-- Jenkinsfiles are Groovy DSL; there's no viable completion LSP for the
+-- Jenkins pipeline DSL, but this at least gets treesitter highlighting
+vim.filetype.add({
+	filename = {
+		["Jenkinsfile"] = "groovy",
+	},
+	pattern = {
+		[".*%.Jenkinsfile"] = "groovy",
+		["Jenkinsfile%..*"] = "groovy",
+	},
+})
