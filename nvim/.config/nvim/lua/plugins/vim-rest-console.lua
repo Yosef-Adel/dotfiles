@@ -1,10 +1,9 @@
 return {
-	"diepm/vim-rest-console",
-	config = function()
-		-- Set the output buffer name and formatting options
-		vim.g.vrc_output_buffer_name = "__OUTPUT.json"
-		vim.g.vrc_auto_format_response_patterns = {
-			json = "jq",
-		}
-	end,
+	"mistweaverco/kulala.nvim",
+	ft = "http",
+	keys = {
+		{ "<leader>hr", "<cmd>lua require('kulala').run()<CR>", desc = "Run HTTP request", ft = "http" },
+		{ "<leader>hl", "<cmd>lua require('kulala').replay_last()<CR>", desc = "Re-run last request", ft = "http" },
+	},
+	opts = {},
 }

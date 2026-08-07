@@ -14,6 +14,12 @@ return {
 		config = function()
 			require("telescope").setup({
 				defaults = {
+					layout_config = {
+						width = 0.95,
+						horizontal = {
+							preview_width = 0.4,
+						},
+					},
 					vimgrep_arguments = {
 						"rg",
 						"--color=never",

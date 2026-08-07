@@ -46,3 +46,13 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	end,
 	group = group,
 })
+
+-- Enable spell checking only for prose filetypes
+vim.api.nvim_create_autocmd("FileType", {
+	desc = "Enable spell checking for prose filetypes",
+	pattern = { "markdown", "text", "gitcommit", "html" },
+	callback = function()
+		vim.opt_local.spell = true
+	end,
+	group = group,
+})
