@@ -17,6 +17,7 @@ return {
 				"lua",
 				"bash",
 				"markdown",
+				"markdown_inline",
 				"vim",
 				-- DevOps
 				"dockerfile",
@@ -57,18 +58,6 @@ return {
 						return
 					end
 					vim.treesitter.start()
-				end,
-			})
-
-			-- markdown's highlight query crashes on Neovim 0.12 with "attempt to
-			-- call method 'range'" via the conceal_lines directive
-			-- (nvim-treesitter#8618). Neovim's own ftplugin/markdown.lua
-			-- auto-starts the highlighter regardless of plugin config, so stop it
-			-- back out rather than trying to prevent the start.
-			vim.api.nvim_create_autocmd("FileType", {
-				pattern = "markdown",
-				callback = function()
-					vim.treesitter.stop()
 				end,
 			})
 		end,
