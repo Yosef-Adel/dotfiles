@@ -49,3 +49,16 @@ vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 
 vim.opt.spelllang = "en_us"
+
+-- Folding. Neovim 0.11+ can fold from LSP `textDocument/foldingRange`
+-- (`vim.lsp.foldexpr`); lsp-config.lua switches a window over to it as soon as
+-- a capable server attaches, and this indent fold is the fallback until then.
+vim.opt.foldmethod = "indent"
+vim.opt.foldtext = "v:lua.vim.lsp.foldtext()"
+vim.opt.foldcolumn = "1"
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
+
+vim.keymap.set("n", "+", "zR", { desc = "Open all folds" })
+vim.keymap.set("n", "-", "zM", { desc = "Close all folds" })

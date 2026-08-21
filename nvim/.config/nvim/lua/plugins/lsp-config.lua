@@ -42,13 +42,35 @@ return {
 				{ "n", "<leader>rs", ":LspRestart<CR>", "Restart LSP" },
 			}
 
+			local lsp_group = vim.api.nvim_create_augroup("UserLspConfig", {})
+
 			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+				group = lsp_group,
 				callback = function(ev)
 					local opts = { buffer = ev.buf, silent = true }
 					for _, mapping in ipairs(default_keymaps) do
 						opts.desc = mapping[4]
 						keymap.set(mapping[1], mapping[2], mapping[3], opts)
+					end
+
+					-- Fold from the server's folding ranges when it offers them;
+					-- settings.lua leaves indent folding as the fallback.
+					local client = vim.lsp.get_client_by_id(ev.data.client_id)
+					if client and client:supports_method("textDocument/foldingRange") then
+						local win = vim.api.nvim_get_current_win()
+						vim.wo[win][0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+						vim.wo[win][0].foldmethod = "expr"
+					end
+				end,
+			})
+
+			vim.api.nvim_create_autocmd("LspDetach", {
+				group = lsp_group,
+				callback = function()
+					local win = vim.api.nvim_get_current_win()
+					if vim.wo[win][0].foldexpr == "v:lua.vim.lsp.foldexpr()" then
+						vim.wo[win][0].foldmethod = "indent"
+						vim.wo[win][0].foldexpr = "0"
 					end
 				end,
 			})
