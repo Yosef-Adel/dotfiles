@@ -1,58 +1,57 @@
 return {
 	"ThePrimeagen/refactoring.nvim",
+	event = "VeryLazy",
 	dependencies = {
-		"nvim-lua/plenary.nvim",
-		"nvim-treesitter/nvim-treesitter",
+		-- required since the plugin's async rewrite; without it `require("async")`
+		-- silently resolves to promise-async and every refactor throws
+		"lewis6991/async.nvim",
 	},
 	config = function()
 		require("refactoring").setup({
-			-- Control prompts for function signatures
-			prompt_func_return_type = {
-				go = false,
-				cpp = false,
-				c = false,
-			},
-			prompt_func_param_type = {
-				go = false,
-				cpp = false,
-				c = false,
-			},
 			show_success_message = true,
 		})
 
-		local refactor = require("refactoring")
+		local map = vim.keymap.set
 
-		-- === VISUAL MODE ===
-		-- Extract selection into a function
-		vim.keymap.set("x", "<leader>re", function()
-			refactor.refactor("Extract Function")
-		end, { desc = "Refactor: Extract function" })
+		-- Every refactor below is operator-pending: the mapping returns the
+		-- operator and you follow it with a motion/textobject (or use it from
+		-- visual mode), hence `expr = true`.
+		map({ "n", "x" }, "<leader>re", function()
+			return require("refactoring").extract_func()
+		end, { expr = true, desc = "Refactor: Extract function" })
 
-		-- Extract selection into a function in a separate file
-		vim.keymap.set("x", "<leader>rf", function()
-			refactor.refactor("Extract Function To File")
-		end, { desc = "Refactor: Extract to file" })
+		map({ "n", "x" }, "<leader>rf", function()
+			return require("refactoring").extract_func_to_file()
+		end, { expr = true, desc = "Refactor: Extract function to file" })
 
-		-- === NORMAL MODE ===
-		-- Inline variable, debug helpers, cleanup, etc.
-		vim.keymap.set("n", "<leader>ri", function()
-			refactor.refactor("Inline Variable")
-		end, { desc = "Refactor: Inline variable" })
+		map({ "n", "x" }, "<leader>rv", function()
+			return require("refactoring").extract_var()
+		end, { expr = true, desc = "Refactor: Extract variable" })
 
-		vim.keymap.set("n", "<leader>rp", function()
-			refactor.debug.printf({ below = false })
-		end, { desc = "Refactor: Add debug print" })
+		map({ "n", "x" }, "<leader>ri", function()
+			return require("refactoring").inline_var()
+		end, { expr = true, desc = "Refactor: Inline variable" })
 
-		-- vim.keymap.set("n", "<leader>rc", function()
-		-- 	refactor.debug.cleanup({})
-		-- end, { desc = "Refactor: Cleanup debug statements" })
+		map({ "n", "x" }, "<leader>rI", function()
+			return require("refactoring").inline_func()
+		end, { expr = true, desc = "Refactor: Inline function" })
 
-		-- Optional: auto-reload treesitter queries when updating
-		vim.api.nvim_create_autocmd("BufWritePost", {
-			pattern = "*/refactoring.lua",
-			callback = function()
-				require("nvim-treesitter.query").invalidate_all()
-			end,
-		})
+		map({ "n", "x" }, "<leader>rx", function()
+			require("refactoring").select_refactor()
+		end, { desc = "Refactor: Select refactor" })
+
+		-- Debug prints. In normal mode `iw` picks the word under the cursor;
+		-- from visual mode the selection is used as-is.
+		map("n", "<leader>rp", function()
+			return require("refactoring.debug").print_var({ output_location = "below" }) .. "iw"
+		end, { expr = true, desc = "Refactor: Print variable below" })
+
+		map("x", "<leader>rp", function()
+			return require("refactoring.debug").print_var({ output_location = "below" })
+		end, { expr = true, desc = "Refactor: Print variable below" })
+
+		map({ "n", "x" }, "<leader>rc", function()
+			return require("refactoring.debug").cleanup({ restore_view = true })
+		end, { expr = true, remap = true, desc = "Refactor: Clean up debug prints" })
 	end,
 }
