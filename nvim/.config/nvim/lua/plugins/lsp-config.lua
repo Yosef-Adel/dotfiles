@@ -20,7 +20,7 @@ return {
 		config = function()
 			local keymap = vim.keymap
 
-			vim.lsp.set_log_level("warn")
+			vim.lsp.log.set_level(vim.log.levels.WARN)
 			local default_keymaps = {
 				-- Use native LSP functions (no deprecated API warnings)
 				{ "n", "gd", vim.lsp.buf.definition, "Go to definition" },
@@ -31,8 +31,12 @@ return {
 				{ { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "See available code actions" },
 				{ "n", "<leader>rn", vim.lsp.buf.rename, "Smart rename" },
 				{ "n", "K", vim.lsp.buf.hover, "Show documentation for what is under cursor" },
-				{ "n", "[d", vim.diagnostic.goto_prev, "Go to previous diagnostic" },
-				{ "n", "]d", vim.diagnostic.goto_next, "Go to next diagnostic" },
+				{ "n", "[d", function()
+					vim.diagnostic.jump({ count = -1, float = true })
+				end, "Go to previous diagnostic" },
+				{ "n", "]d", function()
+					vim.diagnostic.jump({ count = 1, float = true })
+				end, "Go to next diagnostic" },
 				{ "n", "<leader>rr", vim.diagnostic.open_float, "Show diagnostic messages" },
 				{ "n", "<leader>D", vim.diagnostic.setloclist, "Open diagnostic list" },
 				{ "n", "<leader>rs", ":LspRestart<CR>", "Restart LSP" },
