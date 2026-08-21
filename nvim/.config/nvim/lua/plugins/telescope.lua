@@ -2,7 +2,7 @@ return {
 	{
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
-		branch = "0.1.x",
+		branch = "master",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{
@@ -14,13 +14,6 @@ return {
 		config = function()
 			require("telescope").setup({
 				defaults = {
-					-- telescope's treesitter-based preview highlighter still calls
-					-- nvim-treesitter's old API (ft_to_lang), which no longer exists
-					-- on nvim-treesitter's "main" branch. Fall back to plain syntax
-					-- highlighting in previews instead (telescope#3547, unresolved).
-					preview = {
-						treesitter = false,
-					},
 					layout_config = {
 						width = 0.95,
 						horizontal = {
