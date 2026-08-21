@@ -4,160 +4,156 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-This is a Neovim configuration using the Lazy.nvim plugin manager. The configuration is structured around Clean Architecture principles with specialized Telescope searches for navigating codebases organized by architectural layers (Interactors, Gateways, Presenters, Stores, Components, Entities).
+A Neovim configuration for TypeScript/React and DevOps work, managed with
+lazy.nvim. Neovim 0.11+ is required — the config uses `vim.lsp.config`,
+`vim.lsp.foldexpr`, `vim.diagnostic.jump` and `vim.hl`, and is developed
+against 0.12.
 
-## Architecture
-
-### Directory Structure
+## Layout
 
 ```
 nvim/.config/nvim/
-├── init.lua                 # Entry point - bootstraps Lazy.nvim and loads modules
-├── CLAUDE.md               # This file - guidance for Claude Code
-├── SNIPPETS.md             # Complete snippet reference (100+ snippets)
+├── init.lua                  # Bootstraps lazy.nvim, loads config modules, then plugins
+├── CLAUDE.md                 # This file
+├── SNIPPETS.md               # Snippet reference
 ├── lua/
-│   ├── config/             # Core Neovim configuration
-│   │   ├── settings.lua    # Vim options and editor settings
-│   │   ├── keymap.lua      # Global keybindings (leader = space)
-│   │   └── autocmds.lua    # Autocommands (yank highlight, node_modules warnings)
-│   ├── plugins/            # Plugin configurations (~34 plugins)
-│   │   ├── telescope.lua   # Fuzzy finder with Clean Architecture layer searches
-│   │   ├── lsp-config.lua  # LSP setup using modern vim.lsp.config API (Neovim 0.11+)
-│   │   ├── formatting.lua  # Conform.nvim with format-on-save
-│   │   ├── treesitter.lua  # Syntax highlighting
-│   │   ├── blink.lua       # Completion engine with snippet support
-│   │   └── ...             # Other plugin configs
-│   └── after/
-│       └── functions.lua   # Custom functions (e.g., Open_scratch_buffer)
-├── snippets/               # Custom VS Code-style snippets
-│   ├── package.json        # Snippet manifest
-│   ├── react.json          # React components & hooks (16 snippets)
-│   ├── react-testing.json  # Testing Library snippets (19 snippets)
-│   ├── typescript.json     # TypeScript/JS snippets (31 snippets)
-│   ├── css.json            # CSS snippets (10 snippets)
-│   ├── html.json           # HTML snippets (7 snippets)
-│   └── json.json           # Config file templates (2 snippets)
-└── lazy-lock.json          # Plugin version lockfile
+│   ├── config/
+│   │   ├── settings.lua      # Options, folding defaults, a few global keymaps
+│   │   ├── keymap.lua        # Global keybindings (leader = space)
+│   │   ├── autocmds.lua      # Yank highlight, node_modules warnings, filetype overrides
+│   │   ├── functions.lua     # Custom functions (scratch buffer)
+│   │   └── telescope/
+│   │       ├── init.lua      # Entry point called from the telescope plugin spec
+│   │       ├── keymaps.lua   # Core telescope keymaps
+│   │       └── architecture.lua  # DISABLED, see "Clean Architecture searches"
+│   └── plugins/              # One file per plugin (or per group); ~50 plugins total
+├── snippets/                 # VS Code-style snippets (82 across 6 files)
+└── lazy-lock.json            # Plugin lockfile
 ```
 
-### Plugin Loading Strategy
+`lua/plugins/` is loaded wholesale by `require("lazy").setup("plugins")`; every
+file there returns a plugin spec or a list of them. Adding a file is enough to
+add a plugin.
 
-- All plugins are defined in `lua/plugins/` directory
-- Each plugin file returns a table/array of plugin specifications
-- Lazy.nvim automatically loads all files from `lua/plugins/` directory
-- Uses lazy-loading with events like `BufReadPre`, `BufNewFile`, `VimEnter`, `InsertEnter`
+## LSP
 
-### LSP Configuration (Modern API)
+`lua/plugins/lsp-config.lua` holds everything LSP: nvim-lspconfig,
+mason.nvim, mason-lspconfig.nvim, and mason-tool-installer.nvim.
 
-Located in `lua/plugins/lsp-config.lua`. Uses **Neovim 0.11+ vim.lsp.config API** (not lspconfig.setup):
+**One list of servers.** The `servers` table at the top of the file feeds both
+`ensure_installed` and `automatic_enable`. To add a server, add it there — no
+other edit is needed. Do not add a `vim.lsp.enable()` call; mason-lspconfig v2
+does that, and scoping `automatic_enable` to this list is what keeps stray
+mason packages (formatters, linters) from being enabled as if they were
+servers.
 
-- LSP servers configured via `vim.lsp.config[server_name]`
-- Auto-enabled on FileType autocmd using `vim.lsp.enable(server_name)`
-- Mason handles automatic installation of LSP servers
-- Default keymaps set via LspAttach autocmd
-- Supports folding capabilities for nvim-ufo
+**Per-server settings** go in `vim.lsp.config[name] = { settings = ... }`.
+Currently only `lua_ls` and `yamlls` need them. Use this API, never the
+deprecated `require("lspconfig")[name].setup()`.
 
-**Important**: When modifying LSP configuration, use `vim.lsp.config` API, not the deprecated `require('lspconfig')[server].setup()` pattern.
+**Capabilities.** Register only deltas from Neovim's defaults, via
+`vim.lsp.config("*", { capabilities = ... })`. Do not build a
+`vim.lsp.protocol.make_client_capabilities()` table and assign it per server:
+blink.cmp registers its own completion capabilities the same way, and a full
+table clobbers blink's list values on merge.
 
-### Telescope Architecture-Aware Searches
+**Division of labour.** Language servers belong to mason-lspconfig's
+`ensure_installed`; formatters and linters belong to mason-tool-installer's.
+Nothing should appear in both.
 
-The `lua/plugins/telescope.lua` file contains extensive Clean Architecture navigation:
+**Linting.** nvim-lint covers only tools with no language server of their own
+(pylint, hadolint, yamllint, shellcheck, tflint). JS/TS is deliberately absent
+— eslint-lsp already lints those.
 
-**Dual search pattern**: Each layer has TWO keybindings:
-- Lowercase = Find FILES by pattern (e.g., `<leader>si` finds `*Interactor.ts` files)
-- Uppercase = Search CONTENT within files (e.g., `<leader>sI` searches inside interactor code)
+## Folding
 
-**Layer keybindings**:
-- `<leader>si/sI` - Interactors (business logic)
-- `<leader>ss/sS` - Stores (state management)
-- `<leader>sg/sG` - Gateways (external dependencies)
-- `<leader>sp/sP` - Presenters (UI logic, includes legacy Containers)
-- `<leader>so/sO` - Components (React components)
-- `<leader>se` - Entities (domain models)
-- `<leader>sa/sA` - Abstract Tokens (DI interfaces)
-- `<leader>sd/sD` - DI Containers
-- `<leader>st/sT` - Test files
-- `<leader>sc/sC` - Core package search
-- `<leader>sx` - Execute methods (interactor entry points)
-- `<leader>sl` - Interactive layer selector menu
+Core Neovim, no plugin. `settings.lua` sets indent folding as the baseline;
+the `LspAttach` handler in `lsp-config.lua` switches a window to
+`vim.lsp.foldexpr()` when the attached server supports
+`textDocument/foldingRange`, and `LspDetach` puts it back. `+` and `-` are
+`zR` / `zM`.
 
-**Assumes monorepo structure**: Searches target `packages/core/`, `packages/gateways/`, etc.
+Note that nvim-ufo cannot be reintroduced: it depends on promise-async, which
+ships `lua/async.lua`, and so does the async.nvim that refactoring.nvim
+requires. Two plugins, one module name — only one can win.
 
-### Custom Features
+## Keymaps
 
-1. **Scratch Buffer**: `<leader>vs` opens a vertical scratch buffer for temporary notes
-2. **Node Modules Protection**: Autocmds warn when entering/editing files in `node_modules/`
-3. **Yank Highlight**: Briefly highlights yanked text with custom colors
-4. **Format on Save**: Automatically formats files using Conform.nvim (Prettier, Stylua, Black, etc.)
-5. **Spell Checking**: Enabled by default with US English dictionary
+Leader is `<space>`. which-key registers the group names in
+`lua/plugins/which-key.lua`; keep it in sync when adding a new prefix.
 
-## Development Workflow
+| Prefix | Group |
+| ------ | ----- |
+| `<leader>s` | Search (telescope) |
+| `<leader>r` | Refactor + LSP rename/restart |
+| `<leader>g` | Git (gitsigns) |
+| `<leader>x` | Trouble |
+| `<leader>c` | Code |
+| `<leader>p` | Project |
+| `<leader>v` | View |
+| `<leader>n` | Notes/Tabs |
+| `<leader>t` | Tree |
+| `m` | Marks/Harpoon |
 
-### Modifying Plugin Configuration
+Refactoring keymaps are **operator-pending expr mappings** — they return an
+operator and expect a motion or a visual selection. This is the API
+refactoring.nvim exposes now; the older `refactor.refactor("Extract Function")`
+string dispatch and the `refactor.debug` table no longer exist.
 
-1. Edit the relevant file in `lua/plugins/<plugin-name>.lua`
-2. Restart Neovim or run `:Lazy reload <plugin-name>`
-3. Plugin changes take effect immediately with lazy loading
+## Clean Architecture searches
 
-### Adding New Plugins
+`lua/config/telescope/architecture.lua` defines layer-aware pickers for a
+monorepo laid out as `packages/core/`, `packages/gateways/` and so on —
+`<leader>si` for Interactors, `<leader>ss` for Stores, and so on, with the
+uppercase variant grepping inside the layer instead of finding files.
 
-Create a new file in `lua/plugins/` that returns a plugin spec:
+**It is currently disabled.** The `require` in
+`lua/config/telescope/init.lua` is commented out, so none of those keymaps
+exist. Re-enable it by uncommenting that line; it only makes sense inside a
+repo with that structure.
 
-```lua
-return {
-  "author/plugin-name",
-  event = "VeryLazy",  -- or other lazy-loading trigger
-  config = function()
-    require("plugin-name").setup({
-      -- configuration
-    })
-  end,
-}
+## Treesitter
+
+nvim-treesitter is on the `main` branch, which has no `master`-era module
+system: there is no `nvim-treesitter.configs`, no `nvim-treesitter.query`, and
+no `parsers.ft_to_lang`. Plugins that still call those APIs will throw at
+runtime rather than at startup, so check before adding one.
+
+`lua/plugins/treesitter.lua` installs the parser list and starts the
+highlighter from a FileType autocmd, skipping files over 100 KB. Neovim's own
+ftplugins already start it for lua, markdown, help and query.
+
+## Formatting
+
+conform.nvim with format-on-save (`lua/plugins/formatting.lua`), prettier for
+web filetypes, stylua for Lua, isort+black for Python, `lsp_format = "fallback"`.
+`<leader>mp` formats manually. New formatters need an entry in
+`formatters_by_ft` and in mason-tool-installer's `ensure_installed`.
+
+## Other notable behaviour
+
+- **Scratch buffer**: `<leader>vs` (`config.functions.scratch`)
+- **node_modules guard**: warns on entering, errors on writing
+- **Spell check**: prose filetypes only (markdown, text, gitcommit, html)
+- **Jenkinsfile / .gitlab-ci.yml**: mapped to `groovy` and `yaml.gitlab` in
+  `autocmds.lua`; `gitlab_ci_ls` only attaches to the compound filetype
+- **Go**: gopls comes from Neovim's LSP client; vim-go's own gopls is disabled
+  (`g:go_gopls_enabled = 0`) so only one runs
+- **Undo**: persisted to `~/.vim/undodir`
+- **tmux**: `<C-h/j/k/l>` navigation, `<A-f>` sessionizer
+
+## Testing changes
+
+There is no test suite. To check a change without a UI:
+
+```bash
+nvim --headless -c 'lua print("ok")' -c qa      # config loads clean
+nvim --headless <file> -c 'lua vim.defer_fn(function()
+  print(vim.inspect(vim.tbl_map(function(c) return c.name end, vim.lsp.get_clients())))
+  vim.cmd("qa!") end, 5000)'                     # which servers attach
 ```
 
-Lazy.nvim will automatically detect and load it.
-
-### Modifying LSP Servers
-
-Edit `lua/plugins/lsp-config.lua`:
-
-1. Add server name to `ensure_installed` table in mason_lspconfig.setup
-2. Add server to `servers` array or create special config like lua_ls
-3. Configure via `vim.lsp.config[server_name] = { ... }`
-4. Add to servers_to_enable array in FileType autocmd
-
-### Formatting Configuration
-
-Edit `lua/plugins/formatting.lua` to:
-- Add formatters for new file types in `formatters_by_ft`
-- Ensure formatter is installed via mason-tool-installer in lsp-config.lua
-- Adjust timeout or toggle format-on-save behavior
-
-### Custom Snippets
-
-Custom snippets are stored in `snippets/` directory using VS Code snippet format:
-- See `SNIPPETS.md` for complete reference of 100+ snippets
-- Edit JSON files in `snippets/` to add/modify snippets
-- Restart Neovim or run `:Lazy reload blink.cmp` after changes
-- Snippets are organized by language: react.json, typescript.json, css.json, html.json, etc.
-
-## Key Technologies
-
-- **Plugin Manager**: Lazy.nvim (automatic lazy loading)
-- **LSP**: Native Neovim 0.11+ LSP with Mason for server management
-- **Fuzzy Finder**: Telescope with ripgrep backend
-- **Formatting**: Conform.nvim (Prettier, Stylua, Black, isort)
-- **Syntax**: Treesitter with auto-install enabled
-- **Completion**: Blink.cmp (alternative to nvim-cmp)
-- **Snippets**: Custom VS Code-style snippets for frontend development (see SNIPPETS.md)
-- **Notifications**: noice.nvim + nvim-notify
-
-## Important Notes
-
-- Leader key is `<space>`
-- Tab width is 2 spaces (expandtab enabled)
-- Relative line numbers enabled
-- Clipboard synced with system (`unnamedplus`)
-- Undo history persisted to `~/.vim/undodir`
-- Uses tmux-sessionizer integration (`<C-f>`, `<A-f>`)
-- Code assumes monorepo with `packages/` directory structure for architecture searches
+Two caveats when testing headless: `UIEnter` never fires, so lazy.nvim's
+`VeryLazy` plugins stay unloaded unless you force them with
+`require("lazy").load({ plugins = { ... } })`; and nothing redraws, so
+treesitter never parses a buffer unless you call `parse()` yourself.
