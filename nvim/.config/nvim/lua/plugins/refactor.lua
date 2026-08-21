@@ -11,13 +11,11 @@ return {
 				go = false,
 				cpp = false,
 				c = false,
-				java = false,
 			},
 			prompt_func_param_type = {
 				go = false,
 				cpp = false,
 				c = false,
-				java = false,
 			},
 			show_success_message = true,
 		})

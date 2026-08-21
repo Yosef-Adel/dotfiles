@@ -1,5 +1,5 @@
 # Add deno completions to search path
-if [[ ":$FPATH:" != *":/Users/yosefsaaid/.zsh/completions:"* ]]; then export FPATH="/Users/yosefsaaid/.zsh/completions:$FPATH"; fi
+if [[ ":$FPATH:" != *":$HOME/.zsh/completions:"* ]]; then export FPATH="$HOME/.zsh/completions:$FPATH"; fi
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -113,22 +113,19 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # ==================== Path ====================
-export PATH="$HOME/.tmuxifierr/bin:$PATH"
+export PATH="$HOME/.tmuxifier/bin:$PATH"
 # Python3
-export PATH="/Users/yosefsaaid/Library/Python/3.9/bin:$PATH"
+export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 
-# add path for mpj /Users/yosefsaaid/-_-/mpj
-export PATH="/Users/yosefsaaid/-_-/mpj:$PATH"
+# add path for mpj $HOME/-_-/mpj
+export PATH="$HOME/-_-/mpj:$PATH"
 
 bindkey -s '\ef' 'tmux-sessionizer\n'
 
-# n node version control 
+# n node version control
 export PATH="/usr/local/bin:$PATH"
 # for scripts
-export PATH="/users/yosefsaaid/local/bin:$PATH"
-# SDKMAN (must set JAVA_HOME before use)
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+export PATH="$HOME/local/bin:$PATH"
 
 # spark
 export SPARK_HOME=/usr/local/Cellar/apache-spark/3.2.1/libexec
@@ -295,8 +292,8 @@ function git_prompt_string() {
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-. "$HOME/.local/bin/env"
-. "/Users/yosefsaaid/.deno/env"
+[[ -s "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
+[[ -s "$HOME/.deno/env" ]] && . "$HOME/.deno/env"
 # Initialize zsh completions (added by deno install script)
 autoload -Uz compinit
 compinit

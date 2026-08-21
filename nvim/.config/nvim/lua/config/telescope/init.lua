@@ -8,8 +8,8 @@ function M.setup()
 	-- Load core keymaps
 	require("config.telescope.keymaps").setup(builtin, map)
 
-	-- Load architecture layer searches
-	require("config.telescope.architecture").setup(builtin, map)
+	-- -- Load architecture layer searches
+	-- require("config.telescope.architecture").setup(builtin, map)
 end
 
 return M

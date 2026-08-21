@@ -1,60 +1,18 @@
 return {
 	{
-		"catppuccin/nvim",
-		name = "catppuccin",
+		"folke/tokyonight.nvim",
 		lazy = false,
 		priority = 1000,
-		config = function()
-			require("catppuccin").setup({
-				flavour = "mocha", -- Best for long coding sessions
-				background = {
-					light = "latte",
-					dark = "mocha",
-				},
-				transparent_background = false, -- Better for eyes
-				show_end_of_buffer = false,
-				term_colors = true,
-				dim_inactive = {
-					enabled = true,
-					shade = "dark",
-					percentage = 0.15,
-				},
-				styles = {
-					comments = { "italic" },
-					conditionals = { "italic" },
-					loops = {},
-					functions = {},
-					keywords = {},
-					strings = {},
-					variables = {},
-					numbers = {},
-					booleans = {},
-					properties = {},
-					types = {},
-					operators = {},
-				},
-				color_overrides = {
-					mocha = {
-						-- Slightly warmer background for comfort
-						base = "#1e1e2e",
-						mantle = "#181825",
-						crust = "#11111b",
-					},
-				},
-				integrations = {
-					blink_cmp = true,
-					gitsigns = true,
-					nvimtree = true,
-					treesitter = true,
-					telescope = true,
-					notify = false,
-					mini = {
-						enabled = true,
-						indentscope_color = "",
-					},
-				},
-			})
-			vim.cmd.colorscheme("catppuccin")
+		opts = {
+			transparent = true, -- main editor background
+			styles = {
+				floats = "transparent", -- popups: Telescope, LSP hover, etc.
+				sidebars = "transparent", -- nvim-tree
+			},
+		},
+		config = function(_, opts)
+			require("tokyonight").setup(opts)
+			vim.cmd.colorscheme("tokyonight")
 		end,
 	},
 	{
@@ -66,7 +24,7 @@ return {
 		config = function()
 			require("lualine").setup({
 				options = {
-					theme = "catppuccin",
+					theme = "tokyonight", -- flavour-aware, tracks options.flavour above
 					icons_enabled = true,
 					component_separators = { left = "", right = "" },
 					section_separators = { left = "", right = "" },

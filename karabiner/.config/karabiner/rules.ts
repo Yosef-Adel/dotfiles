@@ -111,17 +111,17 @@ const rules: KarabinerRules[] = [
     o: {
       a: app("wezterm"),
       b: app("Obsidian"),
-      c: app("Visual Studio Code"),
       d: app("Discord"),
       e: app("elmedia video player"),
       f: app("Figma"),
-      g: app("Google Chrome"),
+      // g: app("Google Chrome"),
       j: app("IntelliJ IDEA"),
       n: app("Notion"),
       r: app("OBS"),
       s: app("safari"),
       t: app("TickTick"),
       v: app("Preview"),
+      c: app("Claude"),
     },
 
     // -------------------------------------------------------------------------

@@ -11,9 +11,10 @@ local w = require("utils/wallpaper")
 local config = {
 	background = {
 		--		w.get_wallpaper(wallpapers),
-		-- b.get_background(0.9, 0.9),
+		b.get_background(0.9, 0.9),
 	},
-	macos_window_background_blur = 50,
+	window_background_opacity = 0.9,
+	macos_window_background_blur = 75,
 	font_size = 18.0,
 	line_height = 1.2,
 	font = f.get_font({
