@@ -13,35 +13,19 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	group = group,
 })
 
--- To Warn you when writing in node_modules
-vim.api.nvim_create_autocmd("BufWritePre", {
+-- Warn when entering or writing a file inside node_modules
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePre" }, {
 	desc = "Notify if the buffer is within node_modules",
-	callback = function()
+	callback = function(args)
+		if not vim.api.nvim_buf_get_name(args.buf):find("node_modules", 1, true) then
+			return
+		end
+		local level = args.event == "BufWritePre" and vim.log.levels.ERROR or vim.log.levels.WARN
+		local verb = args.event == "BufWritePre" and "are writing to" or "entered"
 		vim.schedule(function()
-			local notify = require("notify")
-			local buf_path = vim.fn.expand("%:p")
-			if string.find(buf_path, "node_modules") then
-				notify("Warning: You entered a file in node_modules!", "error", {
-					title = "Node Modules Warning",
-				})
-			end
-		end)
-	end,
-	group = group,
-})
-
--- To warn you when entering node_modules file
-vim.api.nvim_create_autocmd("BufEnter", {
-	desc = "Notify if the buffer is within node_modules",
-	callback = function()
-		vim.schedule(function()
-			local notify = require("notify")
-			local buf_path = vim.fn.expand("%:p")
-			if string.find(buf_path, "node_modules") then
-				notify("Warning: You entered a file in node_modules!", "warn", {
-					title = "Node Modules Warning",
-				})
-			end
+			vim.notify(("Warning: You %s a file in node_modules!"):format(verb), level, {
+				title = "Node Modules Warning",
+			})
 		end)
 	end,
 	group = group,

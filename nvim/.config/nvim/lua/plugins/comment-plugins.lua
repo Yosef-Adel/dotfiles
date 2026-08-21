@@ -4,6 +4,11 @@ return {
 	dependencies = {
 		"JoosepAlviste/nvim-ts-context-commentstring",
 	},
+	init = function()
+		-- Skip registering the legacy nvim-treesitter module; that path is
+		-- deprecated upstream and doesn't exist on nvim-treesitter's main branch
+		vim.g.skip_ts_context_commentstring_module = true
+	end,
 	config = function()
 		-- Disable the plugin's own CursorHold autocmd: it errors with
 		-- "attempt to index local 'language_tree'" on buffers without an

@@ -35,9 +35,4 @@ function M.scratch(opts)
 	end
 end
 
--- Keep global function for backward compatibility with existing keymap
-function Open_scratch_buffer()
-	M.scratch({ split = "vertical" })
-end
-
 return M
