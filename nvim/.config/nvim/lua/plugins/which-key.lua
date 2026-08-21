@@ -8,6 +8,7 @@ return {
 		wk.add({
 			{ "<leader>s", group = "Search" },
 			{ "<leader>r", group = "Refactor" },
+			{ "<leader>g", group = "Git" },
 			{ "<leader>x", group = "Trouble" },
 			{ "<leader>c", group = "Code" },
 			{ "<leader>p", group = "Project" },
