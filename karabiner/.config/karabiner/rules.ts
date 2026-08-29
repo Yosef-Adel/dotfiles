@@ -11,17 +11,46 @@
 
 import fs from "fs";
 import { KarabinerRules } from "./types";
-import { createHyperSubLayers, app, open, rectangle } from "./utils";
+import { createHyperSubLayers, app, open, yabai, yabaiOr } from "./utils";
+import { LayerCommand } from "./utils";
 
 // =============================================================================
 // HELPER FUNCTIONS
 // =============================================================================
 
-/** Creates a workspace switch command (sends Right Option + number) */
-const workspace = (num: string) => ({
+/**
+ * Switches to a space by sending Right Option + number, which macOS handles
+ * natively via its "Switch to Desktop N" hotkeys. Deliberately NOT yabai's
+ * `space --focus`, which requires the scripting addition (and therefore SIP
+ * to be partially disabled).
+ */
+const workspace = (num: string): LayerCommand => ({
   description: `Move to workspace ${num}`,
   to: [{ key_code: num as any, modifiers: ["right_option" as const] }],
 });
+
+/**
+ * Sends the focused window to space N and follows it there.
+ *
+ * The move goes through yabai and REQUIRES the scripting addition; with SIP
+ * enabled it fails silently and only the focus switch happens. The follow is
+ * the same native Right Option + number used above, so this degrades to a
+ * plain space switch rather than breaking outright.
+ */
+const moveToWorkspace = (num: string): LayerCommand => ({
+  description: `Move window to workspace ${num} and follow`,
+  modifiers: { mandatory: ["shift"] },
+  to: [
+    { shell_command: `/opt/homebrew/bin/yabai -m window --space ${num}` },
+    { key_code: num as any, modifiers: ["right_option" as const] },
+  ],
+});
+
+/** Hyper + Shift + N moves the window; Hyper + N just switches. Order matters. */
+const space = (num: string): LayerCommand[] => [
+  moveToWorkspace(num),
+  workspace(num),
+];
 
 // =============================================================================
 // RULES
@@ -92,18 +121,20 @@ const rules: KarabinerRules[] = [
     ),
 
     // -------------------------------------------------------------------------
-    // Workspace switching (Hyper + 0-9)
+    // Workspaces
+    //   Hyper + N          -> switch to space N
+    //   Hyper + Shift + N  -> send window to space N and follow it
     // -------------------------------------------------------------------------
-    1: workspace("1"),
-    2: workspace("2"),
-    3: workspace("3"),
-    4: workspace("4"),
-    5: workspace("5"),
-    6: workspace("6"),
-    7: workspace("7"),
-    8: workspace("8"),
-    9: workspace("9"),
-    0: workspace("0"),
+    1: space("1"),
+    2: space("2"),
+    3: space("3"),
+    4: space("4"),
+    5: space("5"),
+    6: space("6"),
+    7: space("7"),
+    8: space("8"),
+    9: space("9"),
+    0: space("0"),
 
     // -------------------------------------------------------------------------
     // O = Open applications
@@ -125,22 +156,66 @@ const rules: KarabinerRules[] = [
     },
 
     // -------------------------------------------------------------------------
-    // W = Window management (Rectangle + tabs/navigation)
+    // W = Window focus + state (yabai)
     // -------------------------------------------------------------------------
     w: {
-      // Rectangle window positioning
-      h: rectangle("left-half"),
-      j: rectangle("bottom-half"),
-      k: rectangle("top-half"),
-      l: rectangle("right-half"),
-      f: rectangle("maximize"),
-      y: rectangle("previous-display"),
-      o: rectangle("next-display"),
+      // Directional focus, wrapping to the opposite edge of the space
+      h: yabaiOr("window --focus west", "window --focus east"),
+      j: yabaiOr("window --focus south", "window --focus north"),
+      k: yabaiOr("window --focus north", "window --focus south"),
+      l: yabaiOr("window --focus east", "window --focus west"),
+
+      // Display focus (kept on y/o to match the old Rectangle bindings)
+      y: yabaiOr("display --focus prev", "display --focus last"),
+      o: yabaiOr("display --focus next", "display --focus first"),
+
+      // Window state
+      f: yabai("window --toggle zoom-fullscreen"),
+      z: yabai("window --toggle zoom-parent"),
+      t: yabai("window --toggle float", "window --grid 4:4:1:1:2:2"),
+      e: yabai("window --toggle split"),
+      q: yabai("window --close"),
+
+      // Space layout
+      b: yabai("space --balance"),
+      r: yabai("space --rotate 270"),
+      g: yabai("space --toggle padding", "space --toggle gap"),
 
       semicolon: {
         description: "Hide Window",
         to: [{ key_code: "h", modifiers: ["right_command"] }],
       },
+    },
+
+    // -------------------------------------------------------------------------
+    // M = Move windows around the tree
+    // -------------------------------------------------------------------------
+    m: {
+      // Warp moves the window within the bsp tree; swap trades it with its
+      // neighbour, which is the sensible fallback when there's nowhere to warp.
+      h: yabaiOr("window --warp west", "window --swap west"),
+      j: yabaiOr("window --warp south", "window --swap south"),
+      k: yabaiOr("window --warp north", "window --swap north"),
+      l: yabaiOr("window --warp east", "window --swap east"),
+
+      // Send window to another display (requires the scripting addition)
+      y: yabaiOr("window --display prev", "window --display last"),
+      o: yabaiOr("window --display next", "window --display first"),
+
+      // Mirror the tree
+      f: yabai("space --mirror y-axis"),
+      d: yabai("space --mirror x-axis"),
+    },
+
+    // -------------------------------------------------------------------------
+    // R = Resize the focused window
+    // -------------------------------------------------------------------------
+    r: {
+      h: yabaiOr("window --resize right:-40:0", "window --resize left:-40:0"),
+      l: yabaiOr("window --resize right:40:0", "window --resize left:40:0"),
+      j: yabaiOr("window --resize bottom:0:40", "window --resize top:0:40"),
+      k: yabaiOr("window --resize bottom:0:-40", "window --resize top:0:-40"),
+      0: yabai("space --balance"),
     },
 
     // -------------------------------------------------------------------------

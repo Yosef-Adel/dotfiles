@@ -1,4 +1,4 @@
-import { To, KeyCode, Manipulator, KarabinerRules } from "./types";
+import { To, KeyCode, Manipulator, KarabinerRules, Modifiers } from "./types";
 
 /**
  * Custom way to describe a command in a layer
@@ -6,12 +6,34 @@ import { To, KeyCode, Manipulator, KarabinerRules } from "./types";
 export interface LayerCommand {
   to: To[];
   description?: string;
+  /**
+   * Modifiers that must be held for this command to fire, e.g. Hyper + Shift + 1.
+   * When a key has both a plain and a modified binding, list the modified one
+   * FIRST -- Karabiner uses the first matching manipulator, and plain bindings
+   * match with `optional: ["any"]`, so they would otherwise swallow the variant.
+   */
+  modifiers?: Modifiers;
 }
+
+/** One key may carry several bindings, differentiated by mandatory modifiers. */
+type LayerBinding = LayerCommand | LayerCommand[];
 
 type HyperKeySublayer = {
   // The ? is necessary, otherwise we'd have to define something for _every_ key code
-  [key_code in KeyCode]?: LayerCommand;
+  [key_code in KeyCode]?: LayerBinding;
 };
+
+/** Normalises the single-or-many shape into an array. */
+function toCommands(binding: LayerBinding): LayerCommand[] {
+  return Array.isArray(binding) ? binding : [binding];
+}
+
+/** Builds the `from.modifiers` for a command, defaulting to "any optional". */
+function fromModifiers(command: LayerCommand): Modifiers {
+  return command.modifiers
+    ? { ...command.modifiers, optional: command.modifiers.optional ?? ["any"] }
+    : { optional: ["any"] };
+}
 
 /**
  * Create a Hyper Key sublayer, where every command is prefixed with a key
@@ -75,25 +97,26 @@ export function createHyperSubLayer(
       ],
     },
     // Define the individual commands that are meant to trigger in the sublayer
-    ...(Object.keys(commands) as (keyof typeof commands)[]).map(
-      (command_key): Manipulator => ({
-        ...commands[command_key],
-        type: "basic" as const,
-        from: {
-          key_code: command_key,
-          modifiers: {
-            optional: ["any"],
-          },
-        },
-        // Only trigger this command if the variable is 1 (i.e., if Hyper + sublayer is held)
-        conditions: [
-          {
-            type: "variable_if",
-            name: subLayerVariableName,
-            value: 1,
-          },
-        ],
-      })
+    ...(Object.keys(commands) as (keyof typeof commands)[]).flatMap(
+      (command_key): Manipulator[] =>
+        toCommands(commands[command_key]!).map(
+          ({ modifiers, ...command }): Manipulator => ({
+            ...command,
+            type: "basic" as const,
+            from: {
+              key_code: command_key,
+              modifiers: fromModifiers({ ...command, modifiers }),
+            },
+            // Only trigger this command if the variable is 1 (i.e., if Hyper + sublayer is held)
+            conditions: [
+              {
+                type: "variable_if",
+                name: subLayerVariableName,
+                value: 1,
+              },
+            ],
+          })
+        )
     ),
   ];
 }
@@ -104,40 +127,36 @@ export function createHyperSubLayer(
  * activates at a time
  */
 export function createHyperSubLayers(subLayers: {
-  [key_code in KeyCode]?: HyperKeySublayer | LayerCommand;
+  [key_code in KeyCode]?: HyperKeySublayer | LayerBinding;
 }): KarabinerRules[] {
   const allSubLayerVariables = (
     Object.keys(subLayers) as (keyof typeof subLayers)[]
   ).map((sublayer_key) => generateSubLayerVariableName(sublayer_key));
 
   return Object.entries(subLayers).map(([key, value]) =>
-    "to" in value
+    isLayerBinding(value)
       ? {
           description: `Hyper Key + ${key}`,
-          manipulators: [
-            {
-              ...value,
-              type: "basic" as const,
-              from: {
-                key_code: key as KeyCode,
-                modifiers: {
-                  optional: ["any"],
-                },
-              },
-              conditions: [
-                {
-                  type: "variable_if",
-                  name: "hyper",
-                  value: 1,
-                },
-                ...allSubLayerVariables.map((subLayerVariable) => ({
-                  type: "variable_if" as const,
-                  name: subLayerVariable,
-                  value: 0,
-                })),
-              ],
+          manipulators: toCommands(value).map(({ modifiers, ...command }) => ({
+            ...command,
+            type: "basic" as const,
+            from: {
+              key_code: key as KeyCode,
+              modifiers: fromModifiers({ ...command, modifiers }),
             },
-          ],
+            conditions: [
+              {
+                type: "variable_if" as const,
+                name: "hyper",
+                value: 1,
+              },
+              ...allSubLayerVariables.map((subLayerVariable) => ({
+                type: "variable_if" as const,
+                name: subLayerVariable,
+                value: 0,
+              })),
+            ],
+          })),
         }
       : {
           description: `Hyper Key sublayer "${key}"`,
@@ -152,6 +171,13 @@ export function createHyperSubLayers(subLayers: {
 
 function generateSubLayerVariableName(key: KeyCode) {
   return `hyper_sublayer_${key}`;
+}
+
+/** Distinguishes a leaf binding (one or more commands) from a nested sublayer. */
+function isLayerBinding(
+  value: HyperKeySublayer | LayerBinding
+): value is LayerBinding {
+  return Array.isArray(value) || "to" in value;
 }
 
 /**
@@ -191,17 +217,33 @@ export function shell(
   };
 }
 
+/** Absolute path -- Karabiner runs shell commands with a minimal PATH. */
+const YABAI = "/opt/homebrew/bin/yabai";
+
 /**
- * Shortcut for managing window sizing with Rectangle
+ * Shortcut for driving yabai. Each argument is run as its own `yabai -m ...`
+ * invocation, so multi-step actions (e.g. toggle float then center) compose.
  */
-export function rectangle(name: string): LayerCommand {
+export function yabai(...args: string[]): LayerCommand {
+  return {
+    to: args.map((arg) => ({ shell_command: `${YABAI} -m ${arg}` })),
+    description: `yabai: ${args.join(" ; ")}`,
+  };
+}
+
+/**
+ * yabai command that falls back to a second command when the first fails --
+ * used for directional actions at the edge of a space, where e.g. there is no
+ * window to the west and we want to wrap around to the east instead.
+ */
+export function yabaiOr(primary: string, fallback: string): LayerCommand {
   return {
     to: [
       {
-        shell_command: `open -g rectangle://execute-action?name=${name}`,
+        shell_command: `${YABAI} -m ${primary} || ${YABAI} -m ${fallback}`,
       },
     ],
-    description: `Window: ${name}`,
+    description: `yabai: ${primary} (or ${fallback})`,
   };
 }
 
