@@ -47,8 +47,8 @@ yabai -m config mouse_drop_action            swap
 # =============================================================================
 # Unmanaged apps
 # =============================================================================
-yabai -m rule --add app="^System Settings$"      manage=off sticky=on layer=above
-yabai -m rule --add app="^Digital Color Meter$"  manage=off sticky=on layer=above
+yabai -m rule --add app="^System Settings$"      manage=off sticky=on sub-layer=above
+yabai -m rule --add app="^Digital Color Meter$"  manage=off sticky=on sub-layer=above
 yabai -m rule --add app="^Calculator$"           manage=off
 yabai -m rule --add app="^Karabiner-Elements$"   manage=off
 yabai -m rule --add app="^Karabiner-EventViewer$" manage=off

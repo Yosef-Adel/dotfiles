@@ -21,8 +21,8 @@ import { LayerCommand } from "./utils";
 /**
  * Switches to a space by sending Right Option + number, which macOS handles
  * natively via its "Switch to Desktop N" hotkeys. Deliberately NOT yabai's
- * `space --focus`, which requires the scripting addition (and therefore SIP
- * to be partially disabled).
+ * `space --focus`, which is slower and refuses outright while a mission-control
+ * transition is still animating.
  */
 const workspace = (num: string): LayerCommand => ({
   description: `Move to workspace ${num}`,
@@ -32,10 +32,10 @@ const workspace = (num: string): LayerCommand => ({
 /**
  * Sends the focused window to space N and follows it there.
  *
- * The move goes through yabai and REQUIRES the scripting addition; with SIP
- * enabled it fails silently and only the focus switch happens. The follow is
- * the same native Right Option + number used above, so this degrades to a
- * plain space switch rather than breaking outright.
+ * The move goes through yabai, which handles cross-space moves without the
+ * scripting addition on yabai 7.x. The follow uses the same native Right
+ * Option + number as above rather than yabai's `space --focus`, which can
+ * refuse with "mission-control is active" when spaces are switched quickly.
  */
 const moveToWorkspace = (num: string): LayerCommand => ({
   description: `Move window to workspace ${num} and follow`,
@@ -198,7 +198,7 @@ const rules: KarabinerRules[] = [
       k: yabaiOr("window --warp north", "window --swap north"),
       l: yabaiOr("window --warp east", "window --swap east"),
 
-      // Send window to another display (requires the scripting addition)
+      // Send window to another display (no-op on a single-display setup)
       y: yabaiOr("window --display prev", "window --display last"),
       o: yabaiOr("window --display next", "window --display first"),
 
