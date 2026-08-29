@@ -1,42 +1,62 @@
-# default layout (can be bsp, stack or float)
-yabai -m config layout bsp
+#!/usr/bin/env sh
 
-# new window spawns to the right if vertical split, or bottom if horizontal split
-yabai -m config window_placement second_child
+# =============================================================================
+# Scripting addition
+# Requires SIP to be partially disabled. With SIP on, loading it fails and the
+# space-related commands (window --space, space --focus/--create, sticky, pip)
+# are unavailable. Guarded so a locked-down SIP doesn't spam errors on login.
+# =============================================================================
+if ! csrutil status | grep -q "status: enabled"; then
+  yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
+  sudo yabai --load-sa
+fi
 
-# center mouse on window with focus
-yabai -m config mouse_follows_focus on
+# =============================================================================
+# Layout
+# =============================================================================
+yabai -m config layout                      bsp
+yabai -m config auto_balance                on
+
+# new window spawns to the right if vertical split, or bottom if horizontal
+yabai -m config window_placement             second_child
+
+# padding
+yabai -m config top_padding                  5
+yabai -m config bottom_padding               5
+yabai -m config left_padding                 5
+yabai -m config right_padding                5
+yabai -m config window_gap                   5
+
+# =============================================================================
+# Focus & mouse
+# =============================================================================
+# focus follows the mouse, but the mouse does NOT warp to the focused window --
+# running both together fights itself and causes focus jitter.
+yabai -m config focus_follows_mouse          autoraise
+yabai -m config mouse_follows_focus          off
 
 # modifier for clicking and dragging with mouse
-yabai -m config mouse_modifier alt
-# set modifier + left-click drag to move window
-yabai -m config mouse_action1 move
-# set modifier + right-click drag to resize window
-yabai -m config mouse_action2 resize
+yabai -m config mouse_modifier               alt
+# modifier + left-click drag to move window
+yabai -m config mouse_action1                move
+# modifier + right-click drag to resize window
+yabai -m config mouse_action2                resize
+# dropped in the center of another window swaps them (on edges it splits)
+yabai -m config mouse_drop_action            swap
 
-# when window is dropped in center of another window, swap them (on edges it will split it)
-yabai -m mouse_drop_action swap
+# =============================================================================
+# Unmanaged apps
+# =============================================================================
+yabai -m rule --add app="^System Settings$"      manage=off sticky=on layer=above
+yabai -m rule --add app="^Digital Color Meter$"  manage=off sticky=on layer=above
+yabai -m rule --add app="^Calculator$"           manage=off
+yabai -m rule --add app="^Karabiner-Elements$"   manage=off
+yabai -m rule --add app="^Karabiner-EventViewer$" manage=off
+yabai -m rule --add app="^QuickTime Player$"     manage=off
+yabai -m rule --add app="^Raycast$"              manage=off
+yabai -m rule --add app="^BetterDisplay$"        manage=off
+yabai -m rule --add app="^Archive Utility$"      manage=off
+yabai -m rule --add app="^Finder$" title="^(Copy|Move|Info|Connect)" manage=off
+yabai -m rule --add app="^Preview$" title="^(Open|Save|Print)"       manage=off
 
-
-# disable specific apps
-yabai -m rule --add app="^System Settings$" manage=off
-yabai -m rule --add app="^Calculator$" manage=off
-yabai -m rule --add app="^Karabiner-Elements$" manage=off
-yabai -m rule --add app="^QuickTime Player$" manage=off
-
-yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
-sudo yabai --load-sa
-
-yabai -m config layout bsp
-yabai -m config auto_balance on
-yabai -m config focus_follows_mouse autoraise
-
-yabai -m rule --add app="^System Settings$" sticky=on layer=above manage=off
-yabai -m rule --add app="^Digital Color Meter$" sticky=on layer=above manage=off
-
-# # padding set to 12px
-# yabai -m config top_padding 5
-# yabai -m config bottom_padding 5
-# yabai -m config left_padding 5
-# yabai -m config right_padding 5
-# yabai -m config window_gap 5
+echo "yabai configuration loaded."
