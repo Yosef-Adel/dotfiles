@@ -263,10 +263,14 @@ fs.writeFileSync(
   "karabiner.json",
   JSON.stringify(
     {
-      global: { show_in_menu_bar: false },
+      global: { show_in_menu_bar: true },
       profiles: [
         {
           name: "Default",
+          // Karabiner activates the profile flagged as selected; without this
+          // it falls back to whatever it decides is default, which is not
+          // necessarily this one.
+          selected: true,
           complex_modifications: { rules },
         },
       ],
