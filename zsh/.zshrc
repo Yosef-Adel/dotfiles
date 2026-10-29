@@ -134,6 +134,9 @@ export PATH="$SPARK_HOME/bin/:$PATH"
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
+# Rust / cargo
+export PATH="$HOME/.cargo/bin:$PATH"
+
 # History {{{
 HISTSIZE=10000
 SAVEHIST=9000
@@ -297,3 +300,6 @@ function git_prompt_string() {
 # Initialize zsh completions (added by deno install script)
 autoload -Uz compinit
 compinit
+
+# strix
+export PATH=/Users/yosefadel/.strix/bin:$PATH
