@@ -42,5 +42,5 @@ startup_command = "clear"
 
 [[session]]
 name = "Notes 📝"
-path = "/Users/yosefsaaid/Library/Mobile Documents/iCloud~md~obsidian/Documents/Second Brain"
+path = "~/Documents/Second Brain"
 startup_command = "nvim"
