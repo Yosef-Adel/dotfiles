@@ -271,6 +271,9 @@ fs.writeFileSync(
           // it falls back to whatever it decides is default, which is not
           // necessarily this one.
           selected: true,
+          // Karabiner prompts for the keyboard type whenever this is missing,
+          // and since this file is regenerated from scratch it always would be.
+          virtual_hid_keyboard: { keyboard_type_v2: "iso" },
           complex_modifications: { rules },
         },
       ],
