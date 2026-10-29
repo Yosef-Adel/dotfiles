@@ -1,0 +1,73 @@
+#!/bin/bash
+# Block anime sites system-wide by pointing them at 0.0.0.0 in /etc/hosts.
+# The entries live between two marker lines so re-running replaces them
+# instead of duplicating, and `--remove` strips them back out.
+#
+# Usage: sudo block-anime          # add / refresh the block
+#        sudo block-anime --remove # undo
+
+set -euo pipefail
+
+HOSTS=/etc/hosts
+BEGIN="# >>> block-anime >>>"
+END="# <<< block-anime <<<"
+
+DOMAINS=(
+  # Official streaming
+  crunchyroll.com
+  funimation.com
+  hidive.com
+  animelab.com
+  # Piracy streaming (these rotate mirrors often; add new ones here)
+  hianime.to hianime.sx hianime.nz hianime.mn hianime.bz hianime.pe
+  aniwatch.to aniwatchtv.to kaido.to zoro.to
+  9anime.to 9anime.pl 9animetv.to aniwave.to aniwave.se
+  gogoanime.by gogoanime3.co gogoanime3.net gogoanimes.fi
+  anitaku.to anitaku.pe anitaku.bz
+  animekai.to animekai.bz animekai.cc
+  animepahe.ru animepahe.com animepahe.si
+  animesuge.to animixplay.to anix.to kickassanime.am
+  hianimes.se
+  miruro.tv miruro.to animeflv.net animeheaven.me
+  animeowl.me animefire.plus aniwave.lv
+  # Arabic anime sites
+  witanime.com witanime.cyou witanime.quest
+  anime4up.com anime4up.cam animelek.me animelek.vip
+  animeiat.tv okanime.tv animerco.org animeblkom.net
+  # Databases, trackers and news
+  myanimelist.net anilist.co kitsu.app kitsu.io anidb.net
+  animenewsnetwork.com anime-planet.com livechart.me
+)
+
+if [[ $EUID -ne 0 ]]; then
+  echo "Run with sudo: sudo $0 $*" >&2
+  exit 1
+fi
+
+# Drop any previous block.
+tmp=$(mktemp)
+sed "/^$BEGIN\$/,/^$END\$/d" "$HOSTS" > "$tmp"
+
+if [[ "${1:-}" != "--remove" ]]; then
+  {
+    echo "$BEGIN"
+    for d in "${DOMAINS[@]}"; do
+      for h in "$d" "www.$d"; do
+        printf '0.0.0.0 %s\n:: %s\n' "$h" "$h"
+      done
+    done
+    echo "$END"
+  } >> "$tmp"
+fi
+
+cat "$tmp" > "$HOSTS"
+rm -f "$tmp"
+
+dscacheutil -flushcache
+killall -HUP mDNSResponder 2>/dev/null || true
+
+if [[ "${1:-}" == "--remove" ]]; then
+  echo "Anime block removed."
+else
+  echo "Blocked ${#DOMAINS[@]} anime domains (and their www. variants)."
+fi
