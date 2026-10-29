@@ -7,6 +7,8 @@ M.get_font = function(fonts)
 	return wezterm.font_with_fallback({
 		{ family = family, weight = "Medium", harfbuzz_features = { "calt=1", "clig=1", "liga=1" } },
 		{ family = "Symbols Nerd Font Mono" },
+		{ family = "Kawkab Mono" },
+		{ family = "Geeza Pro" },
 	})
 end
 

@@ -15,6 +15,8 @@ local config = {
 	},
 	window_background_opacity = 0.9,
 	macos_window_background_blur = 75,
+	bidi_enabled = true,
+	bidi_direction = "AutoLeftToRight",
 	font_size = 18.0,
 	line_height = 1.2,
 	font = f.get_font({
