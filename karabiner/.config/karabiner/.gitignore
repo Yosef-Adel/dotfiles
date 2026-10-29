@@ -1,3 +1,4 @@
 node_modules/
 .yarn/cache/
 karabiner.json
+automatic_backups/
