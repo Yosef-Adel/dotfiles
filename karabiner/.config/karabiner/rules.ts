@@ -145,14 +145,11 @@ const rules: KarabinerRules[] = [
       d: app("Discord"),
       e: app("elmedia video player"),
       f: app("Figma"),
-      // g: app("Google Chrome"),
-      j: app("IntelliJ IDEA"),
-      n: app("Notion"),
       r: app("OBS"),
       s: app("safari"),
-      t: app("TickTick"),
-      v: app("Preview"),
+      v: app("davinci"),
       c: app("Claude"),
+      k: app("Amazon Kindle"),
     },
 
     // -------------------------------------------------------------------------
